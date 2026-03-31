@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patricia</title>
+
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+  background: black;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+/* 🌅 Sunset */
+.sunset {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, #140d0a, #2a140f, #ff7a3d, #ffd6a5);
+  animation: sunsetMove 20s infinite ease-in-out;
+}
+
+@keyframes sunsetMove {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(1.2); }
+  100% { filter: brightness(1); }
+}
+
+/* ✨ particles */
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: white;
+  opacity: 0.5;
+  border-radius: 50%;
+  animation: float 10s linear infinite;
+}
+
+@keyframes float {
+  from { transform: translateY(100vh); }
+  to { transform: translateY(-100vh); }
+}
+
+/* center text */
+.center {
+  position: absolute;
+  width: 100%;
+  top: 40%;
+  text-align: center;
+  z-index: 10;
+}
+
+.hidden {
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.visible {
+  opacity: 1;
+}
+
+/* butterfly */
+.butterfly {
+  font-size: 40px;
+  cursor: pointer;
+  animation: fly 3s infinite ease-in-out;
+}
+
+@keyframes fly {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0); }
+}
+
+img {
+  width: 70%;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.6);
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+</style>
+</head>
+
+<body>
+
+<div class="sunset"></div>
+
+<div id="particles"></div>
+
+<div id="content" class="center">
+  <p>This is not what you think.</p>
+  <div class="butterfly" onclick="start()">🦋</div>
+</div>
+
+<script>
+let phase = 0;
+
+function start() {
+  nextPhase();
+}
+
+function nextPhase() {
+  phase++;
+  const content = document.getElementById("content");
+
+  if (phase === 1) {
+    content.innerHTML = "<h2>Some people pass...</h2>";
+  }
+
+  if (phase === 2) {
+    setTimeout(() => {
+      content.innerHTML = "<h2>Some people stay...</h2>";
+    }, 2000);
+  }
+
+  if (phase === 3) {
+    setTimeout(() => {
+      content.innerHTML = "<h1 style='font-size:50px'>Patricia</h1>";
+    }, 4000);
+  }
+
+  if (phase === 4) {
+    setTimeout(() => {
+      content.innerHTML = "<img src='https://picsum.photos/400'>";
+    }, 7000);
+  }
+
+  if (phase === 5) {
+    setTimeout(() => {
+      content.innerHTML = "<p>Close your eyes… and listen</p>";
+      const audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+      audio.play();
+    }, 10000);
+  }
+
+  if (phase === 6) {
+    setTimeout(() => {
+      content.innerHTML = "<video src='https://www.w3schools.com/html/mov_bbb.mp4' autoplay controls></video>";
+    }, 14000);
+  }
+
+  if (phase < 6) {
+    setTimeout(nextPhase, 2000);
+  }
+}
+
+/* particles */
+for (let i = 0; i < 30; i++) {
+  let p = document.createElement("div");
+  p.className = "particle";
+  p.style.left = Math.random() * 100 + "vw";
+  p.style.animationDuration = (5 + Math.random()*5) + "s";
+  document.getElementById("particles").appendChild(p);
+}
+</script>
+
+</body>
+</html>

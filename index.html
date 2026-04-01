@@ -7,13 +7,13 @@
 <style>
 body {
   margin: 0;
-  overflow: hidden;
   background: black;
-  font-family: Arial;
   color: white;
+  font-family: Arial;
+  overflow: hidden;
 }
 
-/* BACKGROUND */
+/* background */
 #bg {
   position: fixed;
   width: 100%;
@@ -21,11 +21,11 @@ body {
   background-size: cover;
   background-position: center;
   opacity: 0;
-  transition: opacity 2s ease, transform 10s ease;
+  transition: opacity 2s ease, transform 8s ease;
   transform: scale(1);
 }
 
-/* DARK OVERLAY */
+/* overlay */
 .overlay {
   position: fixed;
   width: 100%;
@@ -33,10 +33,10 @@ body {
   background: rgba(0,0,0,0.5);
 }
 
-/* TEXT */
+/* text */
 #text {
   position: absolute;
-  bottom: 15%;
+  bottom: 20%;
   width: 100%;
   text-align: center;
   font-size: 22px;
@@ -45,7 +45,7 @@ body {
   padding: 0 20px;
 }
 
-/* VIDEO */
+/* video */
 #video {
   position: fixed;
   width: 100%;
@@ -68,59 +68,55 @@ body {
 
 <video id="video" src="final.mp4"></video>
 
-<audio id="music" loop>
+<audio id="music">
   <source src="piano.mp3">
 </audio>
 
 <script>
 
-const scenes = [
+const timeline = [
 
-  /* AIRPORT */
   {
-    bg: "airport.jpg",
-    texts: [
+    bg: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05",
+    lines: [
+      "",
       "I remember waiting for you…",
-      "I was just hoping I would recognize you instantly.",
-      "And I did."
+      "I didn’t know if I would recognize you instantly."
     ]
   },
 
   {
-    bg: "airport.jpg",
-    texts: [
-      "That first hug…",
+    bg: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05",
+    lines: [
+      "But I did.",
+      "",
+      "And that first hug…",
       "didn’t feel like the first at all."
     ]
   },
 
-  /* FERRY */
   {
-    bg: "ferry.jpg",
-    texts: [
-      ""
+    bg: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21",
+    lines: [
+      "",
+      "",
+      "That moment… on the ferry."
     ]
   },
 
   {
-    bg: "ferry.jpg",
-    texts: [
+    bg: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21",
+    lines: [
       "Your hands were cold…",
-      "I just wanted to warm them."
+      "",
+      "I just wanted to stay there a little longer."
     ]
   },
 
-  {
-    bg: "ferry.jpg",
-    texts: [
-      "I didn’t want that moment to end."
-    ]
-  },
-
-  /* FINAL */
   {
     bg: "black",
-    texts: [
+    lines: [
+      "",
       "Some moments stay.",
       "You are one of them."
     ]
@@ -128,54 +124,55 @@ const scenes = [
 
 ];
 
-let sceneIndex = 0;
-let textIndex = 0;
+let scene = 0;
+let line = 0;
 
 const bg = document.getElementById("bg");
 const text = document.getElementById("text");
 const music = document.getElementById("music");
 const video = document.getElementById("video");
 
-/* START AUTOMATICALLY */
-setTimeout(() => {
+/* START ON FIRST TAP (mobile safe) */
+document.body.onclick = () => {
   music.play();
   nextScene();
-}, 2000);
+  document.body.onclick = null;
+};
 
 function nextScene() {
 
-  if (sceneIndex >= scenes.length) {
-    showFinalVideo();
+  if (scene >= timeline.length) {
+    showVideo();
     return;
   }
 
-  const scene = scenes[sceneIndex];
+  const current = timeline[scene];
 
   bg.style.opacity = 0;
 
   setTimeout(() => {
 
-    if (scene.bg === "black") {
+    if (current.bg === "black") {
       bg.style.backgroundImage = "none";
       bg.style.backgroundColor = "black";
     } else {
-      bg.style.backgroundImage = `url(${scene.bg})`;
+      bg.style.backgroundImage = `url(${current.bg})`;
     }
 
     bg.style.opacity = 1;
     bg.style.transform = "scale(1.05)";
 
-    textIndex = 0;
-    showText(scene);
+    line = 0;
+    showLine(current);
 
   }, 1500);
 
 }
 
-function showText(scene) {
+function showLine(current) {
 
-  if (textIndex >= scene.texts.length) {
-    sceneIndex++;
+  if (line >= current.lines.length) {
+    scene++;
     setTimeout(nextScene, 3000);
     return;
   }
@@ -183,18 +180,17 @@ function showText(scene) {
   text.classList.remove("show");
 
   setTimeout(() => {
-    text.innerHTML = scene.texts[textIndex];
+    text.innerHTML = current.lines[line];
     text.classList.add("show");
-    textIndex++;
-  }, 1000);
+    line++;
+  }, 1200);
 
   setTimeout(() => {
-    showText(scene);
-  }, 4000);
-
+    showLine(current);
+  }, 3500);
 }
 
-function showFinalVideo() {
+function showVideo() {
   text.classList.remove("show");
 
   setTimeout(() => {

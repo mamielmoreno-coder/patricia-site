@@ -2,85 +2,52 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Patricia</title>
 
 <style>
 body {
   margin: 0;
+  font-family: Arial;
   overflow: hidden;
-  font-family: 'Arial', sans-serif;
   color: white;
-  background: black;
 }
 
-/* 🌅 SUNSET BACKGROUND */
+/* 🌅 BACKGROUND IMAGE */
 .background {
   position: fixed;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to top, #1a0f0a, #3a1f14, #ff7a3d, #ffd6a5);
-  animation: breathe 20s infinite ease-in-out;
+  background-size: cover;
+  background-position: center;
+  transition: 1.5s ease;
 }
 
-@keyframes breathe {
-  0%,100% { filter: brightness(1); }
-  50% { filter: brightness(1.2); }
-}
-
-/* ✨ PARTICLES */
-.particle {
-  position: absolute;
-  width: 2px;
-  height: 2px;
-  background: white;
-  opacity: 0.4;
-  border-radius: 50%;
-  animation: float linear infinite;
-}
-
-@keyframes float {
-  from { transform: translateY(100vh); }
-  to { transform: translateY(-100vh); }
-}
-
-/* CENTER CONTENT */
+/* CENTER */
 .center {
   position: absolute;
   width: 100%;
   top: 40%;
   text-align: center;
-  z-index: 10;
 }
 
-/* 🦋 BUTTERFLY */
+/* BUTTERFLIES */
 .butterfly {
-  font-size: 40px;
+  font-size: 35px;
   cursor: pointer;
-  animation: fly 3s infinite ease-in-out;
+  margin: 10px;
+  transition: transform 0.3s;
 }
 
-@keyframes fly {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
-  100% { transform: translateY(0); }
+.butterfly:hover {
+  transform: scale(1.3);
 }
 
-/* 📸 PHOTO */
-img {
-  width: 600px;
-  max-width: 80%;
-  border-radius: 12px;
-  box-shadow: 0 0 40px rgba(0,0,0,0.6);
-  transition: opacity 1.5s;
-}
-
-/* TEXT */
-.text {
+/* MESSAGE */
+.message {
   margin-top: 20px;
-  font-size: 20px;
+  font-size: 24px;
   opacity: 0;
-  transition: opacity 2s;
+  transition: opacity 1.5s;
 }
 
 .show {
@@ -91,63 +58,90 @@ img {
 
 <body>
 
-<div class="background"></div>
-<div id="particles"></div>
+<div id="bg" class="background"></div>
 
 <div id="content" class="center">
-  <p>This is not what you think.</p>
-  <div class="butterfly" onclick="start()">🦋</div>
+
+  <div id="butterflies">
+    <!-- 10 butterflies -->
+    <span class="butterfly" onclick="showSlide(0)">🦋</span>
+    <span class="butterfly" onclick="showSlide(1)">🦋</span>
+    <span class="butterfly" onclick="showSlide(2)">🦋</span>
+    <span class="butterfly" onclick="showSlide(3)">🦋</span>
+    <span class="butterfly" onclick="showSlide(4)">🦋</span>
+    <span class="butterfly" onclick="showSlide(5)">🦋</span>
+    <span class="butterfly" onclick="showSlide(6)">🦋</span>
+    <span class="butterfly" onclick="showSlide(7)">🦋</span>
+    <span class="butterfly" onclick="showSlide(8)">🦋</span>
+    <span class="butterfly" onclick="showSlide(9)">🦋</span>
+  </div>
+
+  <div id="message" class="message"></div>
+
 </div>
+
+<!-- 🎹 BACKGROUND MUSIC -->
+<audio id="music" autoplay loop>
+  <source src="piano.mp3" type="audio/mp3">
+</audio>
 
 <script>
 
-let step = 0;
-
 const slides = [
   {
-    img: "photo1.jpg",
-    text: "Every moment has something that stays..."
+    text: "You are the most beautiful soul I’ve ever met.",
+    bg: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"
   },
   {
-    img: "photo2.jpg",
-    text: "Even the quiet ones feel infinite..."
+    text: "You bring calm into everything around you.",
+    bg: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
   },
   {
-    img: "photo3.jpg",
-    text: "Some memories don't leave..."
+    text: "Every moment with you feels different.",
+    bg: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e"
+  },
+  {
+    text: "You have a light that stays with me.",
+    bg: "https://images.unsplash.com/photo-1493244040629-496f6d136cc3"
+  },
+  {
+    text: "Even silence feels beautiful with you.",
+    bg: "https://images.unsplash.com/photo-1501785888041-af3ef285b470"
+  },
+  {
+    text: "You make everything feel softer.",
+    bg: "https://images.unsplash.com/photo-1469474968028-56623f02e42e"
+  },
+  {
+    text: "There’s something special about you I can’t explain.",
+    bg: "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+  },
+  {
+    text: "You feel like peace.",
+    bg: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e"
+  },
+  {
+    text: "I could stay in those moments forever.",
+    bg: "https://images.unsplash.com/photo-1433086966358-54859d0ed716"
+  },
+  {
+    text: "Feliz cumpleaños, Patricia ❤️",
+    bg: "https://images.unsplash.com/photo-1500534623283-312aade485b7"
   }
 ];
 
-function start() {
-  nextSlide();
-}
+function showSlide(index) {
+  const bg = document.getElementById("bg");
+  const msg = document.getElementById("message");
 
-function nextSlide() {
-  if (step >= slides.length) return;
+  bg.style.backgroundImage = `url(${slides[index].bg})`;
 
-  const content = document.getElementById("content");
-
-  content.innerHTML = `
-    <img id="photo" src="${slides[step].img}">
-    <div class="text" id="text">${slides[step].text}</div>
-  `;
+  msg.classList.remove("show");
 
   setTimeout(() => {
-    document.getElementById("text").classList.add("show");
-  }, 1000);
-
-  step++;
-
-  setTimeout(nextSlide, 6000);
-}
-
-/* PARTICLES */
-for (let i = 0; i < 50; i++) {
-  let p = document.createElement("div");
-  p.className = "particle";
-  p.style.left = Math.random() * 100 + "vw";
-  p.style.animationDuration = (8 + Math.random()*6) + "s";
-  document.getElementById("particles").appendChild(p);
+    msg.innerHTML = slides[index].text;
+    msg.classList.add("show");
+  }, 500);
 }
 
 </script>

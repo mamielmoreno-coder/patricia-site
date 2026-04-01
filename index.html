@@ -3,161 +3,153 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For Patricia ❤️</title>
+<title>Patricia</title>
 
 <style>
 body {
   margin: 0;
   overflow: hidden;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(#ff7e5f, #feb47b);
-  transition: background 5s ease;
+  font-family: 'Arial', sans-serif;
   color: white;
+  background: black;
 }
 
-/* 🌅 Sunset to night */
-.night {
-  background: linear-gradient(#020111, #191621);
+/* 🌅 SUNSET BACKGROUND */
+.background {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, #1a0f0a, #3a1f14, #ff7a3d, #ffd6a5);
+  animation: breathe 20s infinite ease-in-out;
 }
 
-/* ✨ particles */
-canvas {
+@keyframes breathe {
+  0%,100% { filter: brightness(1); }
+  50% { filter: brightness(1.2); }
+}
+
+/* ✨ PARTICLES */
+.particle {
   position: absolute;
-  top: 0;
-  left: 0;
-}
-
-/* 🦋 butterfly */
-.butterfly {
-  position: absolute;
-  width: 70px;
-  animation: float 8s ease-in-out infinite;
+  width: 2px;
+  height: 2px;
+  background: white;
+  opacity: 0.4;
+  border-radius: 50%;
+  animation: float linear infinite;
 }
 
 @keyframes float {
-  0%,100% { transform: translate(10vw,60vh); }
-  50% { transform: translate(70vw,30vh); }
+  from { transform: translateY(100vh); }
+  to { transform: translateY(-100vh); }
 }
 
-/* 💬 text */
-.container {
+/* CENTER CONTENT */
+.center {
   position: absolute;
   width: 100%;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 40%;
   text-align: center;
+  z-index: 10;
 }
 
-h1 {
-  font-size: 2.5rem;
-}
-
-#text {
-  margin-top: 20px;
-  font-size: 1.2rem;
-  min-height: 40px;
-}
-
-/* ❤️ button */
-button {
-  margin-top: 30px;
-  padding: 12px 25px;
-  border-radius: 25px;
-  border: none;
-  background: white;
-  color: black;
+/* 🦋 BUTTERFLY */
+.butterfly {
+  font-size: 40px;
   cursor: pointer;
-  font-size: 1rem;
+  animation: fly 3s infinite ease-in-out;
 }
 
-button:hover {
-  background: #ff4d6d;
-  color: white;
+@keyframes fly {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0); }
+}
+
+/* 📸 PHOTO */
+img {
+  width: 600px;
+  max-width: 80%;
+  border-radius: 12px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.6);
+  transition: opacity 1.5s;
+}
+
+/* TEXT */
+.text {
+  margin-top: 20px;
+  font-size: 20px;
+  opacity: 0;
+  transition: opacity 2s;
+}
+
+.show {
+  opacity: 1;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="canvas"></canvas>
+<div class="background"></div>
+<div id="particles"></div>
 
-<img class="butterfly" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Butterfly_icon.svg/1024px-Butterfly_icon.svg.png">
-
-<div class="container">
-  <h1>Patricia…</h1>
-  <div id="text"></div>
-  <button onclick="start()">Start</button>
+<div id="content" class="center">
+  <p>This is not what you think.</p>
+  <div class="butterfly" onclick="start()">🦋</div>
 </div>
 
-<audio id="music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-
 <script>
-/* ✨ particles */
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+let step = 0;
 
-let particles = [];
-
-for(let i=0;i<100;i++){
-  particles.push({
-    x: Math.random()*canvas.width,
-    y: Math.random()*canvas.height,
-    r: Math.random()*2,
-    dx: (Math.random()-0.5),
-    dy: (Math.random()-0.5)
-  });
-}
-
-function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  particles.forEach(p=>{
-    p.x+=p.dx;
-    p.y+=p.dy;
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle="white";
-    ctx.fill();
-  });
-  requestAnimationFrame(animate);
-}
-animate();
-
-/* ⌨️ typing effect */
-const lines = [
-"I didn't want to send you something normal…",
-"Because you're not someone normal to me.",
-"Somehow… you became a feeling.",
-"And I can't really explain it…",
-"But I know it's real."
+const slides = [
+  {
+    img: "photo1.jpg",
+    text: "Every moment has something that stays..."
+  },
+  {
+    img: "photo2.jpg",
+    text: "Even the quiet ones feel infinite..."
+  },
+  {
+    img: "photo3.jpg",
+    text: "Some memories don't leave..."
+  }
 ];
 
-let i=0, j=0;
-
-function type(){
-  if(i < lines.length){
-    if(j < lines[i].length){
-      document.getElementById("text").innerHTML += lines[i][j];
-      j++;
-      setTimeout(type, 40);
-    } else {
-      document.getElementById("text").innerHTML += "<br><br>";
-      i++;
-      j=0;
-      setTimeout(type, 800);
-    }
-  }
+function start() {
+  nextSlide();
 }
 
-/* 🚀 start */
-function start(){
-  document.body.classList.add("night");
-  document.getElementById("music").play();
-  document.getElementById("text").innerHTML = "";
-  type();
+function nextSlide() {
+  if (step >= slides.length) return;
+
+  const content = document.getElementById("content");
+
+  content.innerHTML = `
+    <img id="photo" src="${slides[step].img}">
+    <div class="text" id="text">${slides[step].text}</div>
+  `;
+
+  setTimeout(() => {
+    document.getElementById("text").classList.add("show");
+  }, 1000);
+
+  step++;
+
+  setTimeout(nextSlide, 6000);
 }
+
+/* PARTICLES */
+for (let i = 0; i < 50; i++) {
+  let p = document.createElement("div");
+  p.className = "particle";
+  p.style.left = Math.random() * 100 + "vw";
+  p.style.animationDuration = (8 + Math.random()*6) + "s";
+  document.getElementById("particles").appendChild(p);
+}
+
 </script>
 
 </body>

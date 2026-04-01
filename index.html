@@ -2,39 +2,49 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Patricia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Patricia</title>
 
 <style>
 body {
   margin: 0;
-  font-family: Arial;
+  font-family: Arial, sans-serif;
   overflow: hidden;
-  color: white;
 }
 
-/* 🌅 BACKGROUND IMAGE */
-.background {
+/* 🌅 BACKGROUND */
+#bg {
   position: fixed;
   width: 100%;
   height: 100%;
   background-size: cover;
   background-position: center;
-  transition: 1.5s ease;
+  transition: opacity 1.5s ease;
+}
+
+/* DARK OVERLAY (cinematic) */
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.35);
 }
 
 /* CENTER */
 .center {
   position: absolute;
   width: 100%;
-  top: 40%;
+  bottom: 15%;
   text-align: center;
+  z-index: 10;
 }
 
-/* BUTTERFLIES */
+/* 🦋 BUTTERFLIES */
 .butterfly {
-  font-size: 35px;
+  font-size: 32px;
+  margin: 8px;
   cursor: pointer;
-  margin: 10px;
+  display: inline-block;
   transition: transform 0.3s;
 }
 
@@ -43,105 +53,109 @@ body {
 }
 
 /* MESSAGE */
-.message {
+#text {
+  color: white;
+  font-size: 20px;
   margin-top: 20px;
-  font-size: 24px;
   opacity: 0;
-  transition: opacity 1.5s;
+  transition: opacity 2s;
+  padding: 0 20px;
 }
 
 .show {
   opacity: 1;
+}
+
+/* START SCREEN */
+#start {
+  position: absolute;
+  width: 100%;
+  top: 40%;
+  text-align: center;
+  color: white;
+  z-index: 20;
+}
+
+.start-btn {
+  font-size: 40px;
+  cursor: pointer;
+  animation: float 2s infinite;
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 </style>
 </head>
 
 <body>
 
-<div id="bg" class="background"></div>
+<div id="bg"></div>
+<div class="overlay"></div>
 
-<div id="content" class="center">
-
-  <div id="butterflies">
-    <!-- 10 butterflies -->
-    <span class="butterfly" onclick="showSlide(0)">🦋</span>
-    <span class="butterfly" onclick="showSlide(1)">🦋</span>
-    <span class="butterfly" onclick="showSlide(2)">🦋</span>
-    <span class="butterfly" onclick="showSlide(3)">🦋</span>
-    <span class="butterfly" onclick="showSlide(4)">🦋</span>
-    <span class="butterfly" onclick="showSlide(5)">🦋</span>
-    <span class="butterfly" onclick="showSlide(6)">🦋</span>
-    <span class="butterfly" onclick="showSlide(7)">🦋</span>
-    <span class="butterfly" onclick="showSlide(8)">🦋</span>
-    <span class="butterfly" onclick="showSlide(9)">🦋</span>
-  </div>
-
-  <div id="message" class="message"></div>
-
+<!-- START -->
+<div id="start">
+  <p>This is something for you…</p>
+  <div class="start-btn" onclick="start()">🦋</div>
 </div>
 
-<!-- 🎹 BACKGROUND MUSIC -->
-<audio id="music" autoplay loop>
+<!-- MAIN -->
+<div id="content" class="center" style="display:none;">
+  <div id="butterflies"></div>
+  <div id="text"></div>
+</div>
+
+<!-- 🎹 MUSIC -->
+<audio id="music" loop>
   <source src="piano.mp3" type="audio/mp3">
 </audio>
 
 <script>
 
 const slides = [
-  {
-    text: "You are the most beautiful soul I’ve ever met.",
-    bg: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"
-  },
-  {
-    text: "You bring calm into everything around you.",
-    bg: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
-  },
-  {
-    text: "Every moment with you feels different.",
-    bg: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e"
-  },
-  {
-    text: "You have a light that stays with me.",
-    bg: "https://images.unsplash.com/photo-1493244040629-496f6d136cc3"
-  },
-  {
-    text: "Even silence feels beautiful with you.",
-    bg: "https://images.unsplash.com/photo-1501785888041-af3ef285b470"
-  },
-  {
-    text: "You make everything feel softer.",
-    bg: "https://images.unsplash.com/photo-1469474968028-56623f02e42e"
-  },
-  {
-    text: "There’s something special about you I can’t explain.",
-    bg: "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
-  },
-  {
-    text: "You feel like peace.",
-    bg: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e"
-  },
-  {
-    text: "I could stay in those moments forever.",
-    bg: "https://images.unsplash.com/photo-1433086966358-54859d0ed716"
-  },
-  {
-    text: "Feliz cumpleaños, Patricia ❤️",
-    bg: "https://images.unsplash.com/photo-1500534623283-312aade485b7"
-  }
+  { text: "You feel like peace.", bg: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee" },
+  { text: "You are something rare.", bg: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e" },
+  { text: "Being with you feels different.", bg: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e" },
+  { text: "You make everything softer.", bg: "https://images.unsplash.com/photo-1493244040629-496f6d136cc3" },
+  { text: "I remember moments with you, not just days.", bg: "https://images.unsplash.com/photo-1501785888041-af3ef285b470" },
+  { text: "You have a calm I didn’t know I needed.", bg: "https://images.unsplash.com/photo-1469474968028-56623f02e42e" },
+  { text: "Even silence feels full with you.", bg: "https://images.unsplash.com/photo-1506744038136-46273834b3fb" },
+  { text: "There’s something about you I can’t explain.", bg: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e" },
+  { text: "Some moments stay… and you are one of them.", bg: "https://images.unsplash.com/photo-1433086966358-54859d0ed716" },
+  { text: "Feliz cumpleaños, Patricia ❤️", bg: "https://images.unsplash.com/photo-1500534623283-312aade485b7" }
 ];
 
-function showSlide(index) {
+let current = -1;
+
+function start() {
+  document.getElementById("start").style.display = "none";
+  document.getElementById("content").style.display = "block";
+
+  document.getElementById("music").play();
+
+  const container = document.getElementById("butterflies");
+
+  slides.forEach((_, i) => {
+    const b = document.createElement("span");
+    b.className = "butterfly";
+    b.innerHTML = "🦋";
+    b.onclick = () => showSlide(i);
+    container.appendChild(b);
+  });
+}
+
+function showSlide(i) {
   const bg = document.getElementById("bg");
-  const msg = document.getElementById("message");
+  const text = document.getElementById("text");
 
-  bg.style.backgroundImage = `url(${slides[index].bg})`;
-
-  msg.classList.remove("show");
+  text.classList.remove("show");
 
   setTimeout(() => {
-    msg.innerHTML = slides[index].text;
-    msg.classList.add("show");
-  }, 500);
+    bg.style.backgroundImage = `url(${slides[i].bg})`;
+    text.innerHTML = slides[i].text;
+    text.classList.add("show");
+  }, 400);
 }
 
 </script>

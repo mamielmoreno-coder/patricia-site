@@ -13,7 +13,20 @@ body {
   overflow: hidden;
 }
 
-/* background */
+/* START SCREEN */
+#start {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: black;
+  z-index: 10;
+  font-size: 24px;
+}
+
+/* BACKGROUND */
 #bg {
   position: fixed;
   width: 100%;
@@ -21,19 +34,10 @@ body {
   background-size: cover;
   background-position: center;
   opacity: 0;
-  transition: opacity 2s ease, transform 8s ease;
-  transform: scale(1);
+  transition: opacity 2s;
 }
 
-/* overlay */
-.overlay {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-}
-
-/* text */
+/* TEXT */
 #text {
   position: absolute;
   bottom: 20%;
@@ -45,15 +49,6 @@ body {
   padding: 0 20px;
 }
 
-/* video */
-#video {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: none;
-}
-
 .show {
   opacity: 1;
 }
@@ -62,111 +57,83 @@ body {
 
 <body>
 
+<div id="start" onclick="start()">Tap to begin</div>
+
 <div id="bg"></div>
-<div class="overlay"></div>
 <div id="text"></div>
-
-<video id="video" src="final.mp4"></video>
-
-<audio id="music">
-  <source src="piano.mp3">
-</audio>
 
 <script>
 
-const timeline = [
-
+const scenes = [
   {
     bg: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05",
     lines: [
-      "",
       "I remember waiting for you…",
-      "I didn’t know if I would recognize you instantly."
+      "I didn’t know if I would recognize you instantly.",
+      "But I did."
     ]
   },
-
   {
     bg: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05",
     lines: [
-      "But I did.",
-      "",
-      "And that first hug…",
+      "That first hug…",
       "didn’t feel like the first at all."
     ]
   },
-
   {
     bg: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21",
     lines: [
-      "",
       "",
       "That moment… on the ferry."
     ]
   },
-
   {
     bg: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21",
     lines: [
       "Your hands were cold…",
-      "",
       "I just wanted to stay there a little longer."
     ]
   },
-
   {
-    bg: "black",
+    bg: "",
     lines: [
-      "",
       "Some moments stay.",
       "You are one of them."
     ]
   }
-
 ];
 
 let scene = 0;
 let line = 0;
 
-const bg = document.getElementById("bg");
-const text = document.getElementById("text");
-const music = document.getElementById("music");
-const video = document.getElementById("video");
-
-/* START ON FIRST TAP (mobile safe) */
-document.body.onclick = () => {
-  music.play();
+function start() {
+  document.getElementById("start").style.display = "none";
   nextScene();
-  document.body.onclick = null;
-};
+}
 
 function nextScene() {
 
-  if (scene >= timeline.length) {
-    showVideo();
-    return;
-  }
+  if (scene >= scenes.length) return;
 
-  const current = timeline[scene];
+  const bg = document.getElementById("bg");
+  const text = document.getElementById("text");
+
+  const current = scenes[scene];
 
   bg.style.opacity = 0;
 
   setTimeout(() => {
 
-    if (current.bg === "black") {
-      bg.style.backgroundImage = "none";
-      bg.style.backgroundColor = "black";
-    } else {
+    if (current.bg) {
       bg.style.backgroundImage = `url(${current.bg})`;
     }
 
     bg.style.opacity = 1;
-    bg.style.transform = "scale(1.05)";
 
     line = 0;
     showLine(current);
 
-  }, 1500);
-
+  }, 1000);
 }
 
 function showLine(current) {
@@ -177,26 +144,19 @@ function showLine(current) {
     return;
   }
 
+  const text = document.getElementById("text");
+
   text.classList.remove("show");
 
   setTimeout(() => {
     text.innerHTML = current.lines[line];
     text.classList.add("show");
     line++;
-  }, 1200);
+  }, 800);
 
   setTimeout(() => {
     showLine(current);
-  }, 3500);
-}
-
-function showVideo() {
-  text.classList.remove("show");
-
-  setTimeout(() => {
-    video.style.display = "block";
-    video.play();
-  }, 2000);
+  }, 3000);
 }
 
 </script>

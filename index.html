@@ -13,43 +13,24 @@ body {
   color: white;
 }
 
-/* 🌅 BACKGROUND */
+/* BACKGROUND */
 #bg {
   position: fixed;
   width: 100%;
   height: 100%;
   background-size: cover;
   background-position: center;
-  transition: opacity 2s ease, transform 8s ease, filter 3s ease;
   opacity: 0;
-  filter: blur(8px);
+  transition: opacity 2s ease, transform 10s ease;
+  transform: scale(1);
 }
 
-/* OVERLAY */
+/* DARK OVERLAY */
 .overlay {
   position: fixed;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.55);
-}
-
-/* CINEMA FADE */
-#fade {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: black;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 1.5s;
-}
-
-/* 🦋 BUTTERFLY */
-#butterfly {
-  position: absolute;
-  font-size: 38px;
-  cursor: pointer;
-  transition: transform 3s ease-in-out, opacity 1s;
+  background: rgba(0,0,0,0.5);
 }
 
 /* TEXT */
@@ -58,14 +39,14 @@ body {
   bottom: 15%;
   width: 100%;
   text-align: center;
-  font-size: 24px;
+  font-size: 22px;
   opacity: 0;
   transition: opacity 2s;
   padding: 0 20px;
 }
 
 /* VIDEO */
-#finalVideo {
+#video {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -76,12 +57,6 @@ body {
 .show {
   opacity: 1;
 }
-
-/* 🌊 WAVE EFFECT */
-@keyframes wave {
-  0% { background-position-x: 0px; }
-  100% { background-position-x: 200px; }
-}
 </style>
 </head>
 
@@ -89,12 +64,9 @@ body {
 
 <div id="bg"></div>
 <div class="overlay"></div>
-<div id="fade"></div>
-
-<div id="butterfly">🦋</div>
 <div id="text"></div>
 
-<video id="finalVideo" src="final.mp4"></video>
+<video id="video" src="final.mp4"></video>
 
 <audio id="music" loop>
   <source src="piano.mp3">
@@ -103,146 +75,134 @@ body {
 <script>
 
 const scenes = [
-  {
-    text: "There was something about that moment…",
-    bg: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"
-  },
-  {
-    text: "When everything felt quiet…",
-    bg: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
-  },
 
-  /* 🌊 FERRY SCENE */
+  /* AIRPORT */
   {
-    text: "",
-    bg: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21",
-    ferry: true
+    bg: "airport.jpg",
+    texts: [
+      "I remember waiting for you…",
+      "I was just hoping I would recognize you instantly.",
+      "And I did."
+    ]
   },
 
   {
-    text: "Like time slowed down.",
-    bg: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e"
-  },
-  {
-    text: "And I didn’t want it to end.",
-    bg: "https://images.unsplash.com/photo-1493244040629-496f6d136cc3"
-  },
-  {
-    text: "You have that effect.",
-    bg: "https://images.unsplash.com/photo-1501785888041-af3ef285b470"
-  },
-  {
-    text: "You make moments stay.",
-    bg: "https://images.unsplash.com/photo-1469474968028-56623f02e42e"
-  },
-  {
-    text: "Even after they’re gone.",
-    bg: "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
-  },
-  {
-    text: "You feel like something rare.",
-    bg: "https://images.unsplash.com/photo-1433086966358-54859d0ed716"
+    bg: "airport.jpg",
+    texts: [
+      "That first hug…",
+      "didn’t feel like the first at all."
+    ]
   },
 
-  /* 🎬 FINAL */
+  /* FERRY */
   {
-    final: true
+    bg: "ferry.jpg",
+    texts: [
+      ""
+    ]
+  },
+
+  {
+    bg: "ferry.jpg",
+    texts: [
+      "Your hands were cold…",
+      "I just wanted to warm them."
+    ]
+  },
+
+  {
+    bg: "ferry.jpg",
+    texts: [
+      "I didn’t want that moment to end."
+    ]
+  },
+
+  /* FINAL */
+  {
+    bg: "black",
+    texts: [
+      "Some moments stay.",
+      "You are one of them."
+    ]
   }
+
 ];
 
-let index = 0;
+let sceneIndex = 0;
+let textIndex = 0;
 
-const butterfly = document.getElementById("butterfly");
+const bg = document.getElementById("bg");
+const text = document.getElementById("text");
+const music = document.getElementById("music");
+const video = document.getElementById("video");
 
-/* 🦋 DRIFT */
-function drift() {
-  const x = Math.random() * (window.innerWidth - 50);
-  const y = Math.random() * (window.innerHeight - 50);
-  butterfly.style.transform = `translate(${x}px, ${y}px)`;
-}
-setInterval(drift, 4000);
-
-/* CLICK */
-butterfly.onclick = () => {
-  document.getElementById("music").play();
+/* START AUTOMATICALLY */
+setTimeout(() => {
+  music.play();
   nextScene();
-};
+}, 2000);
 
-/* 🎬 SCENE */
 function nextScene() {
 
-  if (index >= scenes.length) return;
+  if (sceneIndex >= scenes.length) {
+    showFinalVideo();
+    return;
+  }
 
-  const bg = document.getElementById("bg");
-  const text = document.getElementById("text");
-  const fade = document.getElementById("fade");
-  const video = document.getElementById("finalVideo");
+  const scene = scenes[sceneIndex];
 
-  const scene = scenes[index];
-
-  butterfly.style.opacity = 0;
-  fade.style.opacity = 1;
+  bg.style.opacity = 0;
 
   setTimeout(() => {
 
-    /* FINAL VIDEO */
-    if (scene.final) {
-      bg.style.opacity = 0;
-      text.innerHTML = "Patricia ❤️";
-      text.classList.add("show");
-
-      setTimeout(() => {
-        text.classList.remove("show");
-        video.style.display = "block";
-        video.play();
-      }, 3000);
-
-      return;
+    if (scene.bg === "black") {
+      bg.style.backgroundImage = "none";
+      bg.style.backgroundColor = "black";
+    } else {
+      bg.style.backgroundImage = `url(${scene.bg})`;
     }
 
-    bg.style.backgroundImage = `url(${scene.bg})`;
     bg.style.opacity = 1;
-    bg.style.transform = "scale(1.08)";
-    bg.style.filter = "blur(8px)";
+    bg.style.transform = "scale(1.05)";
 
-    text.classList.remove("show");
+    textIndex = 0;
+    showText(scene);
 
-    /* 🌊 FERRY */
-    if (scene.ferry) {
-      bg.style.animation = "wave 8s infinite linear";
-    } else {
-      bg.style.animation = "none";
-    }
+  }, 1500);
 
-    /* UNBLUR */
-    setTimeout(() => {
-      bg.style.filter = "blur(0px)";
-    }, 1500);
-
-    /* TEXT TIMING */
-    if (scene.ferry) {
-      setTimeout(() => {
-        text.innerHTML = "That moment… on the ferry.";
-        text.classList.add("show");
-      }, 4000);
-    } else {
-      setTimeout(() => {
-        text.innerHTML = scene.text;
-        text.classList.add("show");
-      }, 2500);
-    }
-
-    fade.style.opacity = 0;
-
-    setTimeout(() => {
-      drift();
-      butterfly.style.opacity = 1;
-    }, 3000);
-
-  }, 1200);
-
-  index++;
 }
+
+function showText(scene) {
+
+  if (textIndex >= scene.texts.length) {
+    sceneIndex++;
+    setTimeout(nextScene, 3000);
+    return;
+  }
+
+  text.classList.remove("show");
+
+  setTimeout(() => {
+    text.innerHTML = scene.texts[textIndex];
+    text.classList.add("show");
+    textIndex++;
+  }, 1000);
+
+  setTimeout(() => {
+    showText(scene);
+  }, 4000);
+
+}
+
+function showFinalVideo() {
+  text.classList.remove("show");
+
+  setTimeout(() => {
+    video.style.display = "block";
+    video.play();
+  }, 2000);
+}
+
 </script>
 
 </body>

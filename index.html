@@ -17,75 +17,33 @@ body {
   text-align: center;
 }
 
-/* TEXT */
 #text {
   font-size: 20px;
   padding: 20px;
-}
-
-/* BUTTON */
-#startBtn {
-  margin-top: 30px;
-  padding: 12px 20px;
-  font-size: 16px;
-  background: white;
-  color: black;
-  border: none;
-  border-radius: 8px;
 }
 </style>
 </head>
 
 <body>
 
-<div>
-  <div id="text">
-    Life has more meaning with you...<br><br>
-    I have loved anyone as much as I have loved you.<br><br>
-    I have never wanted to do so many things with anyone as much as I want with you.<br><br>
-    Your love is unmatched and your care can't be surpassed...<br><br>
-    you don't know how lovely you are Patricia ♥
-  </div>
+<!-- 🎹 MUSIC -->
+<audio id="music" src="Jamie-Duffy-Solas-Official.mp3" loop></audio>
 
-  <button id="startBtn">Continue</button>
+<div id="text">
+  Life has more meaning with you...<br><br>
+  I have loved anyone as much as I have loved you.<br><br>
+  I have never wanted to do so many things with anyone as much as I want with you.<br><br>
+  Your love is unmatched and your care can't be surpassed...<br><br>
+  you don't know how lovely you are Patricia ♥
 </div>
 
 <script>
 
-const scenes = [
-  "I remember waiting for you…",
-  "I didn’t know if I would recognize you instantly.",
-  "But I did.",
-  "",
-  "That first hug…",
-  "didn’t feel like the first at all.",
-  "",
-  "That moment… on the ferry.",
-  "Your hands were cold…",
-  "I didn’t want to let go.",
-  "",
-  "Some moments stay.",
-  "You are one of them.",
-  "",
-  "Patricia"
-];
-
-let i = 0;
-
-document.getElementById("startBtn").onclick = () => {
-  next();
+/* play music on first tap */
+document.body.onclick = function() {
+  document.getElementById("music").play();
+  document.body.onclick = null;
 };
-
-function next() {
-
-  if (i >= scenes.length) return;
-
-  document.getElementById("text").innerHTML = scenes[i];
-
-  i++;
-
-  setTimeout(next, 3000);
-}
 
 </script>
 

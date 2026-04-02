@@ -4,14 +4,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Patricia</title>
 
+<!-- ✍️ HANDWRITTEN FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap" rel="stylesheet">
+
 <style>
 body {
   margin: 0;
-  background: black;
-  color: white;
-  font-family: Arial;
+  background: #fdf6e3; /* paper feeling */
+  color: #222;
+  font-family: 'Caveat', cursive;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -19,34 +21,58 @@ body {
   padding: 20px;
 }
 
-/* TEXT FIXED */
+/* TEXT */
 #text {
-  font-size: 22px;
-  display: block;
+  font-size: 26px;
   max-width: 90%;
+  line-height: 1.8;
+  letter-spacing: 0.5px;
+  transform: rotate(-1deg);
+  text-shadow: 0px 1px 1px rgba(0,0,0,0.1);
+  z-index: 2;
 }
 
 /* BUTTON */
 #btn {
-  margin-top: 30px;
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
   padding: 14px 24px;
   font-size: 16px;
-  background: white;
-  color: black;
+  background: #222;
+  color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
+  opacity: 0;
   display: none;
+  transition: opacity 2s ease;
+  z-index: 2;
 }
 
-/* PHOTO FULL SCREEN STYLE */
+/* PHOTO */
 #photo {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: auto;
-  max-height: 70vh;
+  height: 100%;
   object-fit: cover;
-  border-radius: 12px;
-  margin-bottom: 20px;
+  transform: scale(1);
+  transition: transform 6s ease;
   display: none;
+  z-index: 0;
+}
+
+/* CAPTION */
+#caption {
+  position: absolute;
+  bottom: 100px;
+  font-size: 22px;
+  max-width: 90%;
+  z-index: 2;
+  display: none;
+  color: white;
 }
 </style>
 </head>
@@ -58,6 +84,7 @@ body {
 <img id="photo" src="Screenshot_2026-04-02-12-47-16-582_com.miui.gallery.jpg">
 
 <div id="text">welcome</div>
+<div id="caption">Istanbul and me both of us had the best days when you were here✨</div>
 <button id="btn"></button>
 
 <script>
@@ -86,16 +113,16 @@ const pages = [
 
 "I love you birthday girl<br><br>You are the most beautiful thing in the world ❤",
 
-"Istanbul and me both of us had the best days when you were here✨"
-
+""
 ];
 
 let i = 0;
+
 const text = document.getElementById("text");
 const btn = document.getElementById("btn");
 const photo = document.getElementById("photo");
+const caption = document.getElementById("caption");
 
-/* SHOW BUTTON AFTER 2s */
 setTimeout(showButton, 2000);
 
 btn.onclick = function() {
@@ -108,28 +135,35 @@ btn.onclick = function() {
 
   if (i >= pages.length) return;
 
-  text.innerHTML = pages[i];
+  btn.style.opacity = 0;
+  btn.style.display = "none";
 
-  /* SHOW PHOTO ONLY LAST PAGE */
+  photo.style.display = "none";
+  photo.style.transform = "scale(1)";
+  caption.style.display = "none";
+
   if (i === 11) {
+
+    text.innerHTML = "";
+
     photo.style.display = "block";
-  } else {
-    photo.style.display = "none";
+    caption.style.display = "block";
+
+    setTimeout(() => {
+      photo.style.transform = "scale(1.2)";
+    }, 300);
+
+    return;
   }
+
+  text.innerHTML = pages[i];
 
   showButton();
 };
 
 function showButton() {
 
-  btn.style.display = "none";
-
   setTimeout(() => {
-
-    if (i === 11) {
-      btn.style.display = "none";
-      return;
-    }
 
     btn.style.display = "block";
 
@@ -138,6 +172,10 @@ function showButton() {
     } else {
       btn.innerHTML = "Explore more";
     }
+
+    setTimeout(() => {
+      btn.style.opacity = 1;
+    }, 100);
 
   }, 2000);
 }

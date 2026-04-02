@@ -9,108 +9,82 @@ body {
   margin: 0;
   background: black;
   color: white;
-  overflow: hidden;
   font-family: Arial;
-}
-
-#bg {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at center, #111 0%, #000 100%);
-  animation: breathe 8s infinite ease-in-out;
-}
-
-@keyframes breathe {
-  0%,100% { opacity: 1; }
-  50% { opacity: 0.85; }
-}
-
-#text {
-  position: absolute;
-  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
   text-align: center;
-  top: 40%;
-  font-size: 20px;
-  opacity: 0;
-  transition: opacity 1.5s;
-  padding: 0 20px;
 }
 
-.show {
-  opacity: 1;
+/* TEXT */
+#text {
+  font-size: 20px;
+  padding: 20px;
+}
+
+/* BUTTON */
+#startBtn {
+  margin-top: 30px;
+  padding: 12px 20px;
+  font-size: 16px;
+  background: white;
+  color: black;
+  border: none;
+  border-radius: 8px;
 }
 </style>
 </head>
 
 <body>
 
-<div id="bg"></div>
-<div id="text"></div>
+<div>
+  <div id="text">
+    Life has more meaning with you...<br><br>
+    I have loved anyone as much as I have loved you.<br><br>
+    I have never wanted to do so many things with anyone as much as I want with you.<br><br>
+    Your love is unmatched and your care can't be surpassed...<br><br>
+    you don't know how lovely you are Patricia ♥
+  </div>
+
+  <button id="startBtn">Continue</button>
+</div>
 
 <script>
 
-const moments = [
-
-  /* 🔥 YOUR TEXT FIRST */
-  { t:"Life has more meaning with you...", d:5000 },
-  { t:"I have loved anyone as much as I have loved you.", d:5000 },
-  { t:"I have never wanted to do so many things with anyone as much as I want with you.", d:6000 },
-  { t:"Your love is unmatched and your care can't be surpassed...", d:5000 },
-  { t:"you don't know how lovely you are Patricia ♥", d:6000 },
-
-  { t:"", d:3000 },
-
-  /* ✈️ AIRPORT */
-  { t:"I remember waiting for you…", d:3500 },
-  { t:"", d:1500 },
-  { t:"I didn’t know if I would recognize you instantly.", d:4000 },
-  { t:"But I did.", d:2500 },
-
-  { t:"", d:3000 },
-
-  /* 🤝 HUG */
-  { t:"That first hug…", d:3000 },
-  { t:"didn’t feel like the first at all.", d:5000 },
-
-  { t:"", d:3500 },
-
-  /* 🌊 FERRY */
-  { t:"That moment… on the ferry.", d:4000 },
-  { t:"", d:2500 },
-  { t:"Your hands were cold…", d:4000 },
-  { t:"I didn’t want to let go.", d:5000 },
-
-  { t:"", d:4000 },
-
-  /* 🎯 FINAL */
-  { t:"Patricia", d:6000 }
-
+const scenes = [
+  "I remember waiting for you…",
+  "I didn’t know if I would recognize you instantly.",
+  "But I did.",
+  "",
+  "That first hug…",
+  "didn’t feel like the first at all.",
+  "",
+  "That moment… on the ferry.",
+  "Your hands were cold…",
+  "I didn’t want to let go.",
+  "",
+  "Some moments stay.",
+  "You are one of them.",
+  "",
+  "Patricia"
 ];
 
 let i = 0;
-const text = document.getElementById("text");
 
-document.body.onclick = () => {
-  flow();
-  document.body.onclick = null;
+document.getElementById("startBtn").onclick = () => {
+  next();
 };
 
-function flow() {
+function next() {
 
-  if (i >= moments.length) return;
+  if (i >= scenes.length) return;
 
-  text.classList.remove("show");
+  document.getElementById("text").innerHTML = scenes[i];
 
-  setTimeout(() => {
-    text.innerHTML = moments[i].t;
-    text.classList.add("show");
-  }, 300);
+  i++;
 
-  setTimeout(() => {
-    i++;
-    flow();
-  }, moments[i].d);
+  setTimeout(next, 3000);
 }
 
 </script>

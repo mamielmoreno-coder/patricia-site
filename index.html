@@ -11,6 +11,7 @@ body {
   color: white;
   font-family: Arial;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -21,6 +22,16 @@ body {
   font-size: 20px;
   padding: 20px;
 }
+
+#playBtn {
+  margin-top: 20px;
+  padding: 12px 20px;
+  font-size: 16px;
+  background: white;
+  color: black;
+  border: none;
+  border-radius: 8px;
+}
 </style>
 </head>
 
@@ -29,6 +40,7 @@ body {
 <!-- 🎹 MUSIC -->
 <audio id="music" src="Jamie-Duffy-Solas-Official.mp3" loop></audio>
 
+<!-- YOUR TEXT -->
 <div id="text">
   Life has more meaning with you...<br><br>
   I have loved anyone as much as I have loved you.<br><br>
@@ -37,14 +49,14 @@ body {
   you don't know how lovely you are Patricia ♥
 </div>
 
+<!-- BUTTON -->
+<button id="playBtn">Tap to play</button>
+
 <script>
-
-/* play music on first tap */
-document.body.onclick = function() {
+document.getElementById("playBtn").onclick = function() {
   document.getElementById("music").play();
-  document.body.onclick = null;
+  this.style.display = "none";
 };
-
 </script>
 
 </body>

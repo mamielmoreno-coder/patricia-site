@@ -19,35 +19,34 @@ body {
   padding: 20px;
 }
 
+/* TEXT FIXED */
 #text {
   font-size: 22px;
-  opacity: 0;
-  transition: opacity 1.5s;
+  display: block;
+  max-width: 90%;
 }
 
+/* BUTTON */
 #btn {
   margin-top: 30px;
-  padding: 12px 22px;
+  padding: 14px 24px;
   font-size: 16px;
   background: white;
   color: black;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   display: none;
-  opacity: 0;
-  transition: opacity 1s;
 }
 
+/* PHOTO FULL SCREEN STYLE */
 #photo {
-  max-width: 90%;
-  max-height: 60vh;
+  width: 100%;
+  height: auto;
+  max-height: 70vh;
+  object-fit: cover;
+  border-radius: 12px;
   margin-bottom: 20px;
   display: none;
-  border-radius: 12px;
-}
-
-.show {
-  opacity: 1;
 }
 </style>
 </head>
@@ -58,7 +57,7 @@ body {
 
 <img id="photo" src="Screenshot_2026-04-02-12-47-16-582_com.miui.gallery.jpg">
 
-<div id="text"></div>
+<div id="text">welcome</div>
 <button id="btn"></button>
 
 <script>
@@ -96,7 +95,8 @@ const text = document.getElementById("text");
 const btn = document.getElementById("btn");
 const photo = document.getElementById("photo");
 
-showPage();
+/* SHOW BUTTON AFTER 2s */
+setTimeout(showButton, 2000);
 
 btn.onclick = function() {
 
@@ -108,42 +108,36 @@ btn.onclick = function() {
 
   if (i >= pages.length) return;
 
-  showPage();
+  text.innerHTML = pages[i];
+
+  /* SHOW PHOTO ONLY LAST PAGE */
+  if (i === 11) {
+    photo.style.display = "block";
+  } else {
+    photo.style.display = "none";
+  }
+
+  showButton();
 };
 
-function showPage() {
+function showButton() {
 
-  text.classList.remove("show");
-  btn.style.opacity = 0;
   btn.style.display = "none";
-  photo.style.display = "none";
 
   setTimeout(() => {
-
-    text.innerHTML = pages[i];
-    text.classList.add("show");
 
     if (i === 11) {
-      photo.style.display = "block";
+      btn.style.display = "none";
+      return;
     }
-
-  }, 500);
-
-  setTimeout(() => {
 
     btn.style.display = "block";
 
     if (i === 9) {
       btn.innerHTML = "Explore and play";
-    } else if (i === 11) {
-      btn.style.display = "none";
     } else {
       btn.innerHTML = "Explore more";
     }
-
-    setTimeout(() => {
-      btn.style.opacity = 1;
-    }, 100);
 
   }, 2000);
 }

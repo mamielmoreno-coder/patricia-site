@@ -9,43 +9,31 @@ body {
   margin: 0;
   background: black;
   color: white;
-  font-family: Arial;
   overflow: hidden;
+  font-family: Arial;
 }
 
-/* START SCREEN */
-#start {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: black;
-  z-index: 10;
-  font-size: 24px;
-}
-
-/* BACKGROUND */
 #bg {
   position: fixed;
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  transition: opacity 2s;
+  background: radial-gradient(circle at center, #111 0%, #000 100%);
+  animation: breathe 8s infinite ease-in-out;
 }
 
-/* TEXT */
+@keyframes breathe {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
 #text {
   position: absolute;
-  bottom: 20%;
   width: 100%;
   text-align: center;
-  font-size: 22px;
+  top: 40%;
+  font-size: 20px;
   opacity: 0;
-  transition: opacity 2s;
+  transition: opacity 1.5s;
   padding: 0 20px;
 }
 
@@ -57,106 +45,72 @@ body {
 
 <body>
 
-<div id="start" onclick="start()">Tap to begin</div>
-
 <div id="bg"></div>
 <div id="text"></div>
 
 <script>
 
-const scenes = [
-  {
-    bg: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05",
-    lines: [
-      "I remember waiting for you…",
-      "I didn’t know if I would recognize you instantly.",
-      "But I did."
-    ]
-  },
-  {
-    bg: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05",
-    lines: [
-      "That first hug…",
-      "didn’t feel like the first at all."
-    ]
-  },
-  {
-    bg: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21",
-    lines: [
-      "",
-      "That moment… on the ferry."
-    ]
-  },
-  {
-    bg: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21",
-    lines: [
-      "Your hands were cold…",
-      "I just wanted to stay there a little longer."
-    ]
-  },
-  {
-    bg: "",
-    lines: [
-      "Some moments stay.",
-      "You are one of them."
-    ]
-  }
+const moments = [
+
+  /* 🔥 YOUR TEXT FIRST */
+  { t:"Life has more meaning with you...", d:5000 },
+  { t:"I have loved anyone as much as I have loved you.", d:5000 },
+  { t:"I have never wanted to do so many things with anyone as much as I want with you.", d:6000 },
+  { t:"Your love is unmatched and your care can't be surpassed...", d:5000 },
+  { t:"you don't know how lovely you are Patricia ♥", d:6000 },
+
+  { t:"", d:3000 },
+
+  /* ✈️ AIRPORT */
+  { t:"I remember waiting for you…", d:3500 },
+  { t:"", d:1500 },
+  { t:"I didn’t know if I would recognize you instantly.", d:4000 },
+  { t:"But I did.", d:2500 },
+
+  { t:"", d:3000 },
+
+  /* 🤝 HUG */
+  { t:"That first hug…", d:3000 },
+  { t:"didn’t feel like the first at all.", d:5000 },
+
+  { t:"", d:3500 },
+
+  /* 🌊 FERRY */
+  { t:"That moment… on the ferry.", d:4000 },
+  { t:"", d:2500 },
+  { t:"Your hands were cold…", d:4000 },
+  { t:"I didn’t want to let go.", d:5000 },
+
+  { t:"", d:4000 },
+
+  /* 🎯 FINAL */
+  { t:"Patricia", d:6000 }
+
 ];
 
-let scene = 0;
-let line = 0;
+let i = 0;
+const text = document.getElementById("text");
 
-function start() {
-  document.getElementById("start").style.display = "none";
-  nextScene();
-}
+document.body.onclick = () => {
+  flow();
+  document.body.onclick = null;
+};
 
-function nextScene() {
+function flow() {
 
-  if (scene >= scenes.length) return;
-
-  const bg = document.getElementById("bg");
-  const text = document.getElementById("text");
-
-  const current = scenes[scene];
-
-  bg.style.opacity = 0;
-
-  setTimeout(() => {
-
-    if (current.bg) {
-      bg.style.backgroundImage = `url(${current.bg})`;
-    }
-
-    bg.style.opacity = 1;
-
-    line = 0;
-    showLine(current);
-
-  }, 1000);
-}
-
-function showLine(current) {
-
-  if (line >= current.lines.length) {
-    scene++;
-    setTimeout(nextScene, 3000);
-    return;
-  }
-
-  const text = document.getElementById("text");
+  if (i >= moments.length) return;
 
   text.classList.remove("show");
 
   setTimeout(() => {
-    text.innerHTML = current.lines[line];
+    text.innerHTML = moments[i].t;
     text.classList.add("show");
-    line++;
-  }, 800);
+  }, 300);
 
   setTimeout(() => {
-    showLine(current);
-  }, 3000);
+    i++;
+    flow();
+  }, moments[i].d);
 }
 
 </script>

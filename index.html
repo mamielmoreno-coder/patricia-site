@@ -16,45 +16,138 @@ body {
   align-items: center;
   height: 100vh;
   text-align: center;
-}
-
-#text {
-  font-size: 20px;
   padding: 20px;
 }
 
-#playBtn {
-  margin-top: 20px;
-  padding: 12px 20px;
+#text {
+  font-size: 22px;
+  opacity: 0;
+  transition: opacity 1.5s;
+}
+
+#btn {
+  margin-top: 30px;
+  padding: 12px 22px;
   font-size: 16px;
   background: white;
   color: black;
   border: none;
   border-radius: 8px;
+  display: none;
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+#photo {
+  max-width: 90%;
+  max-height: 60vh;
+  margin-bottom: 20px;
+  display: none;
+  border-radius: 12px;
+}
+
+.show {
+  opacity: 1;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🎹 MUSIC (FIXED NAME) -->
 <audio id="music" src="Jamie-Duffy-Solas-Official-Video.mp3" loop></audio>
 
-<div id="text">
-  Life has more meaning with you...<br><br>
-  I have loved anyone as much as I have loved you.<br><br>
-  I have never wanted to do so many things with anyone as much as I want with you.<br><br>
-  Your love is unmatched and your care can't be surpassed...<br><br>
-  you don't know how lovely you are Patricia ♥
-</div>
+<img id="photo" src="Screenshot_2026-04-02-12-47-16-582_com.miui.gallery.jpg">
 
-<button id="playBtn">Tap to play</button>
+<div id="text"></div>
+<button id="btn"></button>
 
 <script>
-document.getElementById("playBtn").onclick = function() {
-  document.getElementById("music").play();
-  this.style.display = "none";
+
+const pages = [
+
+"welcome",
+
+"you must wonder what is this now,<br><br>lean back;<br><br>Think, watch, listen and enjoy",
+
+"Who are you?<br><br>I want you to think",
+
+"I don't know your answer however I am so proud of you",
+
+"what do you want?<br><br>I want you to focus",
+
+"By observing yourself that's the key",
+
+"what do you do?<br><br>Are you just a surgeon?<br><br><br>I want you to empty your mind and contemplate",
+
+"You are a lot of things.<br><br>You are more than just a surgeon",
+
+"Now take a deep breath<br><br>nice and smooth",
+
+"Ready for a journey?<br><br>Buckle up!",
+
+"I love you birthday girl<br><br>You are the most beautiful thing in the world ❤",
+
+"Istanbul and me both of us had the best days when you were here✨"
+
+];
+
+let i = 0;
+const text = document.getElementById("text");
+const btn = document.getElementById("btn");
+const photo = document.getElementById("photo");
+
+showPage();
+
+btn.onclick = function() {
+
+  if (i === 9) {
+    document.getElementById("music").play();
+  }
+
+  i++;
+
+  if (i >= pages.length) return;
+
+  showPage();
 };
+
+function showPage() {
+
+  text.classList.remove("show");
+  btn.style.opacity = 0;
+  btn.style.display = "none";
+  photo.style.display = "none";
+
+  setTimeout(() => {
+
+    text.innerHTML = pages[i];
+    text.classList.add("show");
+
+    if (i === 11) {
+      photo.style.display = "block";
+    }
+
+  }, 500);
+
+  setTimeout(() => {
+
+    btn.style.display = "block";
+
+    if (i === 9) {
+      btn.innerHTML = "Explore and play";
+    } else if (i === 11) {
+      btn.style.display = "none";
+    } else {
+      btn.innerHTML = "Explore more";
+    }
+
+    setTimeout(() => {
+      btn.style.opacity = 1;
+    }, 100);
+
+  }, 2000);
+}
+
 </script>
 
 </body>

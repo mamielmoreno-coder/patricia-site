@@ -127,13 +127,19 @@ button {
   </div>
 </div>
 
+<!-- 🎧 WRITING SOUND -->
+<audio id="writeSound" src="write.mp3" loop></audio>
+
+<!-- 🎵 MUSIC -->
+<audio id="bgMusic" src="music.mp3"></audio>
+
 <script>
 
 /* TEXTS */
 const introMessage = "Only open if you are alone…\n\nand if so\n\nclick start to explore";
 const passwordMessage = "Think for a moment…\n\nWho shines the most this year?";
 
-/* ✍️ REAL WRITING (NO BLUR, SLOW) */
+/* WRITING ENGINE */
 function inkWrite(el, text, speed = 90) {
 
   el.innerHTML = "";
@@ -141,6 +147,11 @@ function inkWrite(el, text, speed = 90) {
   let cursor = document.createElement("span");
   cursor.className = "cursor";
   el.appendChild(cursor);
+
+  let sound = document.getElementById("writeSound");
+  sound.volume = 0.15;
+  sound.currentTime = 0;
+  sound.play();
 
   let i = 0;
 
@@ -151,18 +162,9 @@ function inkWrite(el, text, speed = 90) {
       if (text[i] === "\n") {
         el.insertBefore(document.createElement("br"), cursor);
       } else {
-
         let span = document.createElement("span");
         span.textContent = text[i];
-
-        span.style.opacity = "0";
-        span.style.transition = "opacity 0.3s ease";
-
         el.insertBefore(span, cursor);
-
-        setTimeout(() => {
-          span.style.opacity = "1";
-        }, 10);
       }
 
       i++;
@@ -170,111 +172,33 @@ function inkWrite(el, text, speed = 90) {
 
     } else {
       cursor.remove();
+      sound.pause();
     }
   }
 
   type();
 }
 
+/* 🎵 FADE-IN MUSIC FUNCTION */
+function fadeInMusic() {
+  let music = document.getElementById("bgMusic");
+  music.volume = 0;
+  music.play();
+
+  let vol = 0;
+  let interval = setInterval(() => {
+    if (vol < 0.4) {
+      vol += 0.02;
+      music.volume = vol;
+    } else {
+      clearInterval(interval);
+    }
+  }, 200);
+}
+
 /* LOAD INTRO */
 window.onload = () => {
-  inkWrite(document.getElementById("introText"), introMessage, 90);
+  inkWrite(document.getElementById("introText"), introMessage);
 };
 
-/* START */
-function startIntro(){
-  document.getElementById("introScreen").style.display = "none";
-  document.getElementById("lock").style.display = "flex";
-  inkWrite(document.getElementById("passwordText"), passwordMessage, 90);
-}
-
-/* PASSWORD */
-let tries = 0;
-
-function check(){
-  let val = document.getElementById("password").value.toLowerCase().trim();
-  let t = document.getElementById("passwordText");
-
-  if(val === "patricia"){
-    document.getElementById("lock").style.display="none";
-    document.getElementById("main").style.display="flex";
-    start();
-    return;
-  }
-
-  tries++;
-
-  let msg="";
-  if(tries===1) msg="Think about who makes this year shine the most...";
-  else if(tries===2) msg="Someone who changed your world more than anything...";
-  else if(tries===3) msg="You already have her name in your heart...";
-  else if(tries===4) msg="Whose special day is today...";
-  else if(tries===5) msg="The most beautiful name...";
-  else msg="Say her name...";
-
-  inkWrite(t, msg, 90);
-}
-
-/* PAGES */
-const pages = [
-["welcome",
-"Did you know this year is the brightest year ever?",
-"And do you know why?",
-"This year is the brightest year ever because you are shining the most ever Patricia"],
-
-["you must wonder what is this now, lean back; Think, watch, listen and enjoy"],
-
-["Who are you?","I want you to think"],
-
-["I don't know your answer however I am so proud of you"],
-
-["what do you want?","I want you to focus"],
-
-["By observing yourself that's the key"],
-
-["what do you do?","Are you just a surgeon?",
-"I want you to empty your mind and contemplate"],
-
-["You are a lot of things. You are more than just a surgeon"],
-
-["Now take a deep breath nice and smooth"],
-
-["Ready for a journey? Buckle up!"],
-
-["I love you birthday girl You are the most beautiful thing in the world❤"]
-];
-
-let i = 0;
-let text = document.getElementById("textMain");
-let butterfly = document.getElementById("butterfly");
-
-function start(){
-  show();
-}
-
-function show(){
-  let full = pages[i].join("\n\n");
-  inkWrite(text, full, 90);
-
-  setTimeout(()=>{
-    butterfly.style.display = "block";
-  }, full.length * 90 + 800);
-}
-
-butterfly.onclick = () => {
-
-  if(i === 10){
-    document.getElementById("main").style.display="none";
-    document.getElementById("photoContainer").style.display="flex";
-    return;
-  }
-
-  i++;
-  butterfly.style.display="none";
-  show();
-};
-
-</script>
-
-</body>
-</html>
+/

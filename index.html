@@ -24,7 +24,7 @@ body {
 }
 
 /* TEXT */
-#lockText, #textMain {
+#introText, #passwordText, #textMain {
   font-size: 26px;
   max-width: 90%;
   transition: opacity 0.6s;
@@ -91,7 +91,7 @@ button {
 
 <!-- INTRO -->
 <div id="introScreen" class="center">
-  <div id="lockText">
+  <div id="introText">
     Only open if you are alone…<br><br>
     and if so<br><br>
     click start to explore
@@ -101,7 +101,7 @@ button {
 
 <!-- PASSWORD -->
 <div id="lock" class="center" style="display:none">
-  <div id="lockText">
+  <div id="passwordText">
     Think for a moment…<br><br>
     Who shines the most this year?
   </div>
@@ -141,7 +141,7 @@ let tries=0;
 
 function check(){
 
-let t=document.querySelector("#lockText");
+let t=document.getElementById("passwordText");
 let val=document.getElementById("password").value.toLowerCase();
 
 if(val==="patricia"){
@@ -253,7 +253,6 @@ let caption=document.getElementById("caption");
 
 container.style.display="flex";
 
-/* memory effect */
 setTimeout(()=>{photo.style.opacity=1;},300);
 setTimeout(()=>{photo.style.transform="scale(1.02)";},800);
 setTimeout(()=>{caption.style.opacity=1;},1500);

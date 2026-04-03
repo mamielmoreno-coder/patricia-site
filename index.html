@@ -4,19 +4,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Patricia</title>
 
-<!-- ✍️ HANDWRITTEN FONT -->
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap" rel="stylesheet">
 
 <style>
 body {
   margin: 0;
-  background: #fdf6e3; /* paper feeling */
+  background: #fdf6e3;
   color: #222;
   font-family: 'Caveat', cursive;
   display: flex;
+  flex-direction: column; /* 👈 IMPORTANT */
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   text-align: center;
   padding: 20px;
 }
@@ -26,53 +26,56 @@ body {
   font-size: 26px;
   max-width: 90%;
   line-height: 1.8;
-  letter-spacing: 0.5px;
   transform: rotate(-1deg);
-  text-shadow: 0px 1px 1px rgba(0,0,0,0.1);
   z-index: 2;
 }
 
-/* BUTTON */
-#btn {
+/* BUTTERFLY */
+#butterfly {
   position: fixed;
-  bottom: 40px;
+  bottom: 50px;
   left: 50%;
-  transform: translateX(-50%);
-  padding: 14px 24px;
-  font-size: 16px;
-  background: #222;
-  color: white;
-  border: none;
-  border-radius: 12px;
+  transform: translateX(-50%) scale(0.9);
+  width: 85px;
   opacity: 0;
   display: none;
-  transition: opacity 2s ease;
-  z-index: 2;
+  animation: float 4s ease-in-out infinite;
+  transition: opacity 2s ease, transform 1s ease;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.4));
+  z-index: 3;
 }
 
-/* PHOTO */
+@keyframes float {
+  0%, 100% { transform: translate(-50%, 0px) scale(0.9); }
+  50% { transform: translate(-50%, -15px) scale(1); }
+}
+
+/* FLY AWAY */
+@keyframes flyAway {
+  0% { transform: translate(-50%, 0px) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -300px) scale(0.6); opacity: 0; }
+}
+
+/* PHOTO (now normal flow) */
 #photo {
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 500px;
+  border-radius: 12px;
+  margin-bottom: 10px;
   transform: scale(1);
   transition: transform 6s ease;
   display: none;
-  z-index: 0;
+  z-index: 1;
 }
 
-/* CAPTION */
+/* CAPTION BELOW IMAGE */
 #caption {
-  position: absolute;
-  bottom: 100px;
+  margin-top: 10px;
   font-size: 22px;
   max-width: 90%;
-  z-index: 2;
   display: none;
-  color: white;
+  color: #222;
+  z-index: 2;
 }
 </style>
 </head>
@@ -85,7 +88,8 @@ body {
 
 <div id="text">welcome</div>
 <div id="caption">Istanbul and me both of us had the best days when you were here✨</div>
-<button id="btn"></button>
+
+<img id="butterfly" src="file_00000000914c720a8541e3890677c924.png">
 
 <script>
 
@@ -119,24 +123,40 @@ const pages = [
 let i = 0;
 
 const text = document.getElementById("text");
-const btn = document.getElementById("btn");
+const butterfly = document.getElementById("butterfly");
 const photo = document.getElementById("photo");
 const caption = document.getElementById("caption");
 
-setTimeout(showButton, 2000);
+/* show butterfly */
+setTimeout(showButterfly, 2000);
 
-btn.onclick = function() {
+butterfly.onclick = function() {
 
   if (i === 9) {
+
     document.getElementById("music").play();
+
+    butterfly.style.filter = "drop-shadow(0 0 25px rgba(255,255,255,0.9))";
+    butterfly.style.animation = "flyAway 2.5s forwards";
+
+    setTimeout(() => {
+      nextPage();
+    }, 2000);
+
+    return;
   }
+
+  nextPage();
+};
+
+function nextPage() {
 
   i++;
 
   if (i >= pages.length) return;
 
-  btn.style.opacity = 0;
-  btn.style.display = "none";
+  butterfly.style.opacity = 0;
+  butterfly.style.display = "none";
 
   photo.style.display = "none";
   photo.style.transform = "scale(1)";
@@ -150,7 +170,7 @@ btn.onclick = function() {
     caption.style.display = "block";
 
     setTimeout(() => {
-      photo.style.transform = "scale(1.2)";
+      photo.style.transform = "scale(1.1)";
     }, 300);
 
     return;
@@ -158,23 +178,17 @@ btn.onclick = function() {
 
   text.innerHTML = pages[i];
 
-  showButton();
-};
+  showButterfly();
+}
 
-function showButton() {
+function showButterfly() {
 
   setTimeout(() => {
 
-    btn.style.display = "block";
-
-    if (i === 9) {
-      btn.innerHTML = "Explore and play";
-    } else {
-      btn.innerHTML = "Explore more";
-    }
+    butterfly.style.display = "block";
 
     setTimeout(() => {
-      btn.style.opacity = 1;
+      butterfly.style.opacity = 1;
     }, 100);
 
   }, 2000);

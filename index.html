@@ -7,11 +7,12 @@
 <style>
 body {
   margin: 0;
-  font-family: 'Caveat', cursive;
   background: #f5f1dc;
+  font-family: 'Caveat', cursive;
   color: #222;
 }
 
+/* CENTER */
 .center {
   display: flex;
   flex-direction: column;
@@ -21,41 +22,54 @@ body {
   text-align: center;
 }
 
-#introText, #passwordText, #textMain {
+/* TEXT */
+#text, #textMain, #introText, #passwordText {
   font-size: 26px;
   max-width: 90%;
   line-height: 1.6;
   white-space: pre-line;
+  min-height: 140px;
+  opacity: 0;
 }
 
-input, button {
-  background: black;
-  color: white;
-  border: none;
+/* FADE */
+.textFade {
+  opacity: 0;
 }
 
+.textFade.show {
+  opacity: 1;
+}
+
+/* INPUT */
 input {
   padding: 10px;
   font-size: 18px;
   margin-top: 15px;
   text-align: center;
+  background: black;
+  color: white;
+  border: none;
 }
 
 button {
-  margin-top: 15px;
+  margin-top: 10px;
   padding: 8px 20px;
+  background: black;
+  color: white;
+  border: none;
 }
 
-/* 🦋 BUTTERFLY (FADE IN) */
+/* 🦋 BUTTERFLY */
 #butterfly {
   position: fixed;
   bottom: 40px;
   left: 50%;
-  transform: translateX(-50%) translateY(10px);
+  transform: translateX(-50%) translateY(20px);
   font-size: 40px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 1.2s ease, transform 1.2s ease;
+  transition: opacity 2s ease, transform 2s ease;
 }
 
 #butterfly.show {
@@ -65,29 +79,30 @@ button {
   cursor: pointer;
 }
 
+/* MEMORY */
 #photoContainer {
   display: none;
-  position: fixed;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   background: #f5f1dc;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 #photo {
-  width: 100%;
-  height: 75vh;
-  object-fit: cover;
+  width: 90%;
+  border-radius: 10px;
 }
 
 #caption {
-  height: 25vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin-top: 20px;
   font-size: 24px;
+  text-align: center;
+  padding: 0 20px;
 }
 
+/* CURSOR */
 .cursor {
   display: inline-block;
   width: 2px;
@@ -95,76 +110,71 @@ button {
   animation: blink 1s infinite;
 }
 
-@keyframes blink { 50% { opacity: 0; } }
+@keyframes blink {
+  50% { opacity: 0; }
+}
 
-/* ✨ GLOW + FLICKER */
+/* ✨ STRONG GLOW + FLICKER */
 .letterGlow {
-  animation: glowFlicker 0.6s ease;
+  animation: glowFlicker 0.9s ease;
 }
 
 @keyframes glowFlicker {
-  0% { text-shadow: 0 0 12px rgba(255,255,255,0.9); opacity: 0.6; }
-  40% { text-shadow: 0 0 6px rgba(255,255,255,0.6); opacity: 1; }
-  70% { text-shadow: 0 0 10px rgba(255,255,255,0.8); }
-  100% { text-shadow: none; opacity: 1; }
+  0% {
+    text-shadow: 0 0 20px rgba(255,255,255,1),
+                 0 0 35px rgba(255,220,150,1);
+    opacity: 0.3;
+  }
+  30% {
+    text-shadow: 0 0 12px rgba(255,255,255,0.8);
+  }
+  60% {
+    text-shadow: 0 0 26px rgba(255,240,180,1);
+  }
+  100% {
+    text-shadow: none;
+    opacity: 1;
+  }
 }
 </style>
 </head>
 
 <body>
 
+<!-- INTRO -->
 <div id="introScreen" class="center">
   <div id="introText"></div>
   <button onclick="startIntro()">Start</button>
 </div>
 
+<!-- PASSWORD -->
 <div id="lock" class="center" style="display:none">
   <div id="passwordText"></div>
   <input id="password">
   <button onclick="check()">Enter</button>
 </div>
 
+<!-- MAIN -->
 <div id="main" class="center" style="display:none">
   <div id="textMain"></div>
   <div id="butterfly">🦋</div>
 </div>
 
+<!-- FINAL MEMORY -->
 <div id="photoContainer">
   <img id="photo" src="Screenshot_2026-04-02-12-47-16-582_com.miui.gallery.jpg">
-  <div id="caption">Istanbul and me both of us had the best days when you were here✨</div>
+  <div id="caption">
+    Istanbul and me both of us had the best days when you were here✨
+  </div>
 </div>
 
-<audio id="bgMusic" src="Jamie-Duffy-Solas-Official-Video.mp3"></audio>
+<audio id="music" src="Jamie-Duffy-Solas-Official-Video.mp3"></audio>
 
 <script>
 
-let audioUnlocked = false;
-
-function unlockAudio(){
-  audioUnlocked = true;
-}
-
-/* 🎵 MUSIC REACTION */
-function adjustMusicEmotion(text){
-  let music = document.getElementById("bgMusic");
-  let emotionalWords = ["love","beautiful","you","special","heart"];
-  let isEmotional = emotionalWords.some(w => text.toLowerCase().includes(w));
-
-  let target = isEmotional ? 0.85 : 0.6;
-
-  let interval = setInterval(()=>{
-    if(Math.abs(music.volume - target) < 0.02){
-      music.volume = target;
-      clearInterval(interval);
-    } else {
-      music.volume += (music.volume < target ? 0.02 : -0.02);
-    }
-  },120);
-}
-
-/* 🎵 MUSIC START */
+/* MUSIC */
 function fadeInMusic(){
-  let music = document.getElementById("bgMusic");
+  let music = document.getElementById("music");
   music.volume = 0;
   music.play().catch(()=>{});
 
@@ -177,143 +187,83 @@ function fadeInMusic(){
   },200);
 }
 
-/* ✍️ WRITING ENGINE */
+/* WRITING ENGINE WITH ALL UPDATES */
 function inkWrite(el, text, speed = 90, callback){
 
   el.innerHTML = "";
+  el.classList.add("textFade");
 
   let cursor = document.createElement("span");
   cursor.className = "cursor";
-  el.appendChild(cursor);
 
   let emotionalWords = ["love","beautiful","you","special","heart"];
   let isEmotional = emotionalWords.some(w => text.toLowerCase().includes(w));
   let baseSpeed = isEmotional ? 120 : speed;
 
+  let isIntro = text.includes("Only open if you are alone");
+
+  let fadeTime = isIntro ? 1800 : 1200;
+  let startDelay = isIntro ? 900 : 350;
+
   let i = 0;
 
-  function type(){
+  setTimeout(()=>{
+    el.style.transition = `opacity ${fadeTime}ms ease`;
+    el.classList.add("show");
+  },50);
 
-    if(i < text.length){
+  setTimeout(()=>{
 
-      let char = text[i];
+    el.appendChild(cursor);
 
-      if(char === "\n"){
-        el.insertBefore(document.createElement("br"), cursor);
+    function type(){
+
+      if(i < text.length){
+
+        let char = text[i];
+
+        if(char === "\n"){
+          el.insertBefore(document.createElement("br"), cursor);
+        } else {
+          let span = document.createElement("span");
+          span.textContent = char;
+          span.classList.add("letterGlow");
+          el.insertBefore(span, cursor);
+        }
+
+        i++;
+
+        let pause = 0;
+        if(char === ",") pause = isEmotional ? 200 : 120;
+        else if(char === "." || char === "!" || char === "?") pause = isEmotional ? 500 : 300;
+        else if(char === "\n") pause = isEmotional ? 600 : 400;
+
+        setTimeout(type, baseSpeed + Math.random()*30 + pause);
+
       } else {
-        let span = document.createElement("span");
-        span.textContent = char;
-        span.classList.add("letterGlow");
-        el.insertBefore(span, cursor);
+        cursor.remove();
+        if(callback) callback();
       }
-
-      i++;
-
-      let pause = 0;
-      if(char === ",") pause = isEmotional ? 200 : 120;
-      else if(char === "." || char === "!" || char === "?") pause = isEmotional ? 500 : 300;
-      else if(char === "\n") pause = isEmotional ? 600 : 400;
-
-      setTimeout(type, baseSpeed + Math.random()*30 + pause);
-
-    } else {
-      cursor.remove();
-      if(callback) callback();
     }
-  }
 
-  type();
+    type();
+
+  }, startDelay);
 }
 
-/* TEXT */
-const introMessage = "Only open if you are alone…\n\nand if so\n\nclick start to explore";
-const passwordMessage = "Think for a moment…\n\nWho shines the most this year?";
-
-window.onload = ()=>{
-  inkWrite(document.getElementById("introText"), introMessage);
-};
-
+/* INTRO */
 function startIntro(){
-  unlockAudio();
-  document.getElementById("introScreen").style.display="none";
-  document.getElementById("lock").style.display="flex";
-  inkWrite(document.getElementById("passwordText"), passwordMessage);
+document.getElementById("introScreen").style.display="none";
+document.getElementById("lock").style.display="flex";
+inkWrite(document.getElementById("passwordText"), passwordMessage);
 }
 
+/* PASSWORD */
 let tries=0;
 
 function check(){
-  unlockAudio();
-  let val = document.getElementById("password").value.toLowerCase().trim();
-  let t = document.getElementById("passwordText");
 
-  if(val==="patricia"){
-    document.getElementById("lock").style.display="none";
-    document.getElementById("main").style.display="flex";
-    start();
-    return;
-  }
+let t=document.getElementById("passwordText");
+let val=document.getElementById("password").value.toLowerCase();
 
-  tries++;
-
-  let msg="";
-  if(tries===1) msg="Think about who makes this year shine the most...";
-  else if(tries===2) msg="Someone who changed your world more than anything...";
-  else if(tries===3) msg="You already have her name in your heart...";
-  else if(tries===4) msg="Whose special day is today...";
-  else if(tries===5) msg="The most beautiful name...";
-  else msg="Say her name...";
-
-  inkWrite(t,msg);
-}
-
-const pages=[
-["welcome","Did you know this year is the brightest year ever?","And do you know why?","This year is the brightest year ever because you are shining the most ever Patricia"],
-["you must wonder what is this now, lean back; Think, watch, listen and enjoy"],
-["Who are you?","I want you to think"],
-["I don't know your answer however I am so proud of you"],
-["what do you want?","I want you to focus"],
-["By observing yourself that's the key"],
-["what do you do?","Are you just a surgeon?","I want you to empty your mind and contemplate"],
-["You are a lot of things. You are more than just a surgeon"],
-["Now take a deep breath nice and smooth"],
-["Ready for a journey? Buckle up!"],
-["I love you birthday girl You are the most beautiful thing in the world❤"]
-];
-
-let i=0;
-let text=document.getElementById("textMain");
-let butterfly=document.getElementById("butterfly");
-
-function start(){ show(); }
-
-function show(){
-  let full=pages[i].join("\n\n");
-
-  inkWrite(text, full, 90, () => {
-    butterfly.classList.add("show"); // ✅ ONLY AFTER FINISH
-  });
-
-  adjustMusicEmotion(full);
-}
-
-butterfly.onclick=()=>{
-  unlockAudio();
-
-  if(i===9) fadeInMusic();
-
-  if(i===10){
-    document.getElementById("main").style.display="none";
-    document.getElementById("photoContainer").style.display="flex";
-    return;
-  }
-
-  i++;
-  butterfly.classList.remove("show"); // reset
-  show();
-};
-
-</script>
-
-</body>
-</html>
+if(val==="patricia"){

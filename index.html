@@ -16,68 +16,115 @@ body {
   height: 100vh;
   text-align: center;
   padding: 20px;
+  overflow: hidden;
 }
 
-#text {
-  font-size: 22px;
-}
-
-#butterfly {
+/* VIGNETTE */
+body::after {
+  content: "";
   position: fixed;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 70px;
-  display: none;
-  cursor: pointer;
-}
-
-#photo {
-  display: none;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  box-shadow: inset 0 0 120px rgba(0,0,0,0.85);
+  pointer-events: none;
+}
+
+/* TEXT */
+#text {
+  font-size: 22px;
+  max-width: 90%;
+  line-height: 1.6;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+/* BUTTERFLY */
+#butterfly {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 75px;
+  display: none;
+  opacity: 0;
+  transition: opacity 2s ease;
+  filter: drop-shadow(0 0 12px rgba(255,255,255,0.5));
+}
+
+/* PARTICLES */
+.particle {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* PHOTO */
+#photo {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 85%;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 7s ease;
 }
 
+/* CAPTION */
 #caption {
-  position: fixed;
-  bottom: 40px;
-  width: 100%;
-  text-align: center;
   display: none;
-  font-size: 20px;
+  position: fixed;
+  bottom: 20px;
+  width: 100%;
+  font-size: 18px;
+  opacity: 0;
+  transition: opacity 2.5s ease;
 }
 </style>
 </head>
 
 <body>
 
-<audio id="music" src="Jamie-Duffy-Solas-Official-Video.mp3"></audio>
+<audio id="music" src="music.mp3"></audio>
+<audio id="ambient" src="ambient.mp3" loop></audio>
 
-<img id="photo" src="Screenshot_2026-04-02-12-47-16-582_com.miui.gallery.jpg">
+<img id="photo" src="photo.jpg">
 <div id="caption">Istanbul and me both of us had the best days when you were here✨</div>
 
-<div id="text">welcome</div>
-
-<img id="butterfly" src="file_00000000914c720a8541e3890677c924.png">
+<div id="text"></div>
+<img id="butterfly" src="butterfly.png">
 
 <script>
 
 const pages = [
-"welcome",
-"you must wonder what is this now,<br><br>Think, watch, listen and enjoy",
-"Who are you?<br><br>I want you to think",
-"I am so proud of you",
-"what do you want?<br><br>focus",
-"By observing yourself that's the key",
-"Are you just a surgeon?",
-"You are more than that",
-"Take a deep breath",
-"Ready for a journey?",
-"I love you birthday girl ❤"
+
+["welcome...", "Did you know this year is the brightest year ever?", "And do you know why?", "This year is the brightest year ever", "because you are shining the most ever Patricia"],
+
+["you must wonder what is this now,", "lean back;", "Think, watch, listen and enjoy"],
+
+["Who are you?", "I want you to think"],
+
+["I don't know your answer", "however I am so proud of you"],
+
+["what do you want?", "I want you to focus"],
+
+["By observing yourself", "that's the key"],
+
+["what do you do?", "Are you just a surgeon?", "", "I want you to empty your mind and contemplate"],
+
+["You are a lot of things.", "You are more than just a surgeon"],
+
+["Now take a deep breath", "nice and smooth"],
+
+["Ready for a journey?", "Buckle up!"],
+
+["I love you birthday girl", "You are the most beautiful thing in the world ❤"]
+
 ];
 
 let i = 0;
@@ -87,49 +134,128 @@ const butterfly = document.getElementById("butterfly");
 const photo = document.getElementById("photo");
 const caption = document.getElementById("caption");
 const music = document.getElementById("music");
+const ambient = document.getElementById("ambient");
 
-/* show butterfly */
+/* ambient starts softly */
+ambient.volume = 0.3;
+ambient.play();
+
+/* heartbeat text */
+function showHeartbeat(lines) {
+
+  text.style.opacity = 0;
+
+  setTimeout(() => {
+    text.innerHTML = "";
+    text.style.opacity = 1;
+
+    let index = 0;
+
+    function nextLine() {
+      if (index >= lines.length) return;
+
+      text.innerHTML += lines[index] + "<br><br>";
+      index++;
+
+      setTimeout(nextLine, 1400);
+    }
+
+    nextLine();
+
+  }, 500);
+}
+
+/* butterfly */
 function showButterfly() {
   setTimeout(() => {
     butterfly.style.display = "block";
-  }, 1000);
+    setTimeout(() => butterfly.style.opacity = 1, 200);
+  }, 2000);
 }
 
+/* particles */
+function createParticles() {
+  for (let i = 0; i < 20; i++) {
+    let p = document.createElement("div");
+    p.className = "particle";
+    document.body.appendChild(p);
+
+    let x = window.innerWidth / 2;
+    let y = window.innerHeight - 80;
+
+    p.style.left = x + "px";
+    p.style.top = y + "px";
+
+    let dx = (Math.random() - 0.5) * 200;
+    let dy = -Math.random() * 300;
+
+    setTimeout(() => {
+      p.style.transition = "all 2s ease";
+      p.style.left = x + dx + "px";
+      p.style.top = y + dy + "px";
+      p.style.opacity = 0;
+    }, 50);
+
+    setTimeout(() => p.remove(), 2000);
+  }
+}
+
+/* start */
+showHeartbeat(pages[0]);
 showButterfly();
 
+/* click */
 butterfly.onclick = function() {
 
-  /* page 10 (music moment) */
   if (i === 9) {
-    music.play();
 
-    butterfly.style.display = "none";
+    music.play();
+    createParticles();
+
+    butterfly.style.opacity = 0;
 
     setTimeout(() => {
       i = 10;
-      text.innerHTML = pages[i];
-      showButterfly();
-    }, 1000);
+      showHeartbeat(pages[i]);
+      butterfly.style.display = "none";
+      setTimeout(showButterfly, 2500);
+    }, 1200);
 
     return;
   }
 
-  /* page 11 → final */
   if (i === 10) {
-    text.style.display = "none";
+
+    text.style.opacity = 0;
     butterfly.style.display = "none";
 
-    photo.style.display = "block";
-    caption.style.display = "block";
+    setTimeout(() => {
+
+      photo.style.display = "block";
+
+      setTimeout(() => {
+        photo.style.transform = "scale(1.1)";
+      }, 200);
+
+      setTimeout(() => {
+        caption.style.display = "block";
+        caption.style.opacity = 1;
+      }, 2500);
+
+    }, 800);
+
     return;
   }
 
-  /* normal pages */
   i++;
-  text.innerHTML = pages[i];
 
-  butterfly.style.display = "none";
-  showButterfly();
+  butterfly.style.opacity = 0;
+
+  setTimeout(() => {
+    butterfly.style.display = "none";
+    showHeartbeat(pages[i]);
+    showButterfly();
+  }, 800);
 };
 
 </script>

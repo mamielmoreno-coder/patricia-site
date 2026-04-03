@@ -133,8 +133,8 @@ button {
 const introMessage = "Only open if you are alone…\n\nand if so\n\nclick start to explore";
 const passwordMessage = "Think for a moment…\n\nWho shines the most this year?";
 
-/* ✅ REAL LETTER WRITING ENGINE */
-function inkWrite(el, text, speed = 40) {
+/* ✍️ REAL INK WRITING (SLOW + VISIBLE) */
+function inkWrite(el, text, speed = 70) {
 
   el.innerHTML = "";
 
@@ -155,16 +155,17 @@ function inkWrite(el, text, speed = 40) {
         let span = document.createElement("span");
         span.textContent = text[i];
 
+        /* ✨ STRONG INK EFFECT */
         span.style.opacity = "0";
-        span.style.filter = "blur(2px)";
-        span.style.transition = "0.3s";
+        span.style.filter = "blur(6px)";
+        span.style.transition = "all 0.6s ease";
 
         el.insertBefore(span, cursor);
 
         setTimeout(() => {
           span.style.opacity = "1";
           span.style.filter = "blur(0)";
-        }, 10);
+        }, 50);
       }
 
       i++;
@@ -180,14 +181,14 @@ function inkWrite(el, text, speed = 40) {
 
 /* LOAD INTRO */
 window.onload = () => {
-  inkWrite(document.getElementById("introText"), introMessage, 40);
+  inkWrite(document.getElementById("introText"), introMessage, 70);
 };
 
 /* START */
 function startIntro(){
   document.getElementById("introScreen").style.display = "none";
   document.getElementById("lock").style.display = "flex";
-  inkWrite(document.getElementById("passwordText"), passwordMessage, 40);
+  inkWrite(document.getElementById("passwordText"), passwordMessage, 70);
 }
 
 /* PASSWORD */
@@ -214,7 +215,7 @@ function check(){
   else if(tries===5) msg="The most beautiful name...";
   else msg="Say her name...";
 
-  inkWrite(t, msg, 40);
+  inkWrite(t, msg, 70);
 }
 
 /* PAGES */
@@ -256,11 +257,11 @@ function start(){
 
 function show(){
   let full = pages[i].join("\n\n");
-  inkWrite(text, full, 40);
+  inkWrite(text, full, 70);
 
   setTimeout(()=>{
     butterfly.style.display = "block";
-  }, full.length * 40 + 500);
+  }, full.length * 70 + 800);
 }
 
 butterfly.onclick = () => {

@@ -64,48 +64,46 @@ button {
   pointer-events: auto;
 }
 
-/* 🦋 NATURAL FLIGHT PATH */
+/* 🦋 NATURAL FLIGHT */
 @keyframes butterflyFly {
-  0% { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
-  25% { transform: translateX(-40%) translateY(-60px) rotate(8deg); }
-  50% { transform: translateX(-60%) translateY(-120px) rotate(-10deg); }
-  75% { transform: translateX(-45%) translateY(-180px) rotate(6deg); }
-  100% { transform: translateX(-55%) translateY(-260px) scale(0.9); opacity: 0; }
-}
-
-/* 🦋 WING FLAP */
-@keyframes wingFlap {
-  0% { transform: rotate(0deg); }
-  25% { transform: rotate(12deg); }
-  50% { transform: rotate(-12deg); }
-  75% { transform: rotate(8deg); }
-  100% { transform: rotate(0deg); }
+  0% { transform: translateX(-50%) translateY(0); opacity: 1; }
+  25% { transform: translateX(-45%) translateY(-60px); }
+  50% { transform: translateX(-55%) translateY(-120px); }
+  75% { transform: translateX(-48%) translateY(-180px); }
+  100% { transform: translateX(-52%) translateY(-260px); opacity: 0; }
 }
 
 #butterfly.fly {
-  animation:
-    butterflyFly 0.9s ease forwards,
-    wingFlap 0.25s ease-in-out infinite;
+  animation: butterflyFly 1s ease forwards;
 }
 
-#photoContainer {
-  display: none;
-  width: 100%;
-  height: 100vh;
-  background: #f5f1dc;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+/* 🦋 TRAIL */
+.trail {
+  position: fixed;
+  width: 2px;
+  height: 12px;
+  background: rgba(0,0,0,0.25);
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  border-radius: 2px;
+  animation: fadeTrail 0.6s linear forwards;
 }
 
-#photo {
-  width: 90%;
-  border-radius: 10px;
+@keyframes fadeTrail {
+  from { opacity: 0.5; }
+  to { opacity: 0; }
 }
 
-#caption {
-  margin-top: 20px;
-  font-size: 24px;
+/* 🔥 FIRE EFFECT */
+@keyframes fireFlicker {
+  0%   { text-shadow: 0 0 2px rgba(255,140,0,0.2); }
+  50%  { text-shadow: 0 0 6px rgba(255,160,60,0.35); }
+  100% { text-shadow: 0 0 2px rgba(255,140,0,0.2); }
+}
+
+.fireEffect {
+  animation: fireFlicker 1.5s ease-in-out infinite;
 }
 
 .cursor {
@@ -116,16 +114,6 @@ button {
 }
 
 @keyframes blink { 50% { opacity: 0; } }
-
-.letterGlow {
-  animation: glow 0.8s ease;
-}
-
-@keyframes glow {
-  0% { text-shadow: 0 0 20px white, 0 0 35px #ffdca0; opacity: 0.3; }
-  50% { text-shadow: 0 0 25px #fff0b0; }
-  100% { text-shadow: none; opacity: 1; }
-}
 </style>
 </head>
 
@@ -147,15 +135,26 @@ button {
   <div id="butterfly">🦋</div>
 </div>
 
-<div id="photoContainer">
-  <img id="photo" src="Screenshot_2026-04-02-12-47-16-582_com.miui.gallery.jpg">
-  <div id="caption">Istanbul and me both of us had the best days when you were here✨</div>
-</div>
-
 <audio id="music" src="Jamie-Duffy-Solas-Official-Video.mp3"></audio>
 
 <script>
 
+/* TRAIL */
+function createTrail(){
+  let b = document.getElementById("butterfly");
+  let rect = b.getBoundingClientRect();
+
+  let t = document.createElement("div");
+  t.className = "trail";
+  t.style.top = rect.top + "px";
+  t.style.left = rect.left + rect.width/2 + "px";
+
+  document.body.appendChild(t);
+
+  setTimeout(()=>t.remove(),600);
+}
+
+/* MUSIC */
 function fadeInMusic(){
   let m = document.getElementById("music");
   m.volume = 0;
@@ -167,8 +166,12 @@ function fadeInMusic(){
   },200);
 }
 
+/* WRITING */
 function inkWrite(el, text, speed = 90, callback){
+
   el.innerHTML = "";
+  el.classList.add("fireEffect");
+
   let cursor = document.createElement("span");
   cursor.className = "cursor";
   el.appendChild(cursor);
@@ -177,6 +180,7 @@ function inkWrite(el, text, speed = 90, callback){
 
   function type(){
     if(i < text.length){
+
       let c = text[i];
 
       if(c === "\n"){
@@ -184,15 +188,15 @@ function inkWrite(el, text, speed = 90, callback){
       } else {
         let s = document.createElement("span");
         s.textContent = c;
-        s.classList.add("letterGlow");
         el.insertBefore(s, cursor);
       }
 
       i++;
-
       setTimeout(type, speed + Math.random()*30);
+
     } else {
       cursor.remove();
+      el.classList.remove("fireEffect");
       if(callback) callback();
     }
   }
@@ -200,6 +204,7 @@ function inkWrite(el, text, speed = 90, callback){
   type();
 }
 
+/* INTRO */
 const introMessage = "Only open if you are alone…\n\nand if so\n\nclick start to explore";
 const passwordMessage = "Think for a moment…\n\nWho shines the most this year?";
 
@@ -213,29 +218,22 @@ function startIntro(){
   inkWrite(document.getElementById("passwordText"), passwordMessage);
 }
 
-let tries=0;
-
+/* PASSWORD */
 function check(){
-let val=document.getElementById("password").value.toLowerCase();
-let t=document.getElementById("passwordText");
+  let val = document.getElementById("password").value.toLowerCase();
 
-if(val==="patricia"){
-  document.getElementById("lock").style.display="none";
-  document.getElementById("main").style.display="flex";
-  start();
-  return;
+  if(val==="patricia"){
+    document.getElementById("lock").style.display="none";
+    document.getElementById("main").style.display="flex";
+    start();
+  }
 }
 
-tries++;
-
-let msg="Think again...";
-inkWrite(t,msg);
-}
-
+/* PAGES */
 const pages=[
 ["welcome","Did you know this year is the brightest year ever?"],
-["Ready for a journey? Buckle up!"],
-["I love you birthday girl ❤"]
+["Ready for a journey?"],
+["I love you ❤"]
 ];
 
 let i=0;
@@ -245,36 +243,39 @@ let butterfly=document.getElementById("butterfly");
 function start(){ show(); }
 
 function show(){
-let full=pages[i].join("\n\n");
+  let full=pages[i].join("\n\n");
 
-inkWrite(text, full, 90, ()=>{
-  butterfly.classList.add("show");
-  butterfly.style.pointerEvents="auto";
-});
+  inkWrite(text, full, 90, ()=>{
+    butterfly.classList.add("show");
+    butterfly.style.pointerEvents="auto";
+  });
 }
 
+/* CLICK */
 butterfly.onclick=()=>{
 
-if(i===1) fadeInMusic();
+  if(i===1) fadeInMusic();
 
-if(i===2){
-  document.getElementById("main").style.display="none";
-  document.getElementById("photoContainer").style.display="flex";
-  return;
-}
+  if(i===2){
+    alert("End");
+    return;
+  }
 
-i++;
+  i++;
 
-butterfly.style.pointerEvents="none";
+  butterfly.style.pointerEvents="none";
 
-/* 🦋 FLY */
-butterfly.classList.add("fly");
+  /* TRAIL LOOP */
+  let trailInterval = setInterval(createTrail, 80);
 
-setTimeout(()=>{
-  butterfly.classList.remove("fly");
-  butterfly.classList.remove("show");
-  show();
-},900);
+  butterfly.classList.add("fly");
+
+  setTimeout(()=>{
+    clearInterval(trailInterval);
+    butterfly.classList.remove("fly");
+    butterfly.classList.remove("show");
+    show();
+  },900);
 
 };
 

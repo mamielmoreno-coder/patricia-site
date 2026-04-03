@@ -24,7 +24,7 @@ body {
 }
 
 /* TEXT */
-#text, #textMain {
+#lockText, #textMain {
   font-size: 26px;
   max-width: 90%;
   transition: opacity 0.6s;
@@ -43,7 +43,7 @@ button {
   padding: 8px 20px;
 }
 
-/* 🦋 BUTTERFLY (NO PNG) */
+/* 🦋 BUTTERFLY */
 #butterfly {
   position: fixed;
   bottom: 40px;
@@ -60,21 +60,29 @@ button {
   width: 100%;
   min-height: 100vh;
   background: #f5f1dc;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
 #photo {
-  width: 90%;
+  width: 95%;
+  max-width: 500px;
+  height: auto;
   border-radius: 10px;
+  opacity: 0;
+  transition: opacity 1.5s ease, transform 5s ease;
 }
 
 #caption {
-  margin-top: 20px;
+  margin-top: 10px;
   font-size: 24px;
   text-align: center;
-  padding: 0 20px;
+  padding: 0 15px;
+  max-width: 500px;
+  opacity: 0;
+  transition: opacity 1.5s ease;
 }
 </style>
 </head>
@@ -83,7 +91,7 @@ button {
 
 <!-- INTRO -->
 <div id="introScreen" class="center">
-  <div id="text">
+  <div id="lockText">
     Only open if you are alone…<br><br>
     and if so<br><br>
     click start to explore
@@ -93,7 +101,7 @@ button {
 
 <!-- PASSWORD -->
 <div id="lock" class="center" style="display:none">
-  <div id="text">
+  <div id="lockText">
     Think for a moment…<br><br>
     Who shines the most this year?
   </div>
@@ -133,7 +141,7 @@ let tries=0;
 
 function check(){
 
-let t=document.getElementById("text");
+let t=document.querySelector("#lockText");
 let val=document.getElementById("password").value.toLowerCase();
 
 if(val==="patricia"){
@@ -238,7 +246,17 @@ return;
 if(i===10){
 
 document.getElementById("main").style.display="none";
-document.getElementById("photoContainer").style.display="flex";
+
+let container=document.getElementById("photoContainer");
+let photo=document.getElementById("photo");
+let caption=document.getElementById("caption");
+
+container.style.display="flex";
+
+/* memory effect */
+setTimeout(()=>{photo.style.opacity=1;},300);
+setTimeout(()=>{photo.style.transform="scale(1.02)";},800);
+setTimeout(()=>{caption.style.opacity=1;},1500);
 
 return;
 }

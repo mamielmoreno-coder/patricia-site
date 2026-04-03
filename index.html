@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap" rel="stylesheet">
 
 <style>
@@ -27,7 +28,6 @@ body {
   font-size: 26px;
   max-width: 90%;
   line-height: 1.6;
-  white-space: pre-line;
   min-height: 140px;
   opacity: 0;
 }
@@ -36,7 +36,6 @@ body {
 .textFade {
   opacity: 0;
 }
-
 .textFade.show {
   opacity: 1;
 }
@@ -76,18 +75,17 @@ button {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
   pointer-events: auto;
-  cursor: pointer;
 }
 
 /* MEMORY */
 #photoContainer {
   display: none;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   background: #f5f1dc;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
 #photo {
@@ -99,7 +97,6 @@ button {
   margin-top: 20px;
   font-size: 24px;
   text-align: center;
-  padding: 0 20px;
 }
 
 /* CURSOR */
@@ -109,27 +106,19 @@ button {
   background: #222;
   animation: blink 1s infinite;
 }
+@keyframes blink { 50% { opacity: 0; } }
 
-@keyframes blink {
-  50% { opacity: 0; }
-}
-
-/* ✨ STRONG GLOW + FLICKER */
+/* ✨ STRONG GLOW */
 .letterGlow {
   animation: glowFlicker 0.9s ease;
 }
-
 @keyframes glowFlicker {
   0% {
-    text-shadow: 0 0 20px rgba(255,255,255,1),
-                 0 0 35px rgba(255,220,150,1);
+    text-shadow: 0 0 20px white, 0 0 35px #ffdca0;
     opacity: 0.3;
   }
-  30% {
-    text-shadow: 0 0 12px rgba(255,255,255,0.8);
-  }
-  60% {
-    text-shadow: 0 0 26px rgba(255,240,180,1);
+  50% {
+    text-shadow: 0 0 25px #fff0b0;
   }
   100% {
     text-shadow: none;
@@ -160,12 +149,10 @@ button {
   <div id="butterfly">🦋</div>
 </div>
 
-<!-- FINAL MEMORY -->
+<!-- FINAL -->
 <div id="photoContainer">
   <img id="photo" src="Screenshot_2026-04-02-12-47-16-582_com.miui.gallery.jpg">
-  <div id="caption">
-    Istanbul and me both of us had the best days when you were here✨
-  </div>
+  <div id="caption">Istanbul and me both of us had the best days when you were here✨</div>
 </div>
 
 <audio id="music" src="Jamie-Duffy-Solas-Official-Video.mp3"></audio>
@@ -174,20 +161,17 @@ button {
 
 /* MUSIC */
 function fadeInMusic(){
-  let music = document.getElementById("music");
-  music.volume = 0;
-  music.play().catch(()=>{});
-
-  let vol = 0;
-  let interval = setInterval(()=>{
-    if(vol < 0.6){
-      vol += 0.02;
-      music.volume = vol;
-    } else clearInterval(interval);
+  let m = document.getElementById("music");
+  m.volume = 0;
+  m.play().catch(()=>{});
+  let v = 0;
+  let i = setInterval(()=>{
+    if(v < 0.6){ v += 0.02; m.volume = v; }
+    else clearInterval(i);
   },200);
 }
 
-/* WRITING ENGINE WITH ALL UPDATES */
+/* WRITING */
 function inkWrite(el, text, speed = 90, callback){
 
   el.innerHTML = "";
@@ -196,8 +180,9 @@ function inkWrite(el, text, speed = 90, callback){
   let cursor = document.createElement("span");
   cursor.className = "cursor";
 
-  let emotionalWords = ["love","beautiful","you","special","heart"];
-  let isEmotional = emotionalWords.some(w => text.toLowerCase().includes(w));
+  let emotional = ["love","beautiful","you","special","heart"];
+  let isEmotional = emotional.some(w=>text.toLowerCase().includes(w));
+
   let baseSpeed = isEmotional ? 120 : speed;
 
   let isIntro = text.includes("Only open if you are alone");
@@ -208,7 +193,7 @@ function inkWrite(el, text, speed = 90, callback){
   let i = 0;
 
   setTimeout(()=>{
-    el.style.transition = `opacity ${fadeTime}ms ease`;
+    el.style.transition = `opacity ${fadeTime}ms`;
     el.classList.add("show");
   },50);
 
@@ -217,26 +202,24 @@ function inkWrite(el, text, speed = 90, callback){
     el.appendChild(cursor);
 
     function type(){
-
       if(i < text.length){
 
-        let char = text[i];
+        let c = text[i];
 
-        if(char === "\n"){
+        if(c === "\n"){
           el.insertBefore(document.createElement("br"), cursor);
         } else {
-          let span = document.createElement("span");
-          span.textContent = char;
-          span.classList.add("letterGlow");
-          el.insertBefore(span, cursor);
+          let s = document.createElement("span");
+          s.textContent = c;
+          s.classList.add("letterGlow");
+          el.insertBefore(s, cursor);
         }
 
         i++;
 
         let pause = 0;
-        if(char === ",") pause = isEmotional ? 200 : 120;
-        else if(char === "." || char === "!" || char === "?") pause = isEmotional ? 500 : 300;
-        else if(char === "\n") pause = isEmotional ? 600 : 400;
+        if(c === ",") pause = 120;
+        if(c === "." || c==="!" || c==="?") pause = 300;
 
         setTimeout(type, baseSpeed + Math.random()*30 + pause);
 
@@ -252,18 +235,105 @@ function inkWrite(el, text, speed = 90, callback){
 }
 
 /* INTRO */
+const introMessage = "Only open if you are alone…\n\nand if so\n\nclick start to explore";
+const passwordMessage = "Think for a moment…\n\nWho shines the most this year?";
+
+window.onload = ()=>{
+  inkWrite(document.getElementById("introText"), introMessage);
+};
+
 function startIntro(){
-document.getElementById("introScreen").style.display="none";
-document.getElementById("lock").style.display="flex";
-inkWrite(document.getElementById("passwordText"), passwordMessage);
+  document.getElementById("introScreen").style.display="none";
+  document.getElementById("lock").style.display="flex";
+  inkWrite(document.getElementById("passwordText"), passwordMessage);
 }
 
 /* PASSWORD */
 let tries=0;
-
 function check(){
 
-let t=document.getElementById("passwordText");
 let val=document.getElementById("password").value.toLowerCase();
+let t=document.getElementById("passwordText");
 
 if(val==="patricia"){
+  document.getElementById("lock").style.display="none";
+  document.getElementById("main").style.display="flex";
+  start();
+  return;
+}
+
+tries++;
+
+let msg="";
+if(tries===1) msg="Think about who makes this year shine the most...";
+else if(tries===2) msg="Someone who changed your world more than anything...";
+else if(tries===3) msg="You already have her name in your heart...";
+else msg="Say her name...";
+
+inkWrite(t,msg);
+}
+
+/* PAGES */
+const pages=[
+["welcome","Did you know this year is the brightest year ever?","And do you know why?","This year is the brightest year ever because you are shining the most ever Patricia"],
+["you must wonder what is this now, lean back; Think, watch, listen and enjoy"],
+["Who are you?","I want you to think"],
+["I don't know your answer however I am so proud of you"],
+["what do you want?","I want you to focus"],
+["By observing yourself that's the key"],
+["what do you do?","Are you just a surgeon?","I want you to empty your mind and contemplate"],
+["You are a lot of things. You are more than just a surgeon"],
+["Now take a deep breath nice and smooth"],
+["Ready for a journey? Buckle up!"],
+["I love you birthday girl You are the most beautiful thing in the world❤"]
+];
+
+let i=0;
+let text=document.getElementById("textMain");
+let butterfly=document.getElementById("butterfly");
+
+function start(){ show(); }
+
+function show(){
+
+let full=pages[i].join("\n\n");
+
+inkWrite(text, full, 90, ()=>{
+
+  setTimeout(()=>{
+    butterfly.classList.add("show");
+  },400);
+
+  setTimeout(()=>{
+    butterfly.style.pointerEvents="auto";
+  },1200);
+
+});
+}
+
+/* CLICK */
+butterfly.onclick=()=>{
+
+if(i===9) fadeInMusic();
+
+if(i===10){
+  document.getElementById("main").style.display="none";
+  document.getElementById("photoContainer").style.display="flex";
+  return;
+}
+
+i++;
+
+butterfly.style.pointerEvents="none";
+butterfly.classList.remove("show");
+
+setTimeout(()=>{
+  show();
+},600);
+
+};
+
+</script>
+
+</body>
+</html>

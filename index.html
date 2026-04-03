@@ -13,6 +13,7 @@ body {
   color: #222;
 }
 
+/* CENTER */
 .center {
   display: flex;
   flex-direction: column;
@@ -22,6 +23,7 @@ body {
   text-align: center;
 }
 
+/* TEXT */
 #introText, #passwordText, #textMain {
   font-size: 26px;
   max-width: 90%;
@@ -29,28 +31,49 @@ body {
   white-space: pre-line;
 }
 
+/* 🔥 BLACK INPUT + BUTTON */
 input {
   padding: 10px;
   font-size: 18px;
   margin-top: 15px;
   text-align: center;
+  background: black;
+  color: white;
+  border: none;
+  outline: none;
 }
 
 button {
   margin-top: 15px;
   padding: 8px 20px;
+  background: black;
+  color: white;
+  border: none;
+  cursor: pointer;
 }
 
+/* BUTTERFLY (UNCHANGED FROM LAST VERSION) */
 #butterfly {
   position: fixed;
   bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 40px;
+  font-size: 26px;
   display: none;
   cursor: pointer;
+
+  background: black;
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+/* FINAL PAGE */
 #photoContainer {
   display: none;
   position: fixed;
@@ -78,6 +101,7 @@ button {
   text-align: center;
 }
 
+/* CURSOR */
 .cursor {
   display: inline-block;
   width: 2px;
@@ -117,9 +141,8 @@ button {
   </div>
 </div>
 
-<!-- AUDIO -->
 <audio id="writeSound" src="write.mp3" loop></audio>
-<audio id="bgMusic" src="music.mp3"></audio>
+<audio id="bgMusic" src="Jamie-Duffy-Solas-Official-Video.mp3"></audio>
 
 <script>
 
@@ -127,16 +150,15 @@ let audioUnlocked = false;
 
 function unlockAudio(){
   if(!audioUnlocked){
-    document.getElementById("writeSound").volume = 0.15;
+    let write = document.getElementById("writeSound");
+    write.volume = 0.3;
     audioUnlocked = true;
   }
 }
 
-/* TEXT */
 const introMessage = "Only open if you are alone…\n\nand if so\n\nclick start to explore";
 const passwordMessage = "Think for a moment…\n\nWho shines the most this year?";
 
-/* WRITING ENGINE */
 function inkWrite(el, text, speed = 90) {
 
   el.innerHTML = "";
@@ -178,7 +200,6 @@ function inkWrite(el, text, speed = 90) {
   type();
 }
 
-/* MUSIC FADE */
 function fadeInMusic(){
   let music = document.getElementById("bgMusic");
   music.volume = 0;
@@ -186,8 +207,8 @@ function fadeInMusic(){
 
   let vol = 0;
   let interval = setInterval(()=>{
-    if(vol < 0.4){
-      vol += 0.02;
+    if(vol < 0.7){
+      vol += 0.03;
       music.volume = vol;
     } else {
       clearInterval(interval);
@@ -195,7 +216,6 @@ function fadeInMusic(){
   },200);
 }
 
-/* LOAD */
 window.onload = () => {
   inkWrite(document.getElementById("introText"), introMessage);
 };
@@ -207,7 +227,6 @@ function startIntro(){
   inkWrite(document.getElementById("passwordText"), passwordMessage);
 }
 
-/* PASSWORD */
 let tries = 0;
 
 function check(){
@@ -236,7 +255,6 @@ function check(){
   inkWrite(t, msg);
 }
 
-/* PAGES */
 const pages = [
 ["welcome","Did you know this year is the brightest year ever?","And do you know why?","This year is the brightest year ever because you are shining the most ever Patricia"],
 ["you must wonder what is this now, lean back; Think, watch, listen and enjoy"],
@@ -264,7 +282,7 @@ function show(){
   inkWrite(text, full);
 
   setTimeout(()=>{
-    butterfly.style.display="block";
+    butterfly.style.display="flex";
   }, full.length * 90 + 800);
 }
 

@@ -1,98 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Patricia</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap" rel="stylesheet">
-
-<style>
-body {
-  margin: 0;
-  background: #fdf6e3;
-  color: #222;
-  font-family: 'Caveat', cursive;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  text-align: center;
-  padding: 20px;
-}
-
-/* TEXT */
-#text {
-  font-size: 26px;
-  max-width: 90%;
-  line-height: 1.8;
-  transform: rotate(-1deg);
-  z-index: 2;
-}
-
-/* BUTTERFLY (SOFT & STILL) */
-#butterfly {
-  position: fixed;
-  bottom: 50px;
-  left: 50%;
-  transform: translateX(-50%) scale(0.9);
-  width: 85px;
-  opacity: 0;
-  display: none;
-  transition: opacity 2.5s ease, transform 1s ease;
-  animation: glow 4s ease-in-out infinite;
-  z-index: 3;
-}
-
-@keyframes glow {
-  0%, 100% { filter: drop-shadow(0 0 6px rgba(255,255,255,0.3)); }
-  50% { filter: drop-shadow(0 0 18px rgba(255,255,255,0.6)); }
-}
-
-/* FLY AWAY */
-@keyframes flyAway {
-  0% { transform: translate(-50%, 0px) scale(1); opacity: 1; }
-  100% { transform: translate(-50%, -300px) scale(0.6); opacity: 0; }
-}
-
-/* PHOTO FULL SCREEN */
-#photo {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1);
-  transition: transform 6s ease;
-  display: none;
-  z-index: 0;
-}
-
-/* CAPTION BELOW */
-#caption {
-  position: absolute;
-  bottom: 60px;
-  font-size: 22px;
-  max-width: 90%;
-  display: none;
-  color: white;
-  z-index: 2;
-}
-</style>
-</head>
-
-<body>
-
-<audio id="music" src="Jamie-Duffy-Solas-Official-Video.mp3" loop></audio>
-
-<img id="photo" src="/patricia-site/Screenshot_2026-04-02-12-47-16-582_com.miui.gallery.jpg">
-
-<div id="text">welcome</div>
-<div id="caption">Istanbul and me both of us had the best days when you were here✨</div>
-
-<img id="butterfly" src="file_00000000914c720a8541e3890677c924.png">
-
 <script>
 
 const pages = [
@@ -117,9 +22,7 @@ const pages = [
 
 "Ready for a journey?<br><br>Buckle up!",
 
-"I love you birthday girl<br><br>You are the most beautiful thing in the world ❤",
-
-""
+"I love you birthday girl<br><br>You are the most beautiful thing in the world ❤"
 ];
 
 let i = 0;
@@ -128,20 +31,25 @@ const text = document.getElementById("text");
 const butterfly = document.getElementById("butterfly");
 const photo = document.getElementById("photo");
 const caption = document.getElementById("caption");
+const music = document.getElementById("music");
 
-/* SOFT APPEAR */
+/* show butterfly initially */
 setTimeout(showButterfly, 2200);
 
 butterfly.onclick = function() {
 
+  /* 🔥 SPECIAL MOMENT (after page 10) */
   if (i === 9) {
 
-    document.getElementById("music").play();
+    music.play();
 
     butterfly.style.animation = "flyAway 3s forwards";
 
+    /* permanently disable butterfly */
+    butterfly.onclick = null;
+
     setTimeout(() => {
-      nextPage();
+      showFinalPage();
     }, 2200);
 
     return;
@@ -159,30 +67,15 @@ function nextPage() {
   butterfly.style.opacity = 0;
   butterfly.style.display = "none";
 
-  photo.style.display = "none";
-  photo.style.transform = "scale(1)";
-  caption.style.display = "none";
-
-  if (i === 11) {
-
-    text.innerHTML = "";
-
-    photo.style.display = "block";
-    caption.style.display = "block";
-
-    setTimeout(() => {
-      photo.style.transform = "scale(1.15)";
-    }, 300);
-
-    return;
-  }
-
   text.innerHTML = pages[i];
 
   showButterfly();
 }
 
+/* 🚫 NO BUTTERFLY AFTER PAGE 10 */
 function showButterfly() {
+
+  if (i >= 10) return;
 
   setTimeout(() => {
 
@@ -195,7 +88,19 @@ function showButterfly() {
   }, 2200);
 }
 
-</script>
+/* 🎬 FINAL PAGE */
+function showFinalPage() {
 
-</body>
-</html>
+  text.innerHTML = "";
+
+  butterfly.style.display = "none";
+
+  photo.style.display = "block";
+  caption.style.display = "block";
+
+  setTimeout(() => {
+    photo.style.transform = "scale(1.15)";
+  }, 300);
+}
+
+</script>

@@ -29,7 +29,6 @@ body {
   white-space: pre-line;
 }
 
-/* BLACK INPUT + BUTTON */
 input {
   padding: 10px;
   font-size: 18px;
@@ -48,7 +47,6 @@ button {
   border: none;
 }
 
-/* 🦋 ORIGINAL STYLE */
 #butterfly {
   position: fixed;
   bottom: 40px;
@@ -59,7 +57,6 @@ button {
   cursor: pointer;
 }
 
-/* FINAL PAGE */
 #photoContainer {
   display: none;
   position: fixed;
@@ -98,6 +95,15 @@ button {
 @keyframes blink {
   50% { opacity: 0; }
 }
+
+.letterGlow {
+  animation: glowFade 0.4s ease;
+}
+
+@keyframes glowFade {
+  0% { text-shadow: 0 0 10px rgba(255,255,255,0.8); }
+  100% { text-shadow: none; }
+}
 </style>
 </head>
 
@@ -126,8 +132,10 @@ button {
   </div>
 </div>
 
-<!-- AUDIO -->
-<audio id="writeSound" src="write.mp3"></audio>
+<!-- ✅ YOUR REAL SOUND FILE -->
+<audio id="writeSound" src="freesound_community-writing-63678.mp3"></audio>
+
+<!-- MUSIC -->
 <audio id="bgMusic" src="Jamie-Duffy-Solas-Official-Video.mp3"></audio>
 
 <script>
@@ -143,7 +151,6 @@ function unlockAudio(){
 const introMessage = "Only open if you are alone…\n\nand if so\n\nclick start to explore";
 const passwordMessage = "Think for a moment…\n\nWho shines the most this year?";
 
-/* ✍️ WRITING WITH SOUND PER LETTER */
 function inkWrite(el, text, speed = 90) {
 
   el.innerHTML = "";
@@ -166,12 +173,13 @@ function inkWrite(el, text, speed = 90) {
 
         let span = document.createElement("span");
         span.textContent = text[i];
+        span.classList.add("letterGlow");
+
         el.insertBefore(span, cursor);
 
-        /* 🔥 PLAY SOUND EVERY 2 LETTERS (NOT TOO MUCH) */
         if(audioUnlocked && i % 2 === 0){
           sound.currentTime = 0;
-          sound.volume = 0.4;
+          sound.volume = 0.5;
           sound.play().catch(()=>{});
         }
       }
@@ -187,7 +195,6 @@ function inkWrite(el, text, speed = 90) {
   type();
 }
 
-/* MUSIC FADE */
 function fadeInMusic(){
   let music = document.getElementById("bgMusic");
   music.volume = 0;

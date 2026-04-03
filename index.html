@@ -2,100 +2,58 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Patricia</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap" rel="stylesheet">
 
 <style>
 body {
   margin: 0;
-  background: black;
-  color: white;
-  font-family: Arial;
-  overflow: hidden;
+  background: #f5f1dc;
+  font-family: 'Caveat', cursive;
+  color: #222;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
 }
 
-/* LOCK SCREEN */
-#lockScreen {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: black;
+/* CENTER */
+.center {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  text-align: center;
-  z-index: 10;
-  padding: 20px;
-  transition: opacity 1.5s ease;
-}
-
-#lockText {
-  font-size: 20px;
-  max-width: 80%;
-  line-height: 1.6;
-}
-
-#lockScreen input {
-  margin-top: 20px;
-  padding: 12px;
-  font-size: 16px;
-  text-align: center;
-  border-radius: 8px;
-  border: none;
-}
-
-#lockScreen button {
-  margin-top: 15px;
-  padding: 10px 20px;
-}
-
-#hint {
-  margin-top: 15px;
-  font-size: 14px;
-  opacity: 0;
-  transition: opacity 1s;
-}
-
-#magicButterfly {
-  position: absolute;
-  font-size: 40px;
-  opacity: 0;
-  transform: scale(0.5);
-  transition: all 1.5s ease;
-}
-
-.magic-glow {
-  background: radial-gradient(circle, rgba(255,255,255,0.15), black);
-}
-
-/* MAIN CONTENT */
-#mainContent {
-  display: none;
-  height: 100vh;
-  display: flex;
   justify-content: center;
-  align-items: center;
 }
 
 /* TEXT */
-#text {
-  font-size: 22px;
+#text, #textMain {
+  font-size: 26px;
   max-width: 90%;
+  transition: opacity 0.8s ease;
+}
+
+/* INPUT */
+input {
+  padding: 10px;
+  font-size: 18px;
+  margin-top: 15px;
   text-align: center;
-  opacity: 0;
-  transition: opacity 1.5s ease;
+}
+
+button {
+  margin-top: 10px;
+  padding: 8px 20px;
 }
 
 /* BUTTERFLY */
 #butterfly {
   position: fixed;
-  bottom: 30px;
+  bottom: 40px;
+  width: 90px;
   left: 50%;
   transform: translateX(-50%);
-  width: 70px;
   display: none;
-  opacity: 0;
-  transition: opacity 1.5s ease;
 }
 
 /* PHOTO */
@@ -103,9 +61,8 @@ body {
   display: none;
   position: fixed;
   top: 0;
-  left: 0;
   width: 100%;
-  height: 85%;
+  height: 80%;
   object-fit: cover;
 }
 
@@ -114,179 +71,152 @@ body {
   position: fixed;
   bottom: 20px;
   width: 100%;
-  text-align: center;
-  font-size: 18px;
+  font-size: 20px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🔐 LOCK SCREEN -->
-<div id="lockScreen">
+<!-- PASSWORD -->
+<div id="lock" class="center">
 
-  <div id="lockText">
-    Before you continue...
-    <br><br>
-    Think for a moment.
-    <br><br>
-    What is the one word that shines the most this year?
-  </div>
+<div id="text">
+Think for a moment…<br><br>
+Who shines the most this year?
+</div>
 
-  <input id="password" type="text" placeholder="enter it here..." />
-  <button onclick="checkPassword()">Unlock</button>
-
-  <div id="hint"></div>
-  <div id="magicButterfly">🦋</div>
+<input id="password">
+<button onclick="check()">Enter</button>
 
 </div>
 
-<!-- 🎬 MAIN -->
-<div id="mainContent">
+<!-- MAIN -->
+<div id="main" class="center" style="display:none">
 
-<audio id="music" src="music.mp3"></audio>
+<audio id="music" src="Jamie-Duffy-Solas-Official-Video.mp3"></audio>
 
-<img id="photo" src="photo.jpg">
+<img id="photo" src="Screenshot_2026-04-02-12-47-16-582_com.miui.gallery.jpg">
 <div id="caption">Istanbul and me both of us had the best days when you were here✨</div>
 
-<div id="text"></div>
-<img id="butterfly" src="butterfly.png">
+<div id="textMain"></div>
+
+<img id="butterfly" src="file_00000000914c720a8541e3890677c924.png">
 
 </div>
 
 <script>
 
-/* PASSWORD SYSTEM */
-let attempts = 0;
+/* PASSWORD */
+let tries = 0;
 
-function checkPassword() {
+function check(){
 
-  const input = document.getElementById("password").value.toLowerCase();
-  const hint = document.getElementById("hint");
-  const lock = document.getElementById("lockScreen");
-  const butterfly = document.getElementById("magicButterfly");
+let t = document.getElementById("text");
+let val = document.getElementById("password").value.toLowerCase();
 
-  if (input === "patricia") {
+if(val==="patricia"){
 
-    lock.classList.add("magic-glow");
+document.getElementById("lock").style.display="none";
+document.getElementById("main").style.display="flex";
 
-    butterfly.style.opacity = 1;
-    butterfly.style.transform = "scale(1.5)";
+start();
 
-    setTimeout(() => {
-      butterfly.style.transform = "scale(2)";
-      butterfly.style.opacity = 0;
-    }, 1200);
+}else{
 
-    setTimeout(() => {
-      lock.style.opacity = 0;
-    }, 1500);
+tries++;
 
-    setTimeout(() => {
-      lock.style.display = "none";
-      document.getElementById("mainContent").style.display = "flex";
-      startExperience();
-    }, 2200);
+t.style.opacity=0;
 
-  } else {
+setTimeout(()=>{
 
-    attempts++;
-    hint.style.opacity = 1;
+if(tries===1) t.innerHTML="Think about who makes this year shine...";
+else if(tries===2) t.innerHTML="Someone who changed your world...";
+else if(tries===3) t.innerHTML="You already know...";
+else if(tries===4) t.innerHTML="Whose special day is today...";
+else if(tries===5) t.innerHTML="The most beautiful name...";
+else t.innerHTML="Say her name...";
 
-    if (attempts === 1) hint.innerHTML = "Think about who makes this year shine the most...";
-    else if (attempts === 2) hint.innerHTML = "Someone who changed your world more than anything...";
-    else if (attempts === 3) hint.innerHTML = "You already have her name in your heart...";
-    else if (attempts === 4) hint.innerHTML = "Whose special day is today...";
-    else if (attempts === 5) hint.innerHTML = "The most beautiful name...";
-    else hint.innerHTML = "Say her name...";
-  }
+t.style.opacity=1;
+
+},400);
+
+}
+
 }
 
 /* EXPERIENCE */
-const pages = [
-["welcome...", "Did you know this year is the brightest year ever?", "And do you know why?", "This year is the brightest year ever", "because you are shining the most ever Patricia"],
-["you must wonder what is this now,", "lean back;", "Think, watch, listen and enjoy"],
-["Who are you?", "I want you to think"],
-["I don't know your answer", "however I am so proud of you"],
-["what do you want?", "I want you to focus"],
-["By observing yourself", "that's the key"],
-["what do you do?", "Are you just a surgeon?", "", "I want you to empty your mind and contemplate"],
-["You are a lot of things.", "You are more than just a surgeon"],
-["Now take a deep breath", "nice and smooth"],
-["Ready for a journey?", "Buckle up!"],
-["I love you birthday girl", "You are the most beautiful thing in the world ❤"]
+const pages=[
+["welcome...","Did you know this year is the brightest year ever?","Because you are shining the most ever Patricia"],
+["Think, watch, listen"],
+["Who are you"],
+["I am proud of you"],
+["What do you want"],
+["Observe yourself"],
+["Are you just a surgeon"],
+["You are more"],
+["Take a breath"],
+["Ready"],
+["I love you birthday girl"]
 ];
 
-let i = 0;
+let i=0;
 
-const text = document.getElementById("text");
-const butterflyBtn = document.getElementById("butterfly");
-const photo = document.getElementById("photo");
-const caption = document.getElementById("caption");
-const music = document.getElementById("music");
+let text=document.getElementById("textMain");
+let butterfly=document.getElementById("butterfly");
+let music=document.getElementById("music");
 
-/* HEARTBEAT TEXT */
-function showHeartbeat(lines) {
-
-  text.style.opacity = 0;
-
-  setTimeout(() => {
-    text.innerHTML = "";
-    text.style.opacity = 1;
-
-    let index = 0;
-
-    function nextLine() {
-      if (index >= lines.length) return;
-      text.innerHTML += lines[index] + "<br><br>";
-      index++;
-      setTimeout(nextLine, 1400);
-    }
-
-    nextLine();
-
-  }, 400);
+function start(){
+show();
 }
 
-/* START */
-function startExperience() {
-  showHeartbeat(pages[0]);
-  showButterfly();
+/* TEXT */
+function show(){
+
+text.innerHTML="";
+let lines=pages[i];
+let j=0;
+
+function next(){
+if(j>=lines.length) return;
+text.innerHTML+=lines[j]+"<br><br>";
+j++;
+setTimeout(next,1200);
 }
 
-function showButterfly() {
-  setTimeout(() => {
-    butterflyBtn.style.display = "block";
-    butterflyBtn.style.opacity = 1;
-  }, 2000);
+next();
+
+setTimeout(()=>{
+butterfly.style.display="block";
+},1500);
+
 }
 
 /* CLICK */
-butterflyBtn.onclick = function() {
+butterfly.onclick=function(){
 
-  if (i === 9) {
-    music.play();
-    i = 10;
-    showHeartbeat(pages[i]);
-    return;
-  }
+if(i===9){
+music.play();
+i=10;
+show();
+return;
+}
 
-  if (i === 10) {
-    text.style.display = "none";
-    butterflyBtn.style.display = "none";
-    photo.style.display = "block";
-    caption.style.display = "block";
-    return;
-  }
+if(i===10){
 
-  i++;
-  butterflyBtn.style.opacity = 0;
+text.style.display="none";
+butterfly.style.display="none";
 
-  setTimeout(() => {
-    butterflyBtn.style.display = "none";
-    showHeartbeat(pages[i]);
-    showButterfly();
-  }, 600);
+document.getElementById("photo").style.display="block";
+document.getElementById("caption").style.display="block";
+
+return;
+}
+
+i++;
+butterfly.style.display="none";
+setTimeout(show,400);
+
 };
 
 </script>

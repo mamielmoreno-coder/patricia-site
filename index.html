@@ -13,7 +13,7 @@ body {
   color: #222;
   font-family: 'Caveat', cursive;
   display: flex;
-  flex-direction: column; /* 👈 IMPORTANT */
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
@@ -30,7 +30,7 @@ body {
   z-index: 2;
 }
 
-/* BUTTERFLY */
+/* BUTTERFLY (SOFT & STILL) */
 #butterfly {
   position: fixed;
   bottom: 50px;
@@ -39,15 +39,14 @@ body {
   width: 85px;
   opacity: 0;
   display: none;
-  animation: float 4s ease-in-out infinite;
-  transition: opacity 2s ease, transform 1s ease;
-  filter: drop-shadow(0 0 10px rgba(255,255,255,0.4));
+  transition: opacity 2.5s ease, transform 1s ease;
+  animation: glow 4s ease-in-out infinite;
   z-index: 3;
 }
 
-@keyframes float {
-  0%, 100% { transform: translate(-50%, 0px) scale(0.9); }
-  50% { transform: translate(-50%, -15px) scale(1); }
+@keyframes glow {
+  0%, 100% { filter: drop-shadow(0 0 6px rgba(255,255,255,0.3)); }
+  50% { filter: drop-shadow(0 0 18px rgba(255,255,255,0.6)); }
 }
 
 /* FLY AWAY */
@@ -56,25 +55,28 @@ body {
   100% { transform: translate(-50%, -300px) scale(0.6); opacity: 0; }
 }
 
-/* PHOTO (now normal flow) */
+/* PHOTO FULL SCREEN */
 #photo {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  max-width: 500px;
-  border-radius: 12px;
-  margin-bottom: 10px;
+  height: 100%;
+  object-fit: cover;
   transform: scale(1);
   transition: transform 6s ease;
   display: none;
-  z-index: 1;
+  z-index: 0;
 }
 
-/* CAPTION BELOW IMAGE */
+/* CAPTION BELOW */
 #caption {
-  margin-top: 10px;
+  position: absolute;
+  bottom: 60px;
   font-size: 22px;
   max-width: 90%;
   display: none;
-  color: #222;
+  color: white;
   z-index: 2;
 }
 </style>
@@ -84,7 +86,7 @@ body {
 
 <audio id="music" src="Jamie-Duffy-Solas-Official-Video.mp3" loop></audio>
 
-<img id="photo" src="Screenshot_2026-04-02-12-47-16-582_com.miui.gallery.jpg">
+<img id="photo" src="/patricia-site/Screenshot_2026-04-02-12-47-16-582_com.miui.gallery.jpg">
 
 <div id="text">welcome</div>
 <div id="caption">Istanbul and me both of us had the best days when you were here✨</div>
@@ -127,8 +129,8 @@ const butterfly = document.getElementById("butterfly");
 const photo = document.getElementById("photo");
 const caption = document.getElementById("caption");
 
-/* show butterfly */
-setTimeout(showButterfly, 2000);
+/* SOFT APPEAR */
+setTimeout(showButterfly, 2200);
 
 butterfly.onclick = function() {
 
@@ -136,12 +138,11 @@ butterfly.onclick = function() {
 
     document.getElementById("music").play();
 
-    butterfly.style.filter = "drop-shadow(0 0 25px rgba(255,255,255,0.9))";
-    butterfly.style.animation = "flyAway 2.5s forwards";
+    butterfly.style.animation = "flyAway 3s forwards";
 
     setTimeout(() => {
       nextPage();
-    }, 2000);
+    }, 2200);
 
     return;
   }
@@ -170,7 +171,7 @@ function nextPage() {
     caption.style.display = "block";
 
     setTimeout(() => {
-      photo.style.transform = "scale(1.1)";
+      photo.style.transform = "scale(1.15)";
     }, 300);
 
     return;
@@ -189,9 +190,9 @@ function showButterfly() {
 
     setTimeout(() => {
       butterfly.style.opacity = 1;
-    }, 100);
+    }, 200);
 
-  }, 2000);
+  }, 2200);
 }
 
 </script>

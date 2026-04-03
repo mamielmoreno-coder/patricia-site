@@ -133,8 +133,8 @@ button {
 const introMessage = "Only open if you are alone…\n\nand if so\n\nclick start to explore";
 const passwordMessage = "Think for a moment…\n\nWho shines the most this year?";
 
-/* ✍️ REAL INK WRITING (SLOW + VISIBLE) */
-function inkWrite(el, text, speed = 70) {
+/* ✍️ REAL WRITING (NO BLUR, SLOW) */
+function inkWrite(el, text, speed = 90) {
 
   el.innerHTML = "";
 
@@ -155,17 +155,14 @@ function inkWrite(el, text, speed = 70) {
         let span = document.createElement("span");
         span.textContent = text[i];
 
-        /* ✨ STRONG INK EFFECT */
         span.style.opacity = "0";
-        span.style.filter = "blur(6px)";
-        span.style.transition = "all 0.6s ease";
+        span.style.transition = "opacity 0.3s ease";
 
         el.insertBefore(span, cursor);
 
         setTimeout(() => {
           span.style.opacity = "1";
-          span.style.filter = "blur(0)";
-        }, 50);
+        }, 10);
       }
 
       i++;
@@ -181,14 +178,14 @@ function inkWrite(el, text, speed = 70) {
 
 /* LOAD INTRO */
 window.onload = () => {
-  inkWrite(document.getElementById("introText"), introMessage, 70);
+  inkWrite(document.getElementById("introText"), introMessage, 90);
 };
 
 /* START */
 function startIntro(){
   document.getElementById("introScreen").style.display = "none";
   document.getElementById("lock").style.display = "flex";
-  inkWrite(document.getElementById("passwordText"), passwordMessage, 70);
+  inkWrite(document.getElementById("passwordText"), passwordMessage, 90);
 }
 
 /* PASSWORD */
@@ -215,7 +212,7 @@ function check(){
   else if(tries===5) msg="The most beautiful name...";
   else msg="Say her name...";
 
-  inkWrite(t, msg, 70);
+  inkWrite(t, msg, 90);
 }
 
 /* PAGES */
@@ -257,11 +254,11 @@ function start(){
 
 function show(){
   let full = pages[i].join("\n\n");
-  inkWrite(text, full, 70);
+  inkWrite(text, full, 90);
 
   setTimeout(()=>{
     butterfly.style.display = "block";
-  }, full.length * 70 + 800);
+  }, full.length * 90 + 800);
 }
 
 butterfly.onclick = () => {

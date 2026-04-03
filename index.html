@@ -11,26 +11,37 @@ body {
   background: #f5f1dc;
   font-family: 'Caveat', cursive;
   color: #222;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  text-align: center;
 }
 
 /* CENTER */
 .center {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
 }
 
-/* TEXT */
-#text, #textMain {
+/* INTRO */
+#introScreen {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: #f5f1dc;
+  z-index: 20;
+}
+
+#introText {
+  font-size: 26px;
+  max-width: 80%;
+}
+
+/* PASSWORD TEXT */
+#text {
   font-size: 26px;
   max-width: 90%;
-  transition: opacity 0.8s ease;
+  transition: opacity 0.6s;
 }
 
 /* INPUT */
@@ -46,6 +57,12 @@ button {
   padding: 8px 20px;
 }
 
+/* MAIN TEXT */
+#textMain {
+  font-size: 26px;
+  max-width: 90%;
+}
+
 /* BUTTERFLY */
 #butterfly {
   position: fixed;
@@ -56,39 +73,56 @@ button {
   display: none;
 }
 
-/* PHOTO */
-#photo {
+/* MEMORY */
+#photoContainer {
   display: none;
-  position: fixed;
-  top: 0;
   width: 100%;
-  height: 80%;
-  object-fit: cover;
+  min-height: 100vh;
+  background: #f5f1dc;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 2s;
+}
+
+#photo {
+  width: 90%;
+  border-radius: 10px;
+  opacity: 0;
+  transform: scale(1);
+  transition: 2s, transform 6s;
 }
 
 #caption {
-  display: none;
-  position: fixed;
-  bottom: 20px;
-  width: 100%;
-  font-size: 20px;
+  margin-top: 20px;
+  font-size: 22px;
+  opacity: 0;
+  transition: 2s;
 }
 </style>
 </head>
 
 <body>
 
-<!-- PASSWORD -->
-<div id="lock" class="center">
-
-<div id="text">
-Think for a moment…<br><br>
-Who shines the most this year?
+<!-- INTRO -->
+<div id="introScreen" class="center">
+  <div id="introText">
+    Only open if you are alone…<br><br>
+    and if so<br><br>
+    click start to explore
+  </div>
+  <button onclick="startIntro()">Start</button>
 </div>
 
-<input id="password">
-<button onclick="check()">Enter</button>
-
+<!-- PASSWORD -->
+<div id="lock" class="center" style="display:none">
+  <div id="text">
+    Think for a moment…<br><br>
+    Who shines the most this year?
+  </div>
+  <input id="password">
+  <button onclick="check()">Enter</button>
 </div>
 
 <!-- MAIN -->
@@ -96,24 +130,35 @@ Who shines the most this year?
 
 <audio id="music" src="Jamie-Duffy-Solas-Official-Video.mp3"></audio>
 
-<img id="photo" src="Screenshot_2026-04-02-12-47-16-582_com.miui.gallery.jpg">
-<div id="caption">Istanbul and me both of us had the best days when you were here✨</div>
-
 <div id="textMain"></div>
 
 <img id="butterfly" src="file_00000000914c720a8541e3890677c924.png">
 
 </div>
 
+<!-- MEMORY -->
+<div id="photoContainer">
+  <img id="photo" src="Screenshot_2026-04-02-12-47-16-582_com.miui.gallery.jpg">
+  <div id="caption">
+    Istanbul and me both of us had the best days when you were here✨
+  </div>
+</div>
+
 <script>
 
+/* INTRO */
+function startIntro(){
+document.getElementById("introScreen").style.display="none";
+document.getElementById("lock").style.display="flex";
+}
+
 /* PASSWORD */
-let tries = 0;
+let tries=0;
 
 function check(){
 
-let t = document.getElementById("text");
-let val = document.getElementById("password").value.toLowerCase();
+let t=document.getElementById("text");
+let val=document.getElementById("password").value.toLowerCase();
 
 if(val==="patricia"){
 
@@ -125,39 +170,52 @@ start();
 }else{
 
 tries++;
-
 t.style.opacity=0;
 
 setTimeout(()=>{
 
-if(tries===1) t.innerHTML="Think about who makes this year shine...";
-else if(tries===2) t.innerHTML="Someone who changed your world...";
-else if(tries===3) t.innerHTML="You already know...";
+if(tries===1) t.innerHTML="Think about who makes this year shine the most...";
+else if(tries===2) t.innerHTML="Someone who changed your world more than anything...";
+else if(tries===3) t.innerHTML="You already have her name in your heart...";
 else if(tries===4) t.innerHTML="Whose special day is today...";
 else if(tries===5) t.innerHTML="The most beautiful name...";
 else t.innerHTML="Say her name...";
 
 t.style.opacity=1;
 
-},400);
+},300);
 
 }
 
 }
 
-/* EXPERIENCE */
+/* YOUR EXACT TEXTS */
 const pages=[
-["welcome...","Did you know this year is the brightest year ever?","Because you are shining the most ever Patricia"],
-["Think, watch, listen"],
-["Who are you"],
-["I am proud of you"],
-["What do you want"],
-["Observe yourself"],
-["Are you just a surgeon"],
-["You are more"],
-["Take a breath"],
-["Ready"],
-["I love you birthday girl"]
+["welcome",
+"Did you know this year is the brightest year ever?",
+"And do you know why?",
+"This year is the brightest year ever because you are shining the most ever Patricia"],
+
+["you must wonder what is this now, lean back; Think, watch, listen and enjoy"],
+
+["Who are you?","I want you to think"],
+
+["I don't know your answer however I am so proud of you"],
+
+["what do you want?","I want you to focus"],
+
+["By observing yourself that's the key"],
+
+["what do you do?","Are you just a surgeon?",
+"I want you to empty your mind and contemplate"],
+
+["You are a lot of things. You are more than just a surgeon"],
+
+["Now take a deep breath nice and smooth"],
+
+["Ready for a journey? Buckle up!"],
+
+["I love you birthday girl You are the most beautiful thing in the world❤"]
 ];
 
 let i=0;
@@ -170,7 +228,6 @@ function start(){
 show();
 }
 
-/* TEXT */
 function show(){
 
 text.innerHTML="";
@@ -181,7 +238,7 @@ function next(){
 if(j>=lines.length) return;
 text.innerHTML+=lines[j]+"<br><br>";
 j++;
-setTimeout(next,1200);
+setTimeout(next,1300);
 }
 
 next();
@@ -192,7 +249,6 @@ butterfly.style.display="block";
 
 }
 
-/* CLICK */
 butterfly.onclick=function(){
 
 if(i===9){
@@ -204,11 +260,18 @@ return;
 
 if(i===10){
 
-text.style.display="none";
-butterfly.style.display="none";
+document.getElementById("main").style.display="none";
 
-document.getElementById("photo").style.display="block";
-document.getElementById("caption").style.display="block";
+let c=document.getElementById("photoContainer");
+let p=document.getElementById("photo");
+let cap=document.getElementById("caption");
+
+c.style.display="flex";
+
+setTimeout(()=>{c.style.opacity=1;},100);
+setTimeout(()=>{p.style.opacity=1;},600);
+setTimeout(()=>{p.style.transform="scale(1.05)";},1000);
+setTimeout(()=>{cap.style.opacity=1;},2000);
 
 return;
 }

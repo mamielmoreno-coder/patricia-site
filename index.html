@@ -95,17 +95,38 @@ button {
   to { opacity: 0; }
 }
 
-/* 🔥 FIRE EFFECT */
-@keyframes fireFlicker {
-  0%   { text-shadow: 0 0 2px rgba(255,140,0,0.2); }
-  50%  { text-shadow: 0 0 6px rgba(255,160,60,0.35); }
-  100% { text-shadow: 0 0 2px rgba(255,140,0,0.2); }
+/* 🔥 LETTER FIRE EFFECT */
+@keyframes letterFire {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+    text-shadow: 0 0 2px rgba(255,120,0,0.3);
+  }
+
+  30% {
+    opacity: 1;
+    text-shadow:
+      0 0 6px rgba(255,140,0,0.6),
+      0 0 10px rgba(255,100,0,0.4);
+  }
+
+  60% {
+    text-shadow:
+      0 0 4px rgba(255,160,60,0.3);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    text-shadow: none;
+  }
 }
 
-.fireEffect {
-  animation: fireFlicker 1.5s ease-in-out infinite;
+.fireLetter {
+  animation: letterFire 0.5s ease forwards;
 }
 
+/* CURSOR */
 .cursor {
   display: inline-block;
   width: 2px;
@@ -114,6 +135,7 @@ button {
 }
 
 @keyframes blink { 50% { opacity: 0; } }
+
 </style>
 </head>
 
@@ -146,6 +168,7 @@ function createTrail(){
 
   let t = document.createElement("div");
   t.className = "trail";
+
   t.style.top = rect.top + "px";
   t.style.left = rect.left + rect.width/2 + "px";
 
@@ -170,7 +193,6 @@ function fadeInMusic(){
 function inkWrite(el, text, speed = 90, callback){
 
   el.innerHTML = "";
-  el.classList.add("fireEffect");
 
   let cursor = document.createElement("span");
   cursor.className = "cursor";
@@ -188,15 +210,16 @@ function inkWrite(el, text, speed = 90, callback){
       } else {
         let s = document.createElement("span");
         s.textContent = c;
+        s.classList.add("fireLetter"); // 🔥 fire per letter
         el.insertBefore(s, cursor);
       }
 
       i++;
+
       setTimeout(type, speed + Math.random()*30);
 
     } else {
       cursor.remove();
-      el.classList.remove("fireEffect");
       if(callback) callback();
     }
   }
@@ -265,7 +288,6 @@ butterfly.onclick=()=>{
 
   butterfly.style.pointerEvents="none";
 
-  /* TRAIL LOOP */
   let trailInterval = setInterval(createTrail, 80);
 
   butterfly.classList.add("fly");

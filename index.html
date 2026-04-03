@@ -33,91 +33,70 @@ const photo = document.getElementById("photo");
 const caption = document.getElementById("caption");
 const music = document.getElementById("music");
 
-/* initial butterfly */
-setTimeout(showButterfly, 2200);
+/* show butterfly */
+function showButterfly() {
+  setTimeout(() => {
+    butterfly.style.display = "block";
+    butterfly.style.opacity = 1;
+  }, 1500);
+}
 
-butterfly.onclick = function() {
+/* initial */
+text.innerHTML = pages[0];
+showButterfly();
 
-  /* 🎬 PAGE 10 → SPECIAL TRANSITION */
+butterfly.onclick = function () {
+
+  /* PAGE 10 → SPECIAL */
   if (i === 9) {
 
     music.play();
 
-    butterfly.style.animation = "flyAway 3s forwards";
+    butterfly.style.animation = "flyAway 2.5s forwards";
 
     setTimeout(() => {
 
-      /* go to page 11 */
-      i++;
-      text.innerHTML = pages[i];
+      i = 10;
+      text.innerHTML = pages[10];
 
-      /* reset butterfly */
       butterfly.style.animation = "";
-      butterfly.style.opacity = 0;
       butterfly.style.display = "none";
+      butterfly.style.opacity = 0;
 
-      /* show NEW butterfly for next click */
-      setTimeout(showButterfly, 2000);
+      showButterfly(); // new butterfly
 
-    }, 2200);
+    }, 2000);
 
     return;
   }
 
-  /* 🎬 PAGE 11 → FINAL PAGE */
+  /* PAGE 11 → FINAL PHOTO */
   if (i === 10) {
 
-    butterfly.style.opacity = 0;
     butterfly.style.display = "none";
+    text.innerHTML = "";
+
+    photo.style.display = "block";
+    caption.style.display = "block";
 
     setTimeout(() => {
-      showFinalPage();
-    }, 500);
+      photo.style.transform = "scale(1.15)";
+    }, 300);
 
     return;
   }
 
-  nextPage();
-};
-
-function nextPage() {
-
+  /* NORMAL FLOW */
   i++;
 
   if (i >= pages.length) return;
 
-  butterfly.style.opacity = 0;
   butterfly.style.display = "none";
+  butterfly.style.opacity = 0;
 
   text.innerHTML = pages[i];
 
   showButterfly();
-}
-
-function showButterfly() {
-
-  setTimeout(() => {
-
-    butterfly.style.display = "block";
-
-    setTimeout(() => {
-      butterfly.style.opacity = 1;
-    }, 200);
-
-  }, 2200);
-}
-
-/* FINAL PHOTO PAGE */
-function showFinalPage() {
-
-  text.innerHTML = "";
-
-  photo.style.display = "block";
-  caption.style.display = "block";
-
-  setTimeout(() => {
-    photo.style.transform = "scale(1.15)";
-  }, 300);
-}
+};
 
 </script>

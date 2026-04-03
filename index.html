@@ -1,28 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patricia</title>
+
+<style>
+body {
+  margin: 0;
+  background: black;
+  color: white;
+  font-family: Arial;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  padding: 20px;
+}
+
+#text {
+  font-size: 22px;
+}
+
+#butterfly {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  display: none;
+  cursor: pointer;
+}
+
+#photo {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+#caption {
+  position: fixed;
+  bottom: 40px;
+  width: 100%;
+  text-align: center;
+  display: none;
+  font-size: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" src="Jamie-Duffy-Solas-Official-Video.mp3"></audio>
+
+<img id="photo" src="Screenshot_2026-04-02-12-47-16-582_com.miui.gallery.jpg">
+<div id="caption">Istanbul and me both of us had the best days when you were here✨</div>
+
+<div id="text">welcome</div>
+
+<img id="butterfly" src="file_00000000914c720a8541e3890677c924.png">
+
 <script>
 
 const pages = [
-
 "welcome",
-
-"you must wonder what is this now,<br><br>lean back;<br><br>Think, watch, listen and enjoy",
-
+"you must wonder what is this now,<br><br>Think, watch, listen and enjoy",
 "Who are you?<br><br>I want you to think",
-
-"I don't know your answer however I am so proud of you",
-
-"what do you want?<br><br>I want you to focus",
-
+"I am so proud of you",
+"what do you want?<br><br>focus",
 "By observing yourself that's the key",
-
-"what do you do?<br><br>Are you just a surgeon?<br><br><br>I want you to empty your mind and contemplate",
-
-"You are a lot of things.<br><br>You are more than just a surgeon",
-
-"Now take a deep breath<br><br>nice and smooth",
-
-"Ready for a journey?<br><br>Buckle up!",
-
-"I love you birthday girl<br><br>You are the most beautiful thing in the world ❤"
+"Are you just a surgeon?",
+"You are more than that",
+"Take a deep breath",
+"Ready for a journey?",
+"I love you birthday girl ❤"
 ];
 
 let i = 0;
@@ -37,66 +92,47 @@ const music = document.getElementById("music");
 function showButterfly() {
   setTimeout(() => {
     butterfly.style.display = "block";
-    butterfly.style.opacity = 1;
-  }, 1500);
+  }, 1000);
 }
 
-/* initial */
-text.innerHTML = pages[0];
 showButterfly();
 
-butterfly.onclick = function () {
+butterfly.onclick = function() {
 
-  /* PAGE 10 → SPECIAL */
+  /* page 10 (music moment) */
   if (i === 9) {
-
     music.play();
 
-    butterfly.style.animation = "flyAway 2.5s forwards";
+    butterfly.style.display = "none";
 
     setTimeout(() => {
-
       i = 10;
-      text.innerHTML = pages[10];
-
-      butterfly.style.animation = "";
-      butterfly.style.display = "none";
-      butterfly.style.opacity = 0;
-
-      showButterfly(); // new butterfly
-
-    }, 2000);
+      text.innerHTML = pages[i];
+      showButterfly();
+    }, 1000);
 
     return;
   }
 
-  /* PAGE 11 → FINAL PHOTO */
+  /* page 11 → final */
   if (i === 10) {
-
+    text.style.display = "none";
     butterfly.style.display = "none";
-    text.innerHTML = "";
 
     photo.style.display = "block";
     caption.style.display = "block";
-
-    setTimeout(() => {
-      photo.style.transform = "scale(1.15)";
-    }, 300);
-
     return;
   }
 
-  /* NORMAL FLOW */
+  /* normal pages */
   i++;
-
-  if (i >= pages.length) return;
-
-  butterfly.style.display = "none";
-  butterfly.style.opacity = 0;
-
   text.innerHTML = pages[i];
 
+  butterfly.style.display = "none";
   showButterfly();
 };
 
 </script>
+
+</body>
+</html>

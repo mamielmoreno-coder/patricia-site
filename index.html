@@ -55,9 +55,9 @@ button {
   cursor: pointer;
 }
 
-/* FINAL PAGE (FIXED PROPERLY) */
+/* FINAL PAGE */
 #photoContainer {
-  display: none; /* IMPORTANT FIX */
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -67,14 +67,12 @@ button {
   flex-direction: column;
 }
 
-/* IMAGE */
 #photo {
   width: 100%;
   height: 75vh;
   object-fit: cover;
 }
 
-/* TEXT UNDER IMAGE */
 #caption {
   height: 25vh;
   display: flex;
@@ -146,7 +144,7 @@ button {
 const introMessage = "Only open if you are alone…\n\nand if so\n\nclick start to explore";
 const passwordMessage = "Think for a moment…\n\nWho shines the most this year?";
 
-/* WRITING EFFECT */
+/* FIXED WRITING EFFECT */
 function inkWrite(el, text, speed = 50) {
   el.innerHTML = "";
   let i = 0;
@@ -164,8 +162,9 @@ function inkWrite(el, text, speed = 50) {
       el.innerHTML += '<span class="cursor"></span>';
       i++;
       setTimeout(write, speed);
+
     } else {
-      el.innerHTML = text;
+      return; // ✅ FIX: do NOT overwrite text
     }
   }
 

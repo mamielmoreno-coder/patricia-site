@@ -33,24 +33,46 @@ const photo = document.getElementById("photo");
 const caption = document.getElementById("caption");
 const music = document.getElementById("music");
 
-/* show butterfly initially */
+/* initial butterfly */
 setTimeout(showButterfly, 2200);
 
 butterfly.onclick = function() {
 
-  /* 🔥 SPECIAL MOMENT (after page 10) */
+  /* 🎬 PAGE 10 → SPECIAL TRANSITION */
   if (i === 9) {
 
     music.play();
 
     butterfly.style.animation = "flyAway 3s forwards";
 
-    /* permanently disable butterfly */
-    butterfly.onclick = null;
+    setTimeout(() => {
+
+      /* go to page 11 */
+      i++;
+      text.innerHTML = pages[i];
+
+      /* reset butterfly */
+      butterfly.style.animation = "";
+      butterfly.style.opacity = 0;
+      butterfly.style.display = "none";
+
+      /* show NEW butterfly for next click */
+      setTimeout(showButterfly, 2000);
+
+    }, 2200);
+
+    return;
+  }
+
+  /* 🎬 PAGE 11 → FINAL PAGE */
+  if (i === 10) {
+
+    butterfly.style.opacity = 0;
+    butterfly.style.display = "none";
 
     setTimeout(() => {
       showFinalPage();
-    }, 2200);
+    }, 500);
 
     return;
   }
@@ -72,10 +94,7 @@ function nextPage() {
   showButterfly();
 }
 
-/* 🚫 NO BUTTERFLY AFTER PAGE 10 */
 function showButterfly() {
-
-  if (i >= 10) return;
 
   setTimeout(() => {
 
@@ -88,12 +107,10 @@ function showButterfly() {
   }, 2200);
 }
 
-/* 🎬 FINAL PAGE */
+/* FINAL PHOTO PAGE */
 function showFinalPage() {
 
   text.innerHTML = "";
-
-  butterfly.style.display = "none";
 
   photo.style.display = "block";
   caption.style.display = "block";

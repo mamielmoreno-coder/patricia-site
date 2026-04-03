@@ -27,6 +27,7 @@ body {
 #introText, #passwordText, #textMain {
   font-size: 26px;
   max-width: 90%;
+  white-space: pre-line;
   line-height: 1.6;
 }
 
@@ -54,24 +55,60 @@ button {
   cursor: pointer;
 }
 
-/* MEMORY */
+/* ✅ FIXED FINAL MEMORY */
 #photoContainer {
   display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100vh;
+  background: #f5f1dc;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
 #photo {
-  width: 95%;
-  max-width: 500px;
-  border-radius: 10px;
+  width: 100%;
+  height: 80vh;
+  object-fit: cover;
 }
 
 #caption {
-  margin-top: 10px;
+  height: 20vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 24px;
+  padding: 0 15px;
+  text-align: center;
+}
+
+/* CURSOR */
+.cursor {
+  display: inline-block;
+  width: 2px;
+  background: #222;
+  margin-left: 3px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* INK EFFECT */
+.letter {
+  opacity: 0;
+  animation: inkAppear 0.4s forwards;
+}
+
+@keyframes inkAppear {
+  from { opacity: 0; filter: blur(2px); }
+  to { opacity: 1; filter: blur(0); }
 }
 </style>
 </head>
@@ -80,31 +117,21 @@ button {
 
 <!-- INTRO -->
 <div id="introScreen" class="center">
-  <div id="introText">
-    Only open if you are alone…<br><br>
-    and if so<br><br>
-    click start to explore
-  </div>
+  <div id="introText"></div>
   <button onclick="startIntro()">Start</button>
 </div>
 
 <!-- PASSWORD -->
 <div id="lock" class="center" style="display:none">
-  <div id="passwordText">
-    Think for a moment…<br><br>
-    Who shines the most this year?
-  </div>
+  <div id="passwordText"></div>
   <input id="password">
   <button onclick="check()">Enter</button>
 </div>
 
 <!-- MAIN -->
 <div id="main" class="center" style="display:none">
-
 <div id="textMain"></div>
-
 <div id="butterfly">🦋</div>
-
 </div>
 
 <!-- FINAL -->
@@ -117,18 +144,57 @@ button {
 
 <script>
 
-/* INTRO */
+/* TEXT CONTENT */
+const introMessage = "Only open if you are alone…\n\nand if so\n\nclick start to explore";
+const passwordMessage = "Think for a moment…\n\nWho shines the most this year?";
+
+/* INK WRITING */
+function inkWrite(element, text, speed = 50) {
+  element.innerHTML = "";
+  let i = 0;
+
+  function write() {
+    if (i < text.length) {
+      let char = text[i];
+
+      if (char === "\n") {
+        element.innerHTML += "<br>";
+      } else {
+        element.innerHTML += `<span class="letter">${char}</span>`;
+      }
+
+      element.innerHTML += '<span class="cursor"></span>';
+
+      i++;
+      setTimeout(write, speed);
+
+    } else {
+      element.innerHTML = text;
+    }
+  }
+
+  write();
+}
+
+/* LOAD INTRO */
+window.onload = function(){
+  inkWrite(document.getElementById("introText"), introMessage, 50);
+};
+
+/* START */
 function startIntro(){
   document.getElementById("introScreen").style.display="none";
   document.getElementById("lock").style.display="flex";
+
+  inkWrite(document.getElementById("passwordText"), passwordMessage, 50);
 }
 
 /* PASSWORD */
 let tries=0;
 
 function check(){
+  let val=document.getElementById("password").value.toLowerCase().trim();
   let t=document.getElementById("passwordText");
-  let val=document.getElementById("password").value.toLowerCase();
 
   if(val==="patricia"){
     document.getElementById("lock").style.display="none";
@@ -139,12 +205,15 @@ function check(){
 
   tries++;
 
-  if(tries===1) t.innerHTML="Think about who makes this year shine the most...";
-  else if(tries===2) t.innerHTML="Someone who changed your world more than anything...";
-  else if(tries===3) t.innerHTML="You already have her name in your heart...";
-  else if(tries===4) t.innerHTML="Whose special day is today...";
-  else if(tries===5) t.innerHTML="The most beautiful name...";
-  else t.innerHTML="Say her name...";
+  let msg="";
+  if(tries===1) msg="Think about who makes this year shine the most...";
+  else if(tries===2) msg="Someone who changed your world more than anything...";
+  else if(tries===3) msg="You already have her name in your heart...";
+  else if(tries===4) msg="Whose special day is today...";
+  else if(tries===5) msg="The most beautiful name...";
+  else msg="Say her name...";
+
+  inkWrite(t, msg, 50);
 }
 
 /* PAGES */
@@ -185,8 +254,12 @@ function start(){
 }
 
 function show(){
-  text.innerHTML = pages[i].join("<br><br>");
-  butterfly.style.display="block";
+  let full = pages[i].join("\n\n");
+  inkWrite(text, full, 50);
+
+  setTimeout(()=>{
+    butterfly.style.display="block";
+  }, full.length * 50 + 500);
 }
 
 butterfly.onclick=function(){
@@ -198,6 +271,7 @@ butterfly.onclick=function(){
   }
 
   i++;
+  butterfly.style.display="none";
   show();
 };
 

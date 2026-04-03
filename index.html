@@ -9,9 +9,8 @@
 body {
   margin: 0;
   font-family: 'Caveat', cursive;
-  color: #222;
   background: #f5f1dc;
-  text-align: center;
+  color: #222;
 }
 
 /* CENTER */
@@ -21,14 +20,15 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  text-align: center;
 }
 
 /* TEXT */
 #introText, #passwordText, #textMain {
   font-size: 26px;
   max-width: 90%;
-  white-space: pre-line;
   line-height: 1.6;
+  white-space: pre-line;
 }
 
 /* INPUT */
@@ -55,9 +55,9 @@ button {
   cursor: pointer;
 }
 
-/* ✅ FIXED FINAL MEMORY (ONLY PART CHANGED) */
+/* FINAL PAGE (FIXED PERFECTLY) */
 #photoContainer {
-  display: none; /* FIXED BUG */
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -65,18 +65,18 @@ button {
   height: 100vh;
   background: #f5f1dc;
 
+  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
 }
 
+/* IMAGE TAKES TOP PART */
 #photo {
   width: 100%;
-  height: 80vh; /* SAME STRUCTURE */
-  object-fit: cover; /* FIXES BLACK SPACES */
+  height: 80vh;
+  object-fit: cover;
 }
 
+/* TEXT UNDER IMAGE */
 #caption {
   height: 20vh;
   display: flex;
@@ -103,10 +103,10 @@ button {
 /* INK EFFECT */
 .letter {
   opacity: 0;
-  animation: inkAppear 0.4s forwards;
+  animation: ink 0.4s forwards;
 }
 
-@keyframes inkAppear {
+@keyframes ink {
   from { opacity: 0; filter: blur(2px); }
   to { opacity: 1; filter: blur(0); }
 }
@@ -130,10 +130,150 @@ button {
 
 <!-- MAIN -->
 <div id="main" class="center" style="display:none">
-<div id="textMain"></div>
-<div id="butterfly">🦋</div>
+  <div id="textMain"></div>
+  <div id="butterfly">🦋</div>
 </div>
 
 <!-- FINAL -->
 <div id="photoContainer">
-  <img id="photo" src="Screenshot_2026-04-02-
+  <img id="photo" src="Screenshot_2026-04-02-12-47-16-582_com.miui.gallery.jpg">
+  <div id="caption">
+    Istanbul and me both of us had the best days when you were here✨
+  </div>
+</div>
+
+<script>
+
+/* TEXTS */
+const introMessage = "Only open if you are alone…\n\nand if so\n\nclick start to explore";
+const passwordMessage = "Think for a moment…\n\nWho shines the most this year?";
+
+/* WRITING EFFECT */
+function inkWrite(el, text, speed = 50) {
+  el.innerHTML = "";
+  let i = 0;
+
+  function write() {
+    if (i < text.length) {
+      let c = text[i];
+
+      if (c === "\n") {
+        el.innerHTML += "<br>";
+      } else {
+        el.innerHTML += `<span class="letter">${c}</span>`;
+      }
+
+      el.innerHTML += '<span class="cursor"></span>';
+      i++;
+      setTimeout(write, speed);
+    } else {
+      el.innerHTML = text;
+    }
+  }
+
+  write();
+}
+
+/* LOAD INTRO */
+window.onload = () => {
+  inkWrite(document.getElementById("introText"), introMessage);
+};
+
+/* START */
+function startIntro(){
+  document.getElementById("introScreen").style.display = "none";
+  document.getElementById("lock").style.display = "flex";
+
+  inkWrite(document.getElementById("passwordText"), passwordMessage);
+}
+
+/* PASSWORD */
+let tries = 0;
+
+function check(){
+  let val = document.getElementById("password").value.toLowerCase().trim();
+  let t = document.getElementById("passwordText");
+
+  if(val === "patricia"){
+    document.getElementById("lock").style.display="none";
+    document.getElementById("main").style.display="flex";
+    start();
+    return;
+  }
+
+  tries++;
+
+  let msg="";
+  if(tries===1) msg="Think about who makes this year shine the most...";
+  else if(tries===2) msg="Someone who changed your world more than anything...";
+  else if(tries===3) msg="You already have her name in your heart...";
+  else if(tries===4) msg="Whose special day is today...";
+  else if(tries===5) msg="The most beautiful name...";
+  else msg="Say her name...";
+
+  inkWrite(t, msg);
+}
+
+/* PAGES */
+const pages = [
+["welcome",
+"Did you know this year is the brightest year ever?",
+"And do you know why?",
+"This year is the brightest year ever because you are shining the most ever Patricia"],
+
+["you must wonder what is this now, lean back; Think, watch, listen and enjoy"],
+
+["Who are you?","I want you to think"],
+
+["I don't know your answer however I am so proud of you"],
+
+["what do you want?","I want you to focus"],
+
+["By observing yourself that's the key"],
+
+["what do you do?","Are you just a surgeon?",
+"I want you to empty your mind and contemplate"],
+
+["You are a lot of things. You are more than just a surgeon"],
+
+["Now take a deep breath nice and smooth"],
+
+["Ready for a journey? Buckle up!"],
+
+["I love you birthday girl You are the most beautiful thing in the world❤"]
+];
+
+let i = 0;
+let text = document.getElementById("textMain");
+let butterfly = document.getElementById("butterfly");
+
+function start(){
+  show();
+}
+
+function show(){
+  let full = pages[i].join("\n\n");
+  inkWrite(text, full);
+
+  setTimeout(()=>{
+    butterfly.style.display = "block";
+  }, full.length * 50 + 500);
+}
+
+butterfly.onclick = () => {
+
+  if(i === 10){
+    document.getElementById("main").style.display="none";
+    document.getElementById("photoContainer").style.display="flex";
+    return;
+  }
+
+  i++;
+  butterfly.style.display="none";
+  show();
+};
+
+</script>
+
+</body>
+</html>

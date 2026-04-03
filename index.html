@@ -95,17 +95,6 @@ button {
 @keyframes blink {
   50% { opacity: 0; }
 }
-
-/* INK EFFECT */
-.letter {
-  opacity: 0;
-  animation: ink 0.4s forwards;
-}
-
-@keyframes ink {
-  from { opacity: 0; filter: blur(2px); }
-  to { opacity: 1; filter: blur(0); }
-}
 </style>
 </head>
 
@@ -144,43 +133,61 @@ button {
 const introMessage = "Only open if you are alone…\n\nand if so\n\nclick start to explore";
 const passwordMessage = "Think for a moment…\n\nWho shines the most this year?";
 
-/* FIXED WRITING EFFECT */
-function inkWrite(el, text, speed = 50) {
+/* ✅ REAL LETTER WRITING ENGINE */
+function inkWrite(el, text, speed = 40) {
+
   el.innerHTML = "";
+
+  let cursor = document.createElement("span");
+  cursor.className = "cursor";
+  el.appendChild(cursor);
+
   let i = 0;
 
-  function write() {
-    if (i < text.length) {
-      let c = text[i];
+  function type() {
 
-      if (c === "\n") {
-        el.innerHTML += "<br>";
+    if (i < text.length) {
+
+      if (text[i] === "\n") {
+        el.insertBefore(document.createElement("br"), cursor);
       } else {
-        el.innerHTML += `<span class="letter">${c}</span>`;
+
+        let span = document.createElement("span");
+        span.textContent = text[i];
+
+        span.style.opacity = "0";
+        span.style.filter = "blur(2px)";
+        span.style.transition = "0.3s";
+
+        el.insertBefore(span, cursor);
+
+        setTimeout(() => {
+          span.style.opacity = "1";
+          span.style.filter = "blur(0)";
+        }, 10);
       }
 
-      el.innerHTML += '<span class="cursor"></span>';
       i++;
-      setTimeout(write, speed);
+      setTimeout(type, speed);
 
     } else {
-      return; // ✅ FIX: do NOT overwrite text
+      cursor.remove();
     }
   }
 
-  write();
+  type();
 }
 
 /* LOAD INTRO */
 window.onload = () => {
-  inkWrite(document.getElementById("introText"), introMessage);
+  inkWrite(document.getElementById("introText"), introMessage, 40);
 };
 
 /* START */
 function startIntro(){
   document.getElementById("introScreen").style.display = "none";
   document.getElementById("lock").style.display = "flex";
-  inkWrite(document.getElementById("passwordText"), passwordMessage);
+  inkWrite(document.getElementById("passwordText"), passwordMessage, 40);
 }
 
 /* PASSWORD */
@@ -207,7 +214,7 @@ function check(){
   else if(tries===5) msg="The most beautiful name...";
   else msg="Say her name...";
 
-  inkWrite(t, msg);
+  inkWrite(t, msg, 40);
 }
 
 /* PAGES */
@@ -249,11 +256,11 @@ function start(){
 
 function show(){
   let full = pages[i].join("\n\n");
-  inkWrite(text, full);
+  inkWrite(text, full, 40);
 
   setTimeout(()=>{
     butterfly.style.display = "block";
-  }, full.length * 50 + 500);
+  }, full.length * 40 + 500);
 }
 
 butterfly.onclick = () => {

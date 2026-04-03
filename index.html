@@ -55,30 +55,28 @@ button {
   cursor: pointer;
 }
 
-/* FINAL PAGE (FIXED PERFECTLY) */
+/* FINAL PAGE (FIXED PROPERLY) */
 #photoContainer {
-  display: none;
+  display: none; /* IMPORTANT FIX */
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
   background: #f5f1dc;
-
-  display: flex;
   flex-direction: column;
 }
 
-/* IMAGE TAKES TOP PART */
+/* IMAGE */
 #photo {
   width: 100%;
-  height: 80vh;
+  height: 75vh;
   object-fit: cover;
 }
 
 /* TEXT UNDER IMAGE */
 #caption {
-  height: 20vh;
+  height: 25vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -183,7 +181,6 @@ window.onload = () => {
 function startIntro(){
   document.getElementById("introScreen").style.display = "none";
   document.getElementById("lock").style.display = "flex";
-
   inkWrite(document.getElementById("passwordText"), passwordMessage);
 }
 

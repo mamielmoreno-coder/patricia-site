@@ -2,7 +2,6 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap" rel="stylesheet">
 
 <style>
@@ -29,22 +28,22 @@ body {
   white-space: pre-line;
 }
 
-input {
-  padding: 10px;
-  font-size: 18px;
-  margin-top: 15px;
-  text-align: center;
+input, button {
   background: black;
   color: white;
   border: none;
 }
 
+input {
+  padding: 10px;
+  font-size: 18px;
+  margin-top: 15px;
+  text-align: center;
+}
+
 button {
   margin-top: 15px;
   padding: 8px 20px;
-  background: black;
-  color: white;
-  border: none;
 }
 
 #butterfly {
@@ -60,8 +59,6 @@ button {
 #photoContainer {
   display: none;
   position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100vh;
   background: #f5f1dc;
@@ -80,21 +77,16 @@ button {
   align-items: center;
   justify-content: center;
   font-size: 24px;
-  padding: 0 15px;
-  text-align: center;
 }
 
 .cursor {
   display: inline-block;
   width: 2px;
   background: #222;
-  margin-left: 3px;
   animation: blink 1s infinite;
 }
 
-@keyframes blink {
-  50% { opacity: 0; }
-}
+@keyframes blink { 50% { opacity: 0; } }
 
 .letterGlow {
   animation: glowFade 0.4s ease;
@@ -127,15 +119,10 @@ button {
 
 <div id="photoContainer">
   <img id="photo" src="Screenshot_2026-04-02-12-47-16-582_com.miui.gallery.jpg">
-  <div id="caption">
-    Istanbul and me both of us had the best days when you were here✨
-  </div>
+  <div id="caption">Istanbul and me both of us had the best days when you were here✨</div>
 </div>
 
-<!-- ✅ YOUR REAL SOUND FILE -->
 <audio id="writeSound" src="freesound_community-writing-63678.mp3"></audio>
-
-<!-- MUSIC -->
 <audio id="bgMusic" src="Jamie-Duffy-Solas-Official-Video.mp3"></audio>
 
 <script>
@@ -143,58 +130,28 @@ button {
 let audioUnlocked = false;
 
 function unlockAudio(){
-  if(!audioUnlocked){
-    audioUnlocked = true;
-  }
+  audioUnlocked = true;
 }
 
-const introMessage = "Only open if you are alone…\n\nand if so\n\nclick start to explore";
-const passwordMessage = "Think for a moment…\n\nWho shines the most this year?";
+/* 🎵 MUSIC REACTION */
+function adjustMusicEmotion(text){
+  let music = document.getElementById("bgMusic");
+  let emotionalWords = ["love","beautiful","you","special","heart"];
+  let isEmotional = emotionalWords.some(w => text.toLowerCase().includes(w));
 
-function inkWrite(el, text, speed = 90) {
+  let target = isEmotional ? 0.85 : 0.6;
 
-  el.innerHTML = "";
-
-  let cursor = document.createElement("span");
-  cursor.className = "cursor";
-  el.appendChild(cursor);
-
-  let sound = document.getElementById("writeSound");
-
-  let i = 0;
-
-  function type() {
-
-    if (i < text.length) {
-
-      if (text[i] === "\n") {
-        el.insertBefore(document.createElement("br"), cursor);
-      } else {
-
-        let span = document.createElement("span");
-        span.textContent = text[i];
-        span.classList.add("letterGlow");
-
-        el.insertBefore(span, cursor);
-
-        if(audioUnlocked && i % 2 === 0){
-          sound.currentTime = 0;
-          sound.volume = 0.5;
-          sound.play().catch(()=>{});
-        }
-      }
-
-      i++;
-      setTimeout(type, speed);
-
+  let interval = setInterval(()=>{
+    if(Math.abs(music.volume - target) < 0.02){
+      music.volume = target;
+      clearInterval(interval);
     } else {
-      cursor.remove();
+      music.volume += (music.volume < target ? 0.02 : -0.02);
     }
-  }
-
-  type();
+  },120);
 }
 
+/* 🎵 MUSIC START */
 function fadeInMusic(){
   let music = document.getElementById("bgMusic");
   music.volume = 0;
@@ -202,16 +159,78 @@ function fadeInMusic(){
 
   let vol = 0;
   let interval = setInterval(()=>{
-    if(vol < 0.7){
-      vol += 0.03;
+    if(vol < 0.6){
+      vol += 0.02;
       music.volume = vol;
-    } else {
-      clearInterval(interval);
-    }
+    } else clearInterval(interval);
   },200);
 }
 
-window.onload = () => {
+/* ✍️ FINAL WRITING ENGINE */
+function inkWrite(el, text, speed = 90){
+
+  el.innerHTML = "";
+  let cursor = document.createElement("span");
+  cursor.className = "cursor";
+  el.appendChild(cursor);
+
+  let sound = document.getElementById("writeSound");
+
+  let emotionalWords = ["love","beautiful","you","special","heart"];
+  let isEmotional = emotionalWords.some(w => text.toLowerCase().includes(w));
+  let baseSpeed = isEmotional ? 120 : speed;
+
+  let i = 0;
+
+  function type(){
+
+    if(i < text.length){
+
+      let char = text[i];
+
+      if(char === "\n"){
+        el.insertBefore(document.createElement("br"), cursor);
+      } else {
+
+        let span = document.createElement("span");
+        span.textContent = char;
+        span.classList.add("letterGlow");
+        el.insertBefore(span, cursor);
+
+        if(audioUnlocked && Math.random() > 0.4){
+          setTimeout(()=>{
+            sound.pause();
+            sound.currentTime = 0;
+            sound.volume = 0.5;
+            sound.play().catch(()=>{});
+          }, Math.random()*60);
+        }
+      }
+
+      i++;
+
+      let pause = 0;
+      if(char === ",") pause = isEmotional ? 200 : 120;
+      else if(char === "." || char === "!" || char === "?") pause = isEmotional ? 500 : 300;
+      else if(char === "\n") pause = isEmotional ? 600 : 400;
+
+      setTimeout(type, baseSpeed + Math.random()*30 + pause);
+
+    } else {
+      cursor.remove();
+      sound.pause();
+      sound.currentTime = 0;
+    }
+  }
+
+  type();
+}
+
+/* TEXT */
+const introMessage = "Only open if you are alone…\n\nand if so\n\nclick start to explore";
+const passwordMessage = "Think for a moment…\n\nWho shines the most this year?";
+
+window.onload = ()=>{
   inkWrite(document.getElementById("introText"), introMessage);
 };
 
@@ -222,15 +241,14 @@ function startIntro(){
   inkWrite(document.getElementById("passwordText"), passwordMessage);
 }
 
-let tries = 0;
+let tries=0;
 
 function check(){
   unlockAudio();
-
   let val = document.getElementById("password").value.toLowerCase().trim();
   let t = document.getElementById("passwordText");
 
-  if(val === "patricia"){
+  if(val==="patricia"){
     document.getElementById("lock").style.display="none";
     document.getElementById("main").style.display="flex";
     start();
@@ -247,10 +265,10 @@ function check(){
   else if(tries===5) msg="The most beautiful name...";
   else msg="Say her name...";
 
-  inkWrite(t, msg);
+  inkWrite(t,msg);
 }
 
-const pages = [
+const pages=[
 ["welcome","Did you know this year is the brightest year ever?","And do you know why?","This year is the brightest year ever because you are shining the most ever Patricia"],
 ["you must wonder what is this now, lean back; Think, watch, listen and enjoy"],
 ["Who are you?","I want you to think"],
@@ -264,32 +282,27 @@ const pages = [
 ["I love you birthday girl You are the most beautiful thing in the world❤"]
 ];
 
-let i = 0;
-let text = document.getElementById("textMain");
-let butterfly = document.getElementById("butterfly");
+let i=0;
+let text=document.getElementById("textMain");
+let butterfly=document.getElementById("butterfly");
 
-function start(){
-  show();
-}
+function start(){ show(); }
 
 function show(){
-  let full = pages[i].join("\n\n");
-  inkWrite(text, full);
+  let full=pages[i].join("\n\n");
+  inkWrite(text,full);
 
-  setTimeout(()=>{
-    butterfly.style.display="block";
-  }, full.length * 90 + 800);
+  adjustMusicEmotion(full);
+
+  setTimeout(()=>{ butterfly.style.display="block"; }, full.length*90+800);
 }
 
-butterfly.onclick = () => {
-
+butterfly.onclick=()=>{
   unlockAudio();
 
-  if(i === 9){
-    fadeInMusic();
-  }
+  if(i===9) fadeInMusic();
 
-  if(i === 10){
+  if(i===10){
     document.getElementById("main").style.display="none";
     document.getElementById("photoContainer").style.display="flex";
     return;

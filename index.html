@@ -24,20 +24,11 @@ body {
 }
 
 /* TEXT */
-#text, #textMain, #introText, #passwordText {
+#introText, #passwordText, #textMain {
   font-size: 26px;
   max-width: 90%;
   line-height: 1.6;
   min-height: 140px;
-  opacity: 0;
-}
-
-/* FADE */
-.textFade {
-  opacity: 0;
-}
-.textFade.show {
-  opacity: 1;
 }
 
 /* INPUT */
@@ -77,7 +68,7 @@ button {
   pointer-events: auto;
 }
 
-/* MEMORY */
+/* FINAL IMAGE */
 #photoContainer {
   display: none;
   width: 100%;
@@ -96,7 +87,6 @@ button {
 #caption {
   margin-top: 20px;
   font-size: 24px;
-  text-align: center;
 }
 
 /* CURSOR */
@@ -106,13 +96,17 @@ button {
   background: #222;
   animation: blink 1s infinite;
 }
-@keyframes blink { 50% { opacity: 0; } }
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
 
 /* ✨ STRONG GLOW */
 .letterGlow {
-  animation: glowFlicker 0.9s ease;
+  animation: glow 0.8s ease;
 }
-@keyframes glowFlicker {
+
+@keyframes glow {
   0% {
     text-shadow: 0 0 20px white, 0 0 35px #ffdca0;
     opacity: 0.3;
@@ -130,26 +124,22 @@ button {
 
 <body>
 
-<!-- INTRO -->
 <div id="introScreen" class="center">
   <div id="introText"></div>
   <button onclick="startIntro()">Start</button>
 </div>
 
-<!-- PASSWORD -->
 <div id="lock" class="center" style="display:none">
   <div id="passwordText"></div>
   <input id="password">
   <button onclick="check()">Enter</button>
 </div>
 
-<!-- MAIN -->
 <div id="main" class="center" style="display:none">
   <div id="textMain"></div>
   <div id="butterfly">🦋</div>
 </div>
 
-<!-- FINAL -->
 <div id="photoContainer">
   <img id="photo" src="Screenshot_2026-04-02-12-47-16-582_com.miui.gallery.jpg">
   <div id="caption">Istanbul and me both of us had the best days when you were here✨</div>
@@ -171,37 +161,24 @@ function fadeInMusic(){
   },200);
 }
 
-/* WRITING */
+/* WRITING ENGINE (STABLE) */
 function inkWrite(el, text, speed = 90, callback){
 
   el.innerHTML = "";
-  el.classList.add("textFade");
 
   let cursor = document.createElement("span");
   cursor.className = "cursor";
-
-  let emotional = ["love","beautiful","you","special","heart"];
-  let isEmotional = emotional.some(w=>text.toLowerCase().includes(w));
-
-  let baseSpeed = isEmotional ? 120 : speed;
+  el.appendChild(cursor);
 
   let isIntro = text.includes("Only open if you are alone");
-
-  let fadeTime = isIntro ? 1800 : 1200;
-  let startDelay = isIntro ? 900 : 350;
+  let startDelay = isIntro ? 800 : 200;
 
   let i = 0;
 
   setTimeout(()=>{
-    el.style.transition = `opacity ${fadeTime}ms`;
-    el.classList.add("show");
-  },50);
-
-  setTimeout(()=>{
-
-    el.appendChild(cursor);
 
     function type(){
+
       if(i < text.length){
 
         let c = text[i];
@@ -221,7 +198,7 @@ function inkWrite(el, text, speed = 90, callback){
         if(c === ",") pause = 120;
         if(c === "." || c==="!" || c==="?") pause = 300;
 
-        setTimeout(type, baseSpeed + Math.random()*30 + pause);
+        setTimeout(type, speed + Math.random()*30 + pause);
 
       } else {
         cursor.remove();
@@ -302,11 +279,11 @@ inkWrite(text, full, 90, ()=>{
 
   setTimeout(()=>{
     butterfly.classList.add("show");
-  },400);
+  },500);
 
   setTimeout(()=>{
     butterfly.style.pointerEvents="auto";
-  },1200);
+  },1300);
 
 });
 }
@@ -329,7 +306,7 @@ butterfly.classList.remove("show");
 
 setTimeout(()=>{
   show();
-},600);
+},700);
 
 };
 

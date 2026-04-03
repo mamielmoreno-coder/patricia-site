@@ -23,22 +23,8 @@ body {
   text-align: center;
 }
 
-/* INTRO */
-#introScreen {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: #f5f1dc;
-  z-index: 20;
-}
-
-#introText {
-  font-size: 26px;
-  max-width: 80%;
-}
-
-/* PASSWORD TEXT */
-#text {
+/* TEXT */
+#text, #textMain {
   font-size: 26px;
   max-width: 90%;
   transition: opacity 0.6s;
@@ -57,20 +43,15 @@ button {
   padding: 8px 20px;
 }
 
-/* MAIN TEXT */
-#textMain {
-  font-size: 26px;
-  max-width: 90%;
-}
-
-/* BUTTERFLY */
+/* 🦋 BUTTERFLY (NO PNG) */
 #butterfly {
   position: fixed;
   bottom: 40px;
-  width: 90px;
   left: 50%;
   transform: translateX(-50%);
+  font-size: 40px;
   display: none;
+  cursor: pointer;
 }
 
 /* MEMORY */
@@ -82,23 +63,18 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  opacity: 0;
-  transition: opacity 2s;
 }
 
 #photo {
   width: 90%;
   border-radius: 10px;
-  opacity: 0;
-  transform: scale(1);
-  transition: 2s, transform 6s;
 }
 
 #caption {
   margin-top: 20px;
-  font-size: 22px;
-  opacity: 0;
-  transition: 2s;
+  font-size: 24px;
+  text-align: center;
+  padding: 0 20px;
 }
 </style>
 </head>
@@ -107,7 +83,7 @@ button {
 
 <!-- INTRO -->
 <div id="introScreen" class="center">
-  <div id="introText">
+  <div id="text">
     Only open if you are alone…<br><br>
     and if so<br><br>
     click start to explore
@@ -132,11 +108,11 @@ button {
 
 <div id="textMain"></div>
 
-<img id="butterfly" src="file_00000000914c720a8541e3890677c924.png">
+<div id="butterfly">🦋</div>
 
 </div>
 
-<!-- MEMORY -->
+<!-- FINAL MEMORY -->
 <div id="photoContainer">
   <img id="photo" src="Screenshot_2026-04-02-12-47-16-582_com.miui.gallery.jpg">
   <div id="caption">
@@ -170,6 +146,7 @@ start();
 }else{
 
 tries++;
+
 t.style.opacity=0;
 
 setTimeout(()=>{
@@ -189,7 +166,7 @@ t.style.opacity=1;
 
 }
 
-/* YOUR EXACT TEXTS */
+/* YOUR TEXTS */
 const pages=[
 ["welcome",
 "Did you know this year is the brightest year ever?",
@@ -261,17 +238,7 @@ return;
 if(i===10){
 
 document.getElementById("main").style.display="none";
-
-let c=document.getElementById("photoContainer");
-let p=document.getElementById("photo");
-let cap=document.getElementById("caption");
-
-c.style.display="flex";
-
-setTimeout(()=>{c.style.opacity=1;},100);
-setTimeout(()=>{p.style.opacity=1;},600);
-setTimeout(()=>{p.style.transform="scale(1.05)";},1000);
-setTimeout(()=>{cap.style.opacity=1;},2000);
+document.getElementById("photoContainer").style.display="flex";
 
 return;
 }

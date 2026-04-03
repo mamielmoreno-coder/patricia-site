@@ -13,7 +13,6 @@ body {
   color: #222;
 }
 
-/* CENTER */
 .center {
   display: flex;
   flex-direction: column;
@@ -23,7 +22,6 @@ body {
   text-align: center;
 }
 
-/* TEXT */
 #introText, #passwordText, #textMain {
   font-size: 26px;
   max-width: 90%;
@@ -31,7 +29,6 @@ body {
   min-height: 140px;
 }
 
-/* INPUT */
 input {
   padding: 10px;
   font-size: 18px;
@@ -50,7 +47,6 @@ button {
   border: none;
 }
 
-/* 🦋 BUTTERFLY */
 #butterfly {
   position: fixed;
   bottom: 40px;
@@ -68,7 +64,30 @@ button {
   pointer-events: auto;
 }
 
-/* FINAL IMAGE */
+/* 🦋 NATURAL FLIGHT PATH */
+@keyframes butterflyFly {
+  0% { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
+  25% { transform: translateX(-40%) translateY(-60px) rotate(8deg); }
+  50% { transform: translateX(-60%) translateY(-120px) rotate(-10deg); }
+  75% { transform: translateX(-45%) translateY(-180px) rotate(6deg); }
+  100% { transform: translateX(-55%) translateY(-260px) scale(0.9); opacity: 0; }
+}
+
+/* 🦋 WING FLAP */
+@keyframes wingFlap {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(12deg); }
+  50% { transform: rotate(-12deg); }
+  75% { transform: rotate(8deg); }
+  100% { transform: rotate(0deg); }
+}
+
+#butterfly.fly {
+  animation:
+    butterflyFly 0.9s ease forwards,
+    wingFlap 0.25s ease-in-out infinite;
+}
+
 #photoContainer {
   display: none;
   width: 100%;
@@ -89,7 +108,6 @@ button {
   font-size: 24px;
 }
 
-/* CURSOR */
 .cursor {
   display: inline-block;
   width: 2px;
@@ -97,27 +115,16 @@ button {
   animation: blink 1s infinite;
 }
 
-@keyframes blink {
-  50% { opacity: 0; }
-}
+@keyframes blink { 50% { opacity: 0; } }
 
-/* ✨ STRONG GLOW */
 .letterGlow {
   animation: glow 0.8s ease;
 }
 
 @keyframes glow {
-  0% {
-    text-shadow: 0 0 20px white, 0 0 35px #ffdca0;
-    opacity: 0.3;
-  }
-  50% {
-    text-shadow: 0 0 25px #fff0b0;
-  }
-  100% {
-    text-shadow: none;
-    opacity: 1;
-  }
+  0% { text-shadow: 0 0 20px white, 0 0 35px #ffdca0; opacity: 0.3; }
+  50% { text-shadow: 0 0 25px #fff0b0; }
+  100% { text-shadow: none; opacity: 1; }
 }
 </style>
 </head>
@@ -149,7 +156,6 @@ button {
 
 <script>
 
-/* MUSIC */
 function fadeInMusic(){
   let m = document.getElementById("music");
   m.volume = 0;
@@ -161,57 +167,39 @@ function fadeInMusic(){
   },200);
 }
 
-/* WRITING ENGINE (STABLE) */
 function inkWrite(el, text, speed = 90, callback){
-
   el.innerHTML = "";
-
   let cursor = document.createElement("span");
   cursor.className = "cursor";
   el.appendChild(cursor);
 
-  let isIntro = text.includes("Only open if you are alone");
-  let startDelay = isIntro ? 800 : 200;
-
   let i = 0;
 
-  setTimeout(()=>{
+  function type(){
+    if(i < text.length){
+      let c = text[i];
 
-    function type(){
-
-      if(i < text.length){
-
-        let c = text[i];
-
-        if(c === "\n"){
-          el.insertBefore(document.createElement("br"), cursor);
-        } else {
-          let s = document.createElement("span");
-          s.textContent = c;
-          s.classList.add("letterGlow");
-          el.insertBefore(s, cursor);
-        }
-
-        i++;
-
-        let pause = 0;
-        if(c === ",") pause = 120;
-        if(c === "." || c==="!" || c==="?") pause = 300;
-
-        setTimeout(type, speed + Math.random()*30 + pause);
-
+      if(c === "\n"){
+        el.insertBefore(document.createElement("br"), cursor);
       } else {
-        cursor.remove();
-        if(callback) callback();
+        let s = document.createElement("span");
+        s.textContent = c;
+        s.classList.add("letterGlow");
+        el.insertBefore(s, cursor);
       }
+
+      i++;
+
+      setTimeout(type, speed + Math.random()*30);
+    } else {
+      cursor.remove();
+      if(callback) callback();
     }
+  }
 
-    type();
-
-  }, startDelay);
+  type();
 }
 
-/* INTRO */
 const introMessage = "Only open if you are alone…\n\nand if so\n\nclick start to explore";
 const passwordMessage = "Think for a moment…\n\nWho shines the most this year?";
 
@@ -225,10 +213,9 @@ function startIntro(){
   inkWrite(document.getElementById("passwordText"), passwordMessage);
 }
 
-/* PASSWORD */
 let tries=0;
-function check(){
 
+function check(){
 let val=document.getElementById("password").value.toLowerCase();
 let t=document.getElementById("passwordText");
 
@@ -241,28 +228,14 @@ if(val==="patricia"){
 
 tries++;
 
-let msg="";
-if(tries===1) msg="Think about who makes this year shine the most...";
-else if(tries===2) msg="Someone who changed your world more than anything...";
-else if(tries===3) msg="You already have her name in your heart...";
-else msg="Say her name...";
-
+let msg="Think again...";
 inkWrite(t,msg);
 }
 
-/* PAGES */
 const pages=[
-["welcome","Did you know this year is the brightest year ever?","And do you know why?","This year is the brightest year ever because you are shining the most ever Patricia"],
-["you must wonder what is this now, lean back; Think, watch, listen and enjoy"],
-["Who are you?","I want you to think"],
-["I don't know your answer however I am so proud of you"],
-["what do you want?","I want you to focus"],
-["By observing yourself that's the key"],
-["what do you do?","Are you just a surgeon?","I want you to empty your mind and contemplate"],
-["You are a lot of things. You are more than just a surgeon"],
-["Now take a deep breath nice and smooth"],
+["welcome","Did you know this year is the brightest year ever?"],
 ["Ready for a journey? Buckle up!"],
-["I love you birthday girl You are the most beautiful thing in the world❤"]
+["I love you birthday girl ❤"]
 ];
 
 let i=0;
@@ -272,28 +245,19 @@ let butterfly=document.getElementById("butterfly");
 function start(){ show(); }
 
 function show(){
-
 let full=pages[i].join("\n\n");
 
 inkWrite(text, full, 90, ()=>{
-
-  setTimeout(()=>{
-    butterfly.classList.add("show");
-  },500);
-
-  setTimeout(()=>{
-    butterfly.style.pointerEvents="auto";
-  },1300);
-
+  butterfly.classList.add("show");
+  butterfly.style.pointerEvents="auto";
 });
 }
 
-/* CLICK */
 butterfly.onclick=()=>{
 
-if(i===9) fadeInMusic();
+if(i===1) fadeInMusic();
 
-if(i===10){
+if(i===2){
   document.getElementById("main").style.display="none";
   document.getElementById("photoContainer").style.display="flex";
   return;
@@ -302,11 +266,15 @@ if(i===10){
 i++;
 
 butterfly.style.pointerEvents="none";
-butterfly.classList.remove("show");
+
+/* 🦋 FLY */
+butterfly.classList.add("fly");
 
 setTimeout(()=>{
+  butterfly.classList.remove("fly");
+  butterfly.classList.remove("show");
   show();
-},700);
+},900);
 
 };
 

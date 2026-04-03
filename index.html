@@ -2,7 +2,6 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap" rel="stylesheet">
 
 <style>
@@ -95,35 +94,26 @@ button {
   to { opacity: 0; }
 }
 
-/* 🔥 LETTER FIRE EFFECT */
-@keyframes letterFire {
-  0% {
-    opacity: 0;
-    transform: translateY(4px);
-    text-shadow: 0 0 2px rgba(255,120,0,0.3);
-  }
-
-  30% {
-    opacity: 1;
-    text-shadow:
-      0 0 6px rgba(255,140,0,0.6),
-      0 0 10px rgba(255,100,0,0.4);
-  }
-
-  60% {
-    text-shadow:
-      0 0 4px rgba(255,160,60,0.3);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-    text-shadow: none;
-  }
+/* 🔥 SPARK NEXT TO LETTER */
+.spark {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  margin-left: 2px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffae42 0%, #ff5a00 60%, transparent 100%);
+  animation: sparkFade 0.4s ease-out forwards;
 }
 
-.fireLetter {
-  animation: letterFire 0.5s ease forwards;
+@keyframes sparkFade {
+  0% {
+    opacity: 0.9;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.6);
+  }
 }
 
 /* CURSOR */
@@ -134,8 +124,9 @@ button {
   animation: blink 1s infinite;
 }
 
-@keyframes blink { 50% { opacity: 0; } }
-
+@keyframes blink {
+  50% { opacity: 0; }
+}
 </style>
 </head>
 
@@ -208,10 +199,19 @@ function inkWrite(el, text, speed = 90, callback){
       if(c === "\n"){
         el.insertBefore(document.createElement("br"), cursor);
       } else {
+
         let s = document.createElement("span");
         s.textContent = c;
-        s.classList.add("fireLetter"); // 🔥 fire per letter
         el.insertBefore(s, cursor);
+
+        /* 🔥 SPARK NEXT TO LETTER */
+        let spark = document.createElement("span");
+        spark.className = "spark";
+        el.insertBefore(spark, cursor);
+
+        setTimeout(()=>{
+          spark.remove();
+        },400);
       }
 
       i++;

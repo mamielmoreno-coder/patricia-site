@@ -61,10 +61,11 @@ button{
   position:fixed;
   width:1px;
   height:1px;
-  opacity:0;
+  opacity:0.01;
   pointer-events:none;
-  left:-9999px;
-  top:-9999px;
+  right:0;
+  bottom:0;
+  overflow:hidden;
 }
 </style>
 </head>
@@ -83,6 +84,8 @@ button{
 const textEl = document.getElementById("text");
 const img = document.getElementById("image");
 const butterfly = document.getElementById("butterfly");
+const playerHost = document.getElementById("youtube-player");
+const assetBase = "https://raw.githubusercontent.com/mamielmoreno-coder/patricia-site/main/";
 
 let i = 0;
 let attempts = 0;
@@ -156,34 +159,46 @@ function moveButterfly(duration){
 }
 
 function playMusic(){
-  const playerHost = document.getElementById("youtube-player");
+  if(musicStarted) return;
 
-  if(!musicStarted){
-    playerHost.innerHTML = `
-      <iframe
-        width="1"
-        height="1"
-        src="https://www.youtube.com/embed/MhFbPNLwg0s?autoplay=1&loop=1&playlist=MhFbPNLwg0s&controls=0&modestbranding=1&playsinline=1"
-        title="Twilight"
-        frameborder="0"
-        allow="autoplay; encrypted-media"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen>
-      </iframe>
-    `;
-    musicStarted = true;
-  } else {
-    const iframe = playerHost.querySelector("iframe");
-    if(iframe){
-      iframe.src = "https://www.youtube.com/embed/MhFbPNLwg0s?autoplay=1&loop=1&playlist=MhFbPNLwg0s&controls=0&modestbranding=1&playsinline=1";
-    }
+  playerHost.innerHTML = `
+    <iframe
+      width="1"
+      height="1"
+      src="https://www.youtube.com/embed/MhFbPNLwg0s?autoplay=1&loop=1&playlist=MhFbPNLwg0s&controls=0&modestbranding=1&playsinline=1"
+      title="Twilight"
+      frameborder="0"
+      allow="autoplay; encrypted-media"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen>
+    </iframe>
+  `;
+
+  musicStarted = true;
+}
+
+function showImage(src){
+  if(!src){
+    img.style.display = "none";
+    img.removeAttribute("src");
+    return;
   }
+
+  img.onload = () => {
+    img.style.display = "block";
+  };
+
+  img.onerror = () => {
+    img.style.display = "none";
+  };
+
+  img.src = src;
 }
 
 const pages = [
   {t:"Only open if you are alone… and if so click the butterfly", password:true},
 
-  {t:"Welcome birthday girl ❤️"},
+  {t:"Welcome birthday girl ❤️", music:true},
 
   {t:`You must wonder… what is this now?
 
@@ -277,7 +292,7 @@ Welcome, my love.`},
   {t:"Now, take a deep breath… nice and smooth."},
 
   {t:`Ready for a journey?
-For a better experience, put your headphones on.`, music:true},
+For a better experience, put your headphones on.`},
 
   {t:`You are the most special thing to me.
 I prepared this for you… because it came from the bottom of my heart.
@@ -289,7 +304,7 @@ You are the most authentic person I have ever seen in my life.
 Your authenticity inspires me.
 So feel special, Patricia… because you truly are.
 You deserve all the best.
-You are the most beautiful gift the universe has ever given me.`},
+You are the most beautiful gift the universe has ever given me.`, image: assetBase + "patricia1.jpg"},
 
   {t:`Look at yourself… how noble you are.
 Life has given you beautiful gifts,
@@ -300,7 +315,7 @@ From the very first moment you told me how much you love having a connection wit
 I felt something special.
 The peace they give you… gives me peace as well.
 You bring so much peace into my life.
-I love you.`},
+I love you.`, image: assetBase + "Patricia-and-horse.jpg"},
 
   {t:`Istanbul and I had our best days when you were here.
 What a beautiful time we shared.
@@ -310,14 +325,14 @@ You’re not perfect…
 and you don’t have to be.
 I love you with all your imperfections.
 I love everything about you.
-You are so authentic, just the way you are.`},
+You are so authentic, just the way you are.`, image: assetBase + "patricia1.jpg"},
 
   {t:`The first time I saw you with glasses… you looked so attractive.
 I love how they look on you.
 I love the way you read for me.
 I love how willing you are to share things with me.
 I guess… you love me :)
-You are so beautiful in the way you carry yourself — knowledgeable, smart… and also, so sexy.`},
+You are so beautiful in the way you carry yourself — knowledgeable, smart… and also, so sexy.`, image: assetBase + "Patricia-glasses.jpg"},
 
   {t:`As I told you before, if I had one word to describe you… it would be purity.
 You look so pure.
@@ -325,7 +340,7 @@ You carry the innocence of a child within you.
 Never lose your touch… your connection, and your bond with nature.
 Always stay a part of it.
 And never lose that pure smile you carry on your face.
-Nature loves you.`},
+Nature loves you.`, image: assetBase + "Patricia-pure.jpg"},
 
   {t:`The very first photo you ever sent me…
 I could see joy.
@@ -336,14 +351,14 @@ I love when you stick your tongue out, because I know you feel so good that it j
 You are so funny.
 You make me laugh all the time.
 I still remember your smile…
-the one you had when you saw me for the first time at the airport.`},
+the one you had when you saw me for the first time at the airport.`, image: assetBase + "Patricia-tongue-stickout.jpg"},
 
   {t:`You look so happy here.
 I love this picture so much.
 I can see the child within you… joyful, inspired, active, and full of life.
 I wish you many more moments like this.
 I want to run towards you… catch you…
-and hold you in my arms without ever letting you go.`},
+and hold you in my arms without ever letting you go.`, image: assetBase + "patricia-kid.jpg"},
 
   {t:`Do you remember that beautiful moment when your colleague made you step outside the hospital to see it clearly?
 I want to thank him.
@@ -353,7 +368,7 @@ I loved how excited you were to show me that moment…
 the point where you can’t tell if it’s morning or evening.
 I love how you notice these little details in nature.
 To the many sunsets we will watch together, my love…
-I can’t wait ❤️`},
+I can’t wait ❤️`, image: assetBase + "sunset.jpg"},
 
   {t:`Don’t we look so cute together?
 Istanbul, the ancient city, has witnessed the blossoming of something truly beautiful.
@@ -362,7 +377,7 @@ We look so happy together.
 I can’t wait to take more photos with you.
 I can’t wait to share the most beautiful moments with you.
 Life has given me the most incredible woman in the world…
-and I just want to spend more and more time with her.`},
+and I just want to spend more and more time with her.`, image: assetBase + "Patricia-me.jpg"},
 
   {t:`Los niños se alimentan del presente…
 se ubican en el único tiempo que realmente existe.
@@ -391,12 +406,13 @@ Te quiero mucho, mi amor.`},
 ];
 
 function next(){
-  img.style.display = "none";
+  showImage("");
   butterfly.style.opacity = 0;
 
   let p = pages[i];
 
   write(p.t);
+  showImage(p.image);
 
   if(p.password){
     butterfly.onclick = showPassword;
@@ -404,7 +420,11 @@ function next(){
   }
 
   butterfly.onclick = () => {
-    if(p.music) playMusic();
+    const upcomingPage = pages[i + 1];
+
+    if(upcomingPage && upcomingPage.music){
+      playMusic();
+    }
 
     if(p.final){
       textEl.innerHTML = "❤️<br>Te amo<br><br>Feliz cumpleaños Patricia";

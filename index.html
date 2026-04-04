@@ -2,7 +2,6 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap" rel="stylesheet">
 
 <style>
@@ -39,7 +38,6 @@ img{
   font-size:40px;
   margin-top:20px;
   cursor:pointer;
-  display:none;
 }
 
 .cursor{
@@ -51,6 +49,20 @@ img{
 
 @keyframes blink{
   50%{opacity:0;}
+}
+
+.trail{
+  position:fixed;
+  width:3px;
+  height:10px;
+  background:rgba(0,0,0,0.2);
+  border-radius:2px;
+  pointer-events:none;
+  animation:fade 0.6s linear forwards;
+}
+
+@keyframes fade{
+  to{opacity:0;}
 }
 </style>
 </head>
@@ -73,8 +85,8 @@ const butterfly = document.getElementById("butterfly");
 
 let i = 0;
 
-/* ✍️ typing */
-function write(text, speed=35, cb){
+/* typing */
+function write(text, speed=65, cb){
   textEl.innerHTML="";
   let cursor=document.createElement("span");
   cursor.className="cursor";
@@ -84,26 +96,55 @@ function write(text, speed=35, cb){
 
   function type(){
     if(index < text.length){
-      let c = text[index];
-      if(c === "\n"){
-        textEl.insertBefore(document.createElement("br"), cursor);
-      } else {
-        let s = document.createElement("span");
-        s.textContent = c;
-        textEl.insertBefore(s, cursor);
+      let c=text[index];
+      if(c=="\n"){
+        textEl.insertBefore(document.createElement("br"),cursor);
+      }else{
+        let s=document.createElement("span");
+        s.textContent=c;
+        textEl.insertBefore(s,cursor);
       }
       index++;
-      setTimeout(type, speed);
-    } else {
+      setTimeout(type,speed + Math.random()*20);
+    }else{
       cursor.remove();
       if(cb) cb();
     }
   }
-
   type();
 }
 
-/* 🎵 music */
+/* trail */
+function createTrail(){
+  let rect = butterfly.getBoundingClientRect();
+  let t=document.createElement("div");
+  t.className="trail";
+  t.style.left = rect.left + rect.width/2 + "px";
+  t.style.top = rect.top + rect.height/2 + "px";
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),600);
+}
+
+/* movement */
+function moveButterfly(callback){
+  let interval=setInterval(createTrail,80);
+
+  let dx=(Math.random()-0.5)*200;
+  let dy=-200-Math.random()*100;
+
+  butterfly.animate([
+    {transform:"translate(0,0)"},
+    {transform:`translate(${dx}px,${dy}px)`}
+  ],{duration:900});
+
+  setTimeout(()=>{
+    clearInterval(interval);
+    butterfly.style.transform="translate(0,0)";
+    callback();
+  },900);
+}
+
+/* music */
 function playMusic(){
   let m=document.getElementById("music");
   m.volume=0;
@@ -115,7 +156,7 @@ function playMusic(){
   },200);
 }
 
-/* 🦋 butterflies */
+/* butterflies explosion */
 function releaseButterflies(){
   for(let i=0;i<30;i++){
     let b=document.createElement("div");
@@ -137,34 +178,50 @@ function releaseButterflies(){
   }
 }
 
-/* 📖 FULL STORY */
+/* PAGES */
 const pages = [
 
-{t:"Only open if you are alone… and if so click the butterfly", btn:true},
+{t:"Only open if you are alone… and if so click the butterfly"},
 
 {t:"Welcome birthday girl ❤️"},
 
-{t:"You must wonder what is this now. Do we need answers for everything?..."},
+{t:"You must wonder what is this now. Wow, you don't know. Do we have to have answers for everything? You must say now, of course not. Yes, Patricia, life has another beauty when we don't have answers for some things. I know you like not having all the answers. I know my woman. Now, lean back, think, watch, listen, and enjoy."},
 
-{t:"I'm thinking about you, Patricia. What a lovely thing you are..."},
+{t:"I'm thinking about you, Patricia. What a lovely thing you are. I never get tired of thinking about you. A lot, a lot has happened in my life, which changed and structured me. Life, of course, is interesting. How could I guess you would show up from paradise in the most unexpected way and make me fall in love with you?"},
 
-{t:"Ready for a journey?\n\nPut your headphones on.", music:true, btn:true},
+{t:"Did you know that this year is the brightest year? And do you know why? This year is the brightest year because you are shining the most."},
+
+{t:"Who are you? I want you to think."},
+
+{t:"I don't know what your answer is, however, I will tell you with my own words who are you. In my eyes, you are the light that passes by the universe. You are the soul that surrounds the whole world with peace and calmness. You are the moment that touched a lot of souls. You are the real success. You are my natural dopamine. If you don't have an answer for who you are, don't worry, I will be by your side while you figure it out on the way."},
+
+{t:"What do you want? I want you to focus."},
+
+{t:"A profound question. How can one know what exactly they want by observing themselves? We don't have the ability to observe most of the time. Even if we observe, we tend to observe other people. Rarely we observe ourselves. The key is to hear your inner voice and go after that. Observe yourself, explore yourself, and listen to yourself. Be bold as the decision you made to come to Istanbul without knowing if I was tall or not :) You are more than what you think. You don't have limits. You are just like a butterfly that flies freely in the sky."},
+
+{t:"What do you do? Are you just a pediatric surgeon? I want you to empty your mind and contemplate on this."},
+
+{t:"You are a lot of things. You are more than just a pediatric surgeon. Do you remember the face of the 13-year-old kid you operated (if I remember his age correctly) and his mom's face? You help people. You change lives. You save lives. Be proud of yourself. You achieved so much, Patricia. I am so proud of you."},
+
+{t:"Now, take a deep breath, nice and smooth."},
+
+{t:"Ready for a journey?\n\nFor a better experience, put your headphones on.", music:true},
 
 {t:"You are the most special thing for me..."},
 
 {t:"Look at yourself, how noble you look...", img:"Patricia-and-horse.jpg"},
 
-{t:"Me and Istanbul had the best days when you were here...", img:"patricia1.jpg"},
+{t:"Me and Istanbul had the best days...", img:"patricia1.jpg"},
 
 {t:"The first time I saw you with glasses...", img:"Patricia-glasses.jpg"},
 
-{t:"You are pure...", img:"Patricia-pure.jpg"},
+{t:"As I told you previously...", img:"Patricia-pure.jpg"},
 
-{t:"The first ever photo of you...", img:"Patricia-tongue-stickout.jpg"},
+{t:"The first ever photo...", img:"Patricia-tongue-stickout.jpg"},
 
-{t:"You look so happy here...", img:"patricia-kid.jpg"},
+{t:"You really look so happy here...", img:"patricia-kid.jpg"},
 
-{t:"Do you remember this sunset moment...", img:"sunset.jpg"},
+{t:"Do you remember this beautiful moment...", img:"sunset.jpg"},
 
 {t:"Don't we look so cute together?", img:"Patricia-me.jpg"},
 
@@ -174,15 +231,14 @@ const pages = [
 
 ];
 
-/* 🚀 FLOW */
+/* FLOW */
 function next(){
 
   img.style.display="none";
-  butterfly.style.display="none";
 
   let p = pages[i];
 
-  write(p.t,35,()=>{
+  write(p.t,65,()=>{
 
     if(p.img){
       setTimeout(()=>{
@@ -191,40 +247,24 @@ function next(){
       },800);
     }
 
-    if(p.music){
-      butterfly.style.display="block";
-      butterfly.onclick=()=>{
-        playMusic();
-        i++;
-        next();
-      };
-      return;
-    }
+    butterfly.onclick=()=>{
 
-    if(p.final){
-      butterfly.style.display="block";
-      butterfly.onclick=()=>{
+      if(p.music) playMusic();
+
+      if(p.final){
         releaseButterflies();
         setTimeout(()=>{
           textEl.innerHTML="❤️<br>Te amo<br><br>Feliz cumpleaños Patricia";
         },2000);
-      };
-      return;
-    }
+        return;
+      }
 
-    if(p.btn){
-      butterfly.style.display="block";
-      butterfly.onclick=()=>{
+      moveButterfly(()=>{
         i++;
         next();
-      };
-      return;
-    }
+      });
 
-    setTimeout(()=>{
-      i++;
-      next();
-    },3000);
+    };
 
   });
 
@@ -233,6 +273,5 @@ function next(){
 next();
 
 </script>
-
 </body>
-</html>
+  </html>

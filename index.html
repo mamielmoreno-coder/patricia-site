@@ -39,8 +39,8 @@ body{
 img{
   width:100%;
   height:auto;
-  margin-top:20px;
   object-fit:cover;
+  margin-top:20px;
 }
 
 #butterfly{
@@ -65,26 +65,6 @@ img{
     90px -25px 0 0 rgba(255,255,255,0.85);
   filter:blur(2px);
   opacity:0.5;
-}
-
-input{
-  padding:12px;
-  font-size:18px;
-  background:black;
-  color:white;
-  border:none;
-  border-radius:8px;
-  text-align:center;
-}
-
-button{
-  margin-top:10px;
-  padding:10px 20px;
-  background:black;
-  color:white;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
 }
 
 .trail{
@@ -125,35 +105,31 @@ let attempts = 0;
 const hints = [
 "What do you think the password is?",
 "You are close… think again.",
-"Think about who you truly are…",
+"Who is the most authentic person?",
 "Whose special day is today?",
-"Write the most beautiful name…"
+"Write the most beautiful name."
 ];
 
 function showPassword(){
-  textEl.innerHTML = `
-  Please enter the password.<br><br>
-  Take your time…<br>
-  You already know it.
-  `;
-
-  butterfly.style.display="none";
+  textEl.innerHTML = "Please enter the password.";
+  butterfly.style.display = "none";
 
   let input = document.createElement("input");
   let btn = document.createElement("button");
-  btn.innerText="Enter";
+
+  btn.innerText = "Enter";
 
   textEl.appendChild(document.createElement("br"));
   textEl.appendChild(input);
   textEl.appendChild(btn);
 
-  btn.onclick = ()=>{
-    if(input.value.toLowerCase()==="patricia"){
+  btn.onclick = () => {
+    if(input.value.toLowerCase() === "patricia"){
       i++;
       next();
     } else {
       attempts++;
-      textEl.innerHTML = hints[Math.min(attempts,hints.length-1)];
+      textEl.innerHTML = hints[Math.min(attempts, hints.length-1)];
     }
   };
 }
@@ -165,19 +141,32 @@ function write(text, cb){
 
   function type(){
     if(index < text.length){
+
       let c=text[index];
-      textEl.innerHTML += (c=="\n") ? "<br>" : c;
+
+      if(c=="\n"){
+        textEl.innerHTML += "<br>";
+      } else {
+        textEl.innerHTML += c;
+      }
+
       index++;
 
       let delay = 110 + Math.random()*40;
-      if(".?!".includes(c)) delay += 300;
+
+      if(c==="." || c==="?" || c==="!"){
+        delay += 300;
+        textEl.innerHTML += "<br>";
+      }
 
       setTimeout(type,delay);
-    } else {
+
+    }else{
       setTimeout(()=>{ butterfly.style.display="block"; },2000);
       if(cb) cb();
     }
   }
+
   type();
 }
 
@@ -186,49 +175,55 @@ function createTrail(){
   let rect = butterfly.getBoundingClientRect();
   let t=document.createElement("div");
   t.className="trail";
-  t.style.left = rect.left+"px";
-  t.style.top = rect.top+"px";
+  t.style.left = rect.left + "px";
+  t.style.top = rect.top + "px";
   document.body.appendChild(t);
   setTimeout(()=>t.remove(),1200);
 }
 
 /* MOVE */
-function moveButterfly(callback, duration=1200){
+function moveButterfly(callback, duration = 1200){
+
   let interval=setInterval(createTrail,70);
 
   let dx=(Math.random()-0.5)*400;
-  let dy=-300;
+  let dy=-300 - Math.random()*150;
 
   butterfly.animate([
-    {transform:"translate(0,0)",opacity:1},
-    {transform:`translate(${dx}px,${dy}px)`,opacity:0}
+    {transform:"translate(0,0)", opacity:1},
+    {transform:`translate(${dx}px,${dy}px)`, opacity:0}
   ],{duration:duration});
 
   setTimeout(()=>{
     clearInterval(interval);
-    butterfly.style.opacity=0;
+    butterfly.style.opacity = 0;
+
     setTimeout(()=>{
-      butterfly.style.opacity=1;
+      butterfly.style.opacity = 1;
       butterfly.style.transform="translate(0,0)";
       callback();
     },400);
+
   },duration);
 }
 
 /* MUSIC */
 function playMusic(){
-  let m=document.getElementById("music");
-  m.volume=0;
+  let m = document.getElementById("music");
+  m.currentTime = 0;
+  m.volume = 0;
   m.play().then(()=>{
-    let v=0;
-    let fade=setInterval(()=>{
-      if(v<0.7){v+=0.02;m.volume=v;}
-      else clearInterval(fade);
+    let v = 0;
+    let fade = setInterval(()=>{
+      if(v < 0.7){
+        v += 0.02;
+        m.volume = v;
+      } else clearInterval(fade);
     },200);
   });
 }
 
-/* PAGES (FULL TEXTS) */
+/* PAGES */
 const pages = [
 
 {t:`Only open if you are alone… and if so click the butterfly`, password:true},
@@ -259,7 +254,7 @@ Listen.
 
 And enjoy.`},
 
-{t:`I'm thinking about you, Patricia...`},
+{t:`I'm thinking about you, Patricia. What a lovely thing you are. I never get tired of thinking about you...`},
 
 {t:`Did you know that this year is the brightest year?...`},
 
@@ -271,7 +266,11 @@ And enjoy.`},
 
 I want you to really focus.`},
 
-{t:`A profound question...
+{t:`A profound question…
+
+How can one know what they truly want?
+
+Of course… by observing themselves...
 
 You are just like a butterfly… flying freely in the sky.`, longFly:true},
 
@@ -315,16 +314,18 @@ For a better experience, put your headphones on.`, music:true},
 
 ];
 
+/* FLOW */
 function next(){
+
   img.style.display="none";
   butterfly.style.display="none";
 
-  let p=pages[i];
+  let p = pages[i];
 
   write(p.t,()=>{
 
     if(p.password){
-      butterfly.onclick=showPassword;
+      butterfly.onclick = showPassword;
       return;
     }
 
@@ -348,9 +349,11 @@ function next(){
         i++;
         next();
       }, p.longFly ? 5000 : 1200);
+
     };
 
   });
+
 }
 
 next();

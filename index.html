@@ -8,9 +8,9 @@
 <style>
 body {
   margin: 0;
-  background: #f5f1dc; /* ← back to original */
+  background: #f5f1dc;
   font-family: 'Caveat', cursive;
-  color: #222; /* ← original text color */
+  color: #222;
 }
 
 .center {
@@ -22,13 +22,62 @@ body {
   text-align: center;
 }
 
-#introText, #passwordText, #textMain {
+.text {
   font-size: 26px;
   max-width: 90%;
   line-height: 1.6;
   min-height: 140px;
 }
 
+/* 🔥 FIRE EFFECT (around letters, not on them) */
+.fireLetter {
+  position: relative;
+}
+
+.fireLetter::after {
+  content: "";
+  position: absolute;
+  left: -2px;
+  top: -2px;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255,140,0,0.25) 0%, transparent 70%);
+  filter: blur(3px);
+  opacity: 0;
+  animation: glow 0.4s forwards;
+}
+
+@keyframes glow {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* cursor */
+.cursor {
+  display: inline-block;
+  width: 2px;
+  background: #222;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* 🦋 butterfly */
+#butterfly {
+  font-size: 40px;
+  margin-top: 20px;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 1.5s ease;
+}
+
+#butterfly.show {
+  opacity: 1;
+}
+
+/* input */
 input {
   padding: 10px;
   font-size: 18px;
@@ -46,154 +95,33 @@ button {
   color: white;
   border: none;
 }
-
-#butterfly {
-  position: fixed;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  font-size: 40px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 2s ease, transform 2s ease;
-}
-
-#butterfly.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-  pointer-events: auto;
-}
-
-/* 🦋 NATURAL FLIGHT */
-@keyframes butterflyFly {
-  0% { transform: translateX(-50%) translateY(0); opacity: 1; }
-  25% { transform: translateX(-45%) translateY(-60px); }
-  50% { transform: translateX(-55%) translateY(-120px); }
-  75% { transform: translateX(-48%) translateY(-180px); }
-  100% { transform: translateX(-52%) translateY(-260px); opacity: 0; }
-}
-
-#butterfly.fly {
-  animation: butterflyFly 1s ease forwards;
-}
-
-/* 🦋 TRAIL */
-.trail {
-  position: fixed;
-  width: 2px;
-  height: 12px;
-  background: rgba(0,0,0,0.25);
-  pointer-events: none;
-  border-radius: 2px;
-  animation: fadeTrail 0.6s linear forwards;
-}
-
-@keyframes fadeTrail {
-  from { opacity: 0.5; }
-  to { opacity: 0; }
-}
-
-/* 🔥 INK FIRE EFFECT */
-.inkFire {
-  animation: inkBurn 0.45s ease forwards;
-}
-
-@keyframes inkBurn {
-
-  0% {
-    opacity: 0;
-    transform: translateY(2px);
-    color: rgba(60,40,20,0.4);
-    text-shadow: 0 0 2px rgba(255,120,0,0.2);
-  }
-
-  30% {
-    opacity: 1;
-    color: rgba(80,50,20,0.9);
-    text-shadow:
-      0 0 6px rgba(255,140,0,0.4),
-      0 0 10px rgba(255,100,0,0.2);
-  }
-
-  60% {
-    text-shadow:
-      0 0 3px rgba(255,120,0,0.2);
-  }
-
-  100% {
-    color: #222;
-    text-shadow: none;
-    transform: translateY(0);
-  }
-}
-
-/* CURSOR */
-.cursor {
-  display: inline-block;
-  width: 2px;
-  background: #222;
-  animation: blink 1s infinite;
-}
-
-@keyframes blink {
-  50% { opacity: 0; }
-}
 </style>
 </head>
 
 <body>
 
-<div id="introScreen" class="center">
-  <div id="introText"></div>
-  <button onclick="startIntro()">Start</button>
+<!-- PAGE 1 -->
+<div id="page1" class="center">
+  <div id="text1" class="text"></div>
+  <div id="butterfly">🦋</div>
 </div>
 
-<div id="lock" class="center" style="display:none">
-  <div id="passwordText"></div>
+<!-- PAGE 2 -->
+<div id="page2" class="center" style="display:none">
+  <div id="hintText" class="text"></div>
   <input id="password">
   <button onclick="check()">Enter</button>
 </div>
 
-<div id="main" class="center" style="display:none">
-  <div id="textMain"></div>
-  <div id="butterfly">🦋</div>
+<!-- PAGE 3 -->
+<div id="page3" class="center" style="display:none">
+  <div id="text3" class="text"></div>
 </div>
-
-<audio id="music" src="Jamie-Duffy-Solas-Official-Video.mp3"></audio>
 
 <script>
 
-/* TRAIL */
-function createTrail(){
-  let b = document.getElementById("butterfly");
-  let rect = b.getBoundingClientRect();
-
-  let t = document.createElement("div");
-  t.className = "trail";
-
-  t.style.top = rect.top + "px";
-  t.style.left = rect.left + rect.width/2 + "px";
-
-  document.body.appendChild(t);
-
-  setTimeout(()=>t.remove(),600);
-}
-
-/* MUSIC */
-function fadeInMusic(){
-  let m = document.getElementById("music");
-  m.volume = 0;
-  m.play().catch(()=>{});
-  let v = 0;
-  let i = setInterval(()=>{
-    if(v < 0.6){ v += 0.02; m.volume = v; }
-    else clearInterval(i);
-  },200);
-}
-
-/* WRITING */
-function inkWrite(el, text, speed = 90, callback){
-
+/* ✍️ handwriting */
+function write(el, text, speed=70, callback){
   el.innerHTML = "";
 
   let cursor = document.createElement("span");
@@ -212,12 +140,11 @@ function inkWrite(el, text, speed = 90, callback){
       } else {
         let s = document.createElement("span");
         s.textContent = c;
-        s.classList.add("inkFire");
+        s.classList.add("fireLetter");
         el.insertBefore(s, cursor);
       }
 
       i++;
-
       setTimeout(type, speed + Math.random()*30);
 
     } else {
@@ -229,79 +156,51 @@ function inkWrite(el, text, speed = 90, callback){
   type();
 }
 
-/* INTRO */
-const introMessage = "Only open if you are alone…\n\nand if so\n\nclick start to explore";
-const passwordMessage = "Think for a moment…\n\nWho shines the most this year?";
+/* PAGE 1 TEXT */
+const intro = "Only open if you are alone…\n\nand if so\n\nclick the butterfly";
 
-window.onload = ()=>{
-  inkWrite(document.getElementById("introText"), introMessage);
+/* PAGE 3 TEXT */
+const finalText = "I'm thinking about you, Patricia.\n\nWhat a lovely thing you are.\n\nI never get tired of thinking about you.\n\nA lot, a lot has happened in my life,\nwhich changed and structured me.\n\nLife, of course, is interesting.\n\nHow could I guess you would show up from paradise\nin the most unexpected way\nand make me fall in love with you?";
+
+/* PASSWORD HINTS */
+const hints = [
+"What do you think the password is?",
+"You are close, think again.",
+"Who shines the most this year?",
+"Whose special day is today?",
+"Say her name"
+];
+
+let attempt = 0;
+
+/* START */
+window.onload = () => {
+  write(document.getElementById("text1"), intro, 70, ()=>{
+    document.getElementById("butterfly").classList.add("show");
+  });
 };
 
-function startIntro(){
-  document.getElementById("introScreen").style.display="none";
-  document.getElementById("lock").style.display="flex";
-  inkWrite(document.getElementById("passwordText"), passwordMessage);
-}
+/* BUTTERFLY CLICK */
+document.getElementById("butterfly").onclick = ()=>{
+  document.getElementById("page1").style.display = "none";
+  document.getElementById("page2").style.display = "flex";
+  write(document.getElementById("hintText"), hints[0]);
+};
 
-/* PASSWORD */
+/* PASSWORD CHECK */
 function check(){
   let val = document.getElementById("password").value.toLowerCase();
 
-  if(val==="patricia"){
-    document.getElementById("lock").style.display="none";
-    document.getElementById("main").style.display="flex";
-    start();
+  if(val === "patricia"){
+    document.getElementById("page2").style.display = "none";
+    document.getElementById("page3").style.display = "flex";
+    write(document.getElementById("text3"), finalText);
+  } else {
+    attempt++;
+    if(attempt >= hints.length) attempt = hints.length - 1;
+    write(document.getElementById("hintText"), hints[attempt]);
   }
 }
-
-/* PAGES */
-const pages=[
-["welcome","Did you know this year is the brightest year ever?"],
-["Ready for a journey?"],
-["I love you ❤"]
-];
-
-let i=0;
-let text=document.getElementById("textMain");
-let butterfly=document.getElementById("butterfly");
-
-function start(){ show(); }
-
-function show(){
-  let full=pages[i].join("\n\n");
-
-  inkWrite(text, full, 90, ()=>{
-    butterfly.classList.add("show");
-    butterfly.style.pointerEvents="auto";
-  });
-}
-
-/* CLICK */
-butterfly.onclick=()=>{
-
-  if(i===1) fadeInMusic();
-
-  if(i===2){
-    alert("End");
-    return;
-  }
-
-  i++;
-
-  butterfly.style.pointerEvents="none";
-
-  let trailInterval = setInterval(createTrail, 80);
-
-  butterfly.classList.add("fly");
-
-  setTimeout(()=>{
-    clearInterval(trailInterval);
-    butterfly.classList.remove("fly");
-    butterfly.classList.remove("show");
-    show();
-  },900);
-
-};
 
 </script>
 

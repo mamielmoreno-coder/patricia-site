@@ -9,14 +9,7 @@ body{
   margin:0;
   font-family:'Caveat', cursive;
   text-align:center;
-
-  background:
-    radial-gradient(circle at top left, rgba(0,0,0,0.05), transparent 40%),
-    radial-gradient(circle at bottom right, rgba(0,0,0,0.06), transparent 50%),
-    linear-gradient(#fdfaf3, #f6f1e6);
-
-  background-image: radial-gradient(rgba(0,0,0,0.06) 1px, transparent 1px);
-  background-size:18px 18px;
+  background:#fdfaf3;
 }
 
 .center{
@@ -29,15 +22,17 @@ body{
 }
 
 .text{
-  font-size:26px;
+  font-size:24px;
   max-width:90%;
   line-height:1.8;
+  white-space:pre-line;
 }
 
 img{
   width:100%;
-  height:auto;
-  margin-top:20px;
+  max-height:50vh;
+  object-fit:cover;
+  margin-top:15px;
 }
 
 #butterfly{
@@ -55,12 +50,6 @@ img{
   height:140px;
   background:rgba(255,255,255,0.85);
   border-radius:100px;
-  box-shadow:
-    60px 20px 0 0 rgba(255,255,255,0.85),
-    120px 10px 0 0 rgba(255,255,255,0.85),
-    30px -20px 0 0 rgba(255,255,255,0.85),
-    90px -25px 0 0 rgba(255,255,255,0.85);
-  filter:blur(2px);
   opacity:0.5;
 }
 
@@ -71,7 +60,6 @@ input{
   color:white;
   border:none;
   border-radius:8px;
-  text-align:center;
 }
 
 button{
@@ -82,17 +70,6 @@ button{
   border:none;
   border-radius:8px;
 }
-
-.trail{
-  position:fixed;
-  width:3px;
-  height:12px;
-  background:rgba(0,0,0,0.25);
-  border-radius:2px;
-  animation:fade 1.2s linear forwards;
-}
-
-@keyframes fade{to{opacity:0;}}
 </style>
 </head>
 
@@ -115,19 +92,18 @@ const img = document.getElementById("image");
 const butterfly = document.getElementById("butterfly");
 
 let i = 0;
-
-/* PASSWORD */
 let attempts = 0;
+
 const hints = [
 "What do you think the password is?",
 "You are close… think again.",
-"Think about who you truly are…",
+"Who is the most authentic person?",
 "Whose special day is today?",
-"Write the most beautiful name…"
+"Write the most beautiful name."
 ];
 
 function showPassword(){
-  textEl.innerHTML = "Please enter the password.<br><br>You already know it.";
+  textEl.innerHTML = "Please enter the password.\n\nTake your time…\nYou already know it.";
   butterfly.style.display="none";
 
   let input = document.createElement("input");
@@ -140,92 +116,61 @@ function showPassword(){
 
   btn.onclick = ()=>{
     if(input.value.toLowerCase()==="patricia"){
+      attempts = 0;
       i++;
       next();
     } else {
+      let hint = hints[Math.min(attempts, hints.length-1)];
       attempts++;
-      textEl.innerHTML = hints[Math.min(attempts,hints.length-1)];
+      textEl.innerHTML = hint;
+
+      setTimeout(()=>{
+        showPassword();
+      },1200);
     }
   };
 }
 
-/* WRITING */
-function write(text, cb){
-  textEl.innerHTML="";
-  let index=0;
+function write(text){
+  textEl.innerText = "";
+  let index = 0;
 
   function type(){
     if(index < text.length){
-      let c=text[index];
-      textEl.innerHTML += (c=="\n") ? "<br>" : c;
+      textEl.innerText += text[index];
       index++;
 
-      let delay = 110 + Math.random()*40;
-      if(".?!".includes(c)) delay += 300;
+      let delay = 90;
+      if(".?!".includes(text[index])) delay += 200;
 
-      setTimeout(type,delay);
+      setTimeout(type, delay);
     } else {
-      setTimeout(()=>{ butterfly.style.display="block"; },2000);
-      if(cb) cb();
+      setTimeout(()=>butterfly.style.display="block",1500);
     }
   }
   type();
 }
 
-/* TRAIL */
-function createTrail(){
-  let rect = butterfly.getBoundingClientRect();
-  let t=document.createElement("div");
-  t.className="trail";
-  t.style.left = rect.left+"px";
-  t.style.top = rect.top+"px";
-  document.body.appendChild(t);
-  setTimeout(()=>t.remove(),1200);
-}
-
-/* MOVE */
-function moveButterfly(callback, duration=1200){
-  let interval=setInterval(createTrail,70);
-
-  let dx=(Math.random()-0.5)*400;
-  let dy=-300;
-
-  butterfly.animate([
-    {transform:"translate(0,0)",opacity:1},
-    {transform:`translate(${dx}px,${dy}px)`,opacity:0}
-  ],{duration:duration});
-
-  setTimeout(()=>{
-    clearInterval(interval);
-    butterfly.style.opacity=0;
-    setTimeout(()=>{
-      butterfly.style.opacity=1;
-      butterfly.style.transform="translate(0,0)";
-      callback();
-    },400);
-  },duration);
-}
-
-/* MUSIC */
 function playMusic(){
-  let m=document.getElementById("music");
+  let m = document.getElementById("music");
   m.currentTime = 0;
   m.volume = 0;
-
   m.play().then(()=>{
-    let v = 0;
-    let fade = setInterval(()=>{
-      if(v < 0.7){
-        v += 0.02;
-        m.volume = v;
-      } else clearInterval(fade);
+    let v=0;
+    let fade=setInterval(()=>{
+      if(v<0.7){v+=0.02;m.volume=v;}
+      else clearInterval(fade);
     },200);
-  }).catch(()=>{
-    document.body.addEventListener("click", ()=>m.play(), {once:true});
   });
 }
 
-/* FULL PAGES */
+function moveButterfly(duration){
+  butterfly.animate([
+    {transform:"translate(0,0)",opacity:1},
+    {transform:"translate(0,-300px)",opacity:0}
+  ],{duration:duration});
+}
+
 const pages = [
 
 {t:`Only open if you are alone… and if so click the butterfly`, password:true},
@@ -294,7 +239,7 @@ You are more than what you think.
 
 You don’t have limits.
 
-You are just like a butterfly… flying freely in the sky.`, longFly:true},
+You are just like a butterfly… flying freely in the sky.`, long:true},
 
 {t:`What do you do?
 
@@ -326,35 +271,7 @@ All the struggle.
 All the pain.
 All the tears.
 
-You overcame all of it… because you found yourself.
-
-You realized that you can be happy with just your own presence.
-
-And you replaced everything with love.
-
-You found the real love — the love you have for yourself.
-
-And that’s Patricia.
-
-That’s real happiness.
-
-That’s real achievement.
-
-I think highly of you.
-
-You are such an amazing person.
-
-Do you know who you have helped the most… who you have changed the most… who you have saved the most?
-
-Yourself, Patricia.
-
-You helped, changed, and saved yourself the most by making the right decisions to bring yourself to where you are now.
-
-I feel at peace… knowing that I have welcomed such a marvelous soul into my life.
-
-Welcome, Patricia.
-
-Welcome, my love.`},
+You overcame all of it… because you found yourself.`},
 
 {t:`Now, take a deep breath… nice and smooth.`},
 
@@ -362,28 +279,86 @@ Welcome, my love.`},
 
 For a better experience, put your headphones on.`, music:true},
 
-{t:`You are the most special thing to me.
+{t:`You are the most special thing to me.`},
 
-I prepared this for you… because it came from the bottom of my heart.
+{t:`Look at yourself… how noble you are.`, img:"Patricia-and-horse.jpg"},
 
-I wish you could see how excited I am while writing this for you.
+{t:`Istanbul and I had our best days when you were here.
 
-I hope you feel special.
+What a beautiful time we shared.
 
-I hope you feel unique…
+I remember the wind gently moving your hair while I was trying to take that photo… and still, it looked a little messy.
 
-and I hope you feel authentic.
+You’re not perfect… and you don’t have to be.
 
-You are the most authentic person I have ever seen in my life.
+I love you with all your imperfections.
 
-Your authenticity inspires me.
+I love everything about you.
 
-So feel special, Patricia… because you truly are.
+You are so authentic, just the way you are.`, img:"patricia1.jpg"},
 
-You deserve all the best.
+{t:`The first time I saw you with glasses… you looked so attractive.`, img:"Patricia-glasses.jpg"},
 
-You are the most beautiful gift the universe has ever given me.`},
+{t:`As I told you before, if I had one word to describe you… it would be purity.`, img:"Patricia-pure.jpg"},
 
-{t:`Look at yourself… how noble you are.
+{t:`The very first photo you ever sent me…`, img:"Patricia-tongue-stickout.jpg"},
 
-Life has given you beautiful gifts, and in these past years, you’ve been able
+{t:`You look so happy here.`, img:"patricia-kid.jpg"},
+
+{t:`Do you remember that beautiful moment…`, img:"sunset.jpg"},
+
+{t:`Don’t we look so cute together?`, img:"Patricia-me.jpg"},
+
+{t:`Los niños se alimentan del presente…`},
+
+{t:`Que vueles tan libre como las mariposas.`},
+
+{t:``, final:true}
+
+];
+
+function next(){
+
+  img.style.display="none";
+  butterfly.style.display="none";
+
+  let p = pages[i];
+
+  write(p.t);
+
+  if(p.password){
+    butterfly.onclick = showPassword;
+    return;
+  }
+
+  if(p.img){
+    setTimeout(()=>{
+      img.src = p.img;
+      img.style.display="block";
+    },1000);
+  }
+
+  butterfly.onclick = ()=>{
+
+    if(p.music) playMusic();
+
+    if(p.final){
+      textEl.innerHTML = "❤️<br>Te amo<br><br>Feliz cumpleaños Patricia";
+      return;
+    }
+
+    moveButterfly(p.long ? 5000 : 1200);
+
+    setTimeout(()=>{
+      i++;
+      next();
+    }, p.long ? 5000 : 1200);
+  };
+}
+
+next();
+
+</script>
+
+</body>
+</html>

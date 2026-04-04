@@ -1,385 +1,452 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap" rel="stylesheet">
+<title>Patricia ❤️</title>
 
 <style>
-body{
-  margin:0;
-  background:#f5f1dc;
-  font-family:'Caveat', cursive;
-  text-align:center;
+body {
+  margin: 0;
+  font-family: 'Georgia', serif;
+  background: black;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  overflow: hidden;
 }
 
-.center{
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  padding:20px;
+.page {
+  position: absolute;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+  max-width: 900px;
+  padding: 30px;
 }
 
-.text{
-  font-size:26px;
-  max-width:90%;
-  line-height:1.8;
-}
-
-/* IMAGE FIX */
-img{
-  width:80%;
-  max-width:360px;
-  height:250px;
-  object-fit:cover;
-  margin-top:20px;
-  border-radius:16px;
-}
+.active { opacity: 1; }
 
 /* BUTTERFLY */
-#butterfly{
-  font-size:40px;
-  margin-top:20px;
-  cursor:pointer;
-  display:none;
-  opacity:1;
-  transition:opacity 0.6s ease;
+.butterfly-btn {
+  margin-top: 40px;
+  font-size: 40px;
+  cursor: pointer;
+  transition: transform 0.3s ease, text-shadow 0.3s ease;
 }
 
-/* PASSWORD INPUT */
-input{
-  padding:10px;
-  font-size:18px;
-  margin-top:15px;
-  text-align:center;
-  background:black;
-  color:white;
-  border:none;
+.butterfly-btn:hover {
+  transform: scale(1.4);
+  text-shadow: 0 0 10px #fff, 0 0 20px #ffccff, 0 0 30px #ff99ff;
 }
 
-button{
-  margin-top:10px;
-  padding:8px 20px;
-  background:black;
-  color:white;
-  border:none;
+.butterfly-clicked {
+  animation: glowPulse 0.6s ease;
 }
 
-.cursor{
-  display:inline-block;
-  width:2px;
-  background:black;
-  animation:blink 1s infinite;
+@keyframes glowPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.8); text-shadow: 0 0 30px white; }
+  100% { transform: scale(1); }
 }
 
-@keyframes blink{50%{opacity:0;}}
-
-/* TRAIL */
-.trail{
-  position:fixed;
-  width:3px;
-  height:12px;
-  background:rgba(0,0,0,0.25);
-  border-radius:2px;
-  pointer-events:none;
-  animation:fade 1.4s linear forwards;
+/* INPUT */
+input {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
 }
 
-@keyframes fade{to{opacity:0;}}
+/* TYPEWRITER */
+.cursor {
+  border-right: 2px solid white;
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  50% { border-color: transparent }
+}
 </style>
 </head>
 
 <body>
 
-<!-- MAIN -->
-<div id="main" class="center">
-  <div id="text" class="text"></div>
-  <img id="image" style="display:none;">
-  <div id="butterfly">🦋</div>
+<audio autoplay loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_1c4c6b6a64.mp3" type="audio/mp3">
+</audio>
+
+<div id="pages">
+
+<!-- PAGE 1 -->
+<div class="page active">
+<p>Only open if you are alone… and if so click the butterfly</p>
+<div class="butterfly-btn" onclick="nextPage(this)">🦋</div>
 </div>
 
-<!-- PASSWORD SCREEN -->
-<div id="lock" class="center" style="display:none">
-  <div id="passwordText" class="text"></div>
-  <input id="password">
-  <button onclick="check()">Enter</button>
+<!-- PASSWORD -->
+<div class="page">
+<p>Please enter the password.</p>
+<p>
+Hints:<br>
+What do you think the password is?<br>
+You are close… think again.<br>
+Who is the most authentic person?<br>
+Whose special day is today?<br>
+Write the most beautiful name.
+</p>
+<input id="password"><br><br>
+<div class="butterfly-btn" onclick="checkPassword(this)">🦋</div>
+<p id="hint"></p>
 </div>
 
-<audio id="music" src="Twilight.mp3"></audio>
+<!-- PAGE 2 -->
+<div class="page">
+<h2>Welcome birthday girl ❤️</h2>
+<div class="butterfly-btn" onclick="nextPage(this)">🦋</div>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page"><p>
+You must wonder… what is this now?<br><br>
+Well… you don’t know.<br><br>
+Do we really have to have answers for everything?<br><br>
+Right now, you would probably say… of course not.<br><br>
+Yes, Patricia… life has another kind of beauty when we don’t have answers for some things.<br><br>
+I know you like not having all the answers.<br>
+I know my woman.<br><br>
+Now… lean back.<br>
+Think.<br>
+Watch.<br>
+Listen.<br>
+And enjoy.
+</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 4 -->
+<div class="page"><p>
+I'm thinking about you, Patricia. What a lovely thing you are. I never get tired of thinking about you. A lot, a lot has happened in my life, which changed and structured me. Life, of course, is interesting. How could I guess you would show up from paradise in the most unexpected way and make me fall in love with you?
+</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 5 -->
+<div class="page"><p>
+Did you know that this year is the brightest year? And do you know why? This year is the brightest year because you are shining the most.
+</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 6 -->
+<div class="page"><p>Who are you? I want you to think.</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 7 -->
+<div class="page"><p>
+I don't know what your answer is, however, I will tell you with my own words who are you. In my eyes, you are the light that passes by the universe. You are the soul that surrounds the whole world with peace and calmness. You are the moment that touched a lot of souls. You are the real success. You are my natural dopamine.
+</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 8 -->
+<div class="page"><p>What do you want?<br>I want you to really focus.</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 9 -->
+<div class="page"><p>
+A profound question…<br><br>
+How can one know what they truly want?<br><br>
+Of course… by observing themselves.<br>
+But we don’t always have that ability.<br>
+Even when we do observe, we tend to observe others.<br>
+Rarely do we observe ourselves.<br><br>
+The key is to hear your inner voice… and follow it.<br>
+Observe yourself.<br>
+Explore yourself.<br>
+Listen to yourself.<br>
+Be as bold as the decision you made to come to Istanbul without even knowing if I was tall or not :)<br><br>
+You are more than what you think.<br>
+You don’t have limits.<br>
+You are just like a butterfly… flying freely in the sky.
+</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 10 -->
+<div class="page"><p>
+What do you do?<br><br>
+Are you just a pediatric surgeon?<br><br>
+I want you to empty your mind… and truly contemplate this.
+</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 11 -->
+<div class="page"><p>
+You are many things.
+You are more than just a pediatric surgeon.
+Do you remember the face of the 13-year-old kid you operated on
+(if I remember his age correctly)…
+and his mother’s face?
+
+You help people.
+You change lives.
+You save lives.
+Be proud of yourself.
+You have achieved so much, Patricia.
+I’m so proud of you.
+
+Go back… and look at everything you’ve been through.
+All the struggle.
+All the pain.
+All the tears.
+
+You overcame all of it… because you found yourself.
+You realized that you can be happy with just your own presence.
+And you replaced everything with love.
+
+You found the real love — the love you have for yourself.
+And that’s Patricia.
+That’s real happiness.
+That’s real achievement.
+
+I think highly of you.
+You are such an amazing person.
+
+Do you know who you have helped the most…
+who you have changed the most…
+who you have saved the most?
+
+Yourself, Patricia.
+
+You helped, changed, and saved yourself the most
+by making the right decisions to bring yourself to where you are now.
+
+I feel at peace… knowing that I have welcomed such a marvelous soul into my life.
+
+Welcome, Patricia.
+Welcome, my love.
+</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 12 -->
+<div class="page"><p>Now, take a deep breath… nice and smooth.</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 13 -->
+<div class="page"><p>Ready for a journey?<br><br>For a better experience, put your headphones on.</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 14 -->
+<div class="page"><p>
+You are the most special thing to me.
+I prepared this for you… because it came from the bottom of my heart.
+I wish you could see how excited I am while writing this for you.
+
+I hope you feel special.
+I hope you feel unique…
+and I hope you feel authentic.
+
+You are the most authentic person I have ever seen in my life.
+Your authenticity inspires me.
+
+So feel special, Patricia… because you truly are.
+You deserve all the best.
+
+You are the most beautiful gift the universe has ever given me.
+</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 15 -->
+<div class="page"><p>
+Look at yourself… how noble you are.
+Life has given you beautiful gifts,
+and in these past years, you’ve been able to receive them.
+Do you know why?
+Because now… you’re ready to receive.
+
+From the very first moment you told me how much you love having a connection with horses,
+I felt something special.
+The peace they give you… gives me peace as well.
+You bring so much peace into my life.
+I love you.
+</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 16 -->
+<div class="page"><p>
+Istanbul and I had our best days when you were here.
+What a beautiful time we shared.
+I remember the wind gently moving your hair while I was trying to take that photo…
+and still, it looked a little messy.
+
+You’re not perfect…
+and you don’t have to be.
+
+I love you with all your imperfections.
+I love everything about you.
+You are so authentic, just the way you are.
+</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 17 -->
+<div class="page"><p>
+The first time I saw you with glasses… you looked so attractive.
+I love how they look on you.
+I love the way you read for me.
+I love how willing you are to share things with me.
+I guess… you love me :)
+
+You are so beautiful in the way you carry yourself — knowledgeable, smart… and also, so sexy.
+</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 18 -->
+<div class="page"><p>
+As I told you before, if I had one word to describe you… it would be purity.
+You look so pure.
+You carry the innocence of a child within you.
+
+Never lose your touch… your connection, and your bond with nature.
+Always stay a part of it.
+And never lose that pure smile you carry on your face.
+
+Nature loves you.
+</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 19 -->
+<div class="page"><p>
+The very first photo you ever sent me…
+I could see joy.
+I could see happiness.
+I wasn’t expecting it at all.
+
+I must confess… I loved seeing you.
+
+I love when you stick your tongue out, because I know you feel so good that it just comes naturally.
+You are so funny.
+You make me laugh all the time.
+
+I still remember your smile…
+the one you had when you saw me for the first time at the airport.
+</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 20 -->
+<div class="page"><p>
+You look so happy here.
+I love this picture so much.
+
+I can see the child within you… joyful, inspired, active, and full of life.
+I wish you many more moments like this.
+
+I want to run towards you… catch you…
+and hold you in my arms without ever letting you go.
+</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 21 -->
+<div class="page"><p>
+Do you remember that beautiful moment when your colleague made you step outside the hospital to see it clearly?
+I want to thank him.
+
+We all need people like that… the ones who gently push us toward something beautiful.
+
+How could I ever forget the sunset we watched together in Kadıköy?
+I loved how excited you were to show me that moment…
+the point where you can’t tell if it’s morning or evening.
+
+I love how you notice these little details in nature.
+
+To the many sunsets we will watch together, my love…
+I can’t wait ❤️
+</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 22 -->
+<div class="page"><p>
+Don’t we look so cute together?
+
+Istanbul, the ancient city, has witnessed the blossoming of something truly beautiful.
+I love seeing us.
+We look so happy together.
+
+I can’t wait to take more photos with you.
+I can’t wait to share the most beautiful moments with you.
+
+Life has given me the most incredible woman in the world…
+and I just want to spend more and more time with her.
+</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 23 -->
+<div class="page"><p>
+Los niños se alimentan del presente…
+se ubican en el único tiempo que realmente existe.
+No añoran el pasado,
+no sienten nostalgia por otra época anterior,
+no se lamentan por lo que hicieron o dejaron de hacer años atrás.
+
+Tampoco se preocupan por el futuro…
+solo miran hacia adelante para recordar la fecha de su cumpleaños.
+
+Que seas tan feliz como la niña que,
+aun estando nerviosa, sostiene un conejo entre sus manos.
+
+Eres el regalo más hermoso…
+no solo para mí, sino también para ti.
+
+Nunca pierdas la sonrisa de la niña que llevas en tu rostro.
+
+Quiero besarte como te besé aquella primera vez…
+qué beso tan tierno fue.
+
+Mi pecho está lleno de amor.
+
+¿Recuerdas cuando me dijiste que la felicidad no cabía en tu pecho…
+y que tuviste que mandar un mensaje a una amiga?
+
+Así es como me siento ahora.
+Quiero darte un amor que no cabe en el pecho.
+
+Ocupas el lugar más especial en mi corazón.
+
+Te quiero mucho, Patricia.
+Te quiero mucho, mi amor.
+</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 24 -->
+<div class="page"><p>Que vueles tan libre como las mariposas.</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 25 -->
+<div class="page"><p>🦋 🦋 🦋</p><div class="butterfly-btn" onclick="nextPage(this)">🦋</div></div>
+
+<!-- PAGE 26 -->
+<div class="page">
+<h1>❤️<br>Te amo<br>Feliz cumpleaños Patricia</h1>
+<div class="butterfly-btn" onclick="nextPage(this)">🦋</div>
+</div>
+
+</div>
 
 <script>
+let currentPage = 0;
+const pages = document.querySelectorAll(".page");
 
-const textEl = document.getElementById("text");
-const img = document.getElementById("image");
-const butterfly = document.getElementById("butterfly");
-
-let i = 0;
-
-/* PASSWORD HINTS */
-let attempts = 0;
-const hints = [
-"What do you think the password is?",
-"You are close, think again.",
-"Who is the most authentic person?",
-"Whose special day is today?",
-"Write the most beautiful name."
-];
-
-/* WRITING */
-function write(text, cb){
-  textEl.innerHTML="";
-  let cursor=document.createElement("span");
-  cursor.className="cursor";
-  textEl.appendChild(cursor);
-
-  let index=0;
-
-  function type(){
-    if(index < text.length){
-
-      let c=text[index];
-
-      if(c=="\n"){
-        textEl.insertBefore(document.createElement("br"),cursor);
-      } else {
-        let span=document.createElement("span");
-        span.textContent=c;
-        textEl.insertBefore(span,cursor);
-      }
-
-      index++;
-
-      let delay = 70 + Math.random()*30;
-
-      if(c==="." || c==="?" || c==="!"){
-        delay += 300;
-        textEl.insertBefore(document.createElement("br"),cursor);
-      }
-
-      setTimeout(type,delay);
-
-    }else{
-      cursor.remove();
-      setTimeout(()=>{ butterfly.style.display="block"; },500);
-      if(cb) cb();
+function typeWriter(el) {
+  let text = el.innerHTML;
+  el.innerHTML = "";
+  let i = 0;
+  function type() {
+    if (i < text.length) {
+      el.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(type, 15);
     }
   }
-
   type();
 }
 
-/* PASSWORD FLOW */
-function showPassword(){
-  document.getElementById("main").style.display="none";
-  document.getElementById("lock").style.display="flex";
-  typePasswordHint();
+function activateTypewriter(page) {
+  page.querySelectorAll("p,h1,h2").forEach(el => typeWriter(el));
 }
 
-function typePasswordHint(){
-  let el = document.getElementById("passwordText");
-  el.innerHTML="";
-  let text = hints[Math.min(attempts, hints.length-1)];
-  let i=0;
-
-  function t(){
-    if(i < text.length){
-      el.innerHTML += text[i];
-      i++;
-      setTimeout(t,40);
+function nextPage(el) {
+  if (el) el.classList.add("butterfly-clicked");
+  setTimeout(() => {
+    pages[currentPage].classList.remove("active");
+    currentPage++;
+    if (currentPage < pages.length) {
+      pages[currentPage].classList.add("active");
+      activateTypewriter(pages[currentPage]);
     }
-  }
-  t();
+  }, 400);
 }
 
-function check(){
-  let val = document.getElementById("password").value.toLowerCase();
-
-  if(val === "patricia"){
-    document.getElementById("lock").style.display="none";
-    document.getElementById("main").style.display="flex";
-    i = 1;
-    next();
-  } else {
-    attempts++;
-    typePasswordHint();
-  }
+function checkPassword(el) {
+  let input = document.getElementById("password").value.toLowerCase();
+  if (input === "patricia") nextPage(el);
+  else document.getElementById("hint").innerText = "You are close… think again.";
 }
 
-/* TRAIL */
-function createTrail(){
-  let rect = butterfly.getBoundingClientRect();
-  let t=document.createElement("div");
-  t.className="trail";
-  t.style.left = rect.left + rect.width/2 + "px";
-  t.style.top = rect.top + rect.height/2 + "px";
-  document.body.appendChild(t);
-  setTimeout(()=>t.remove(),1400);
-}
-
-/* MOVE */
-function moveButterfly(callback){
-
-  let interval=setInterval(createTrail,70);
-
-  let dx=(Math.random()-0.5)*250;
-  let dy=-250 - Math.random()*120;
-
-  butterfly.animate([
-    {transform:"translate(0,0)", opacity:1},
-    {transform:`translate(${dx}px,${dy}px)`, opacity:0}
-  ],{duration:1200});
-
-  setTimeout(()=>{
-    clearInterval(interval);
-    butterfly.style.opacity = 0;
-
-    setTimeout(()=>{
-      butterfly.style.opacity = 1;
-      butterfly.style.transform="translate(0,0)";
-      callback();
-    },400);
-
-  },1200);
-}
-
-/* MUSIC */
-function playMusic(){
-  let m = document.getElementById("music");
-  m.volume = 0;
-  let p = m.play();
-  if(p){
-    p.then(()=>{
-      let v=0;
-      let fade=setInterval(()=>{
-        if(v<0.7){v+=0.02;m.volume=v;}
-        else clearInterval(fade);
-      },200);
-    });
-  }
-}
-
-/* EXPLOSION */
-function releaseButterflies(){
-  for(let i=0;i<30;i++){
-    let b=document.createElement("div");
-    b.textContent="🦋";
-    b.style.position="fixed";
-    b.style.left="50%";
-    b.style.top="60%";
-    document.body.appendChild(b);
-
-    let dx=(Math.random()-0.5)*600;
-    let dy=(Math.random()-0.5)*600;
-
-    b.animate([
-      {transform:"translate(0,0)",opacity:1},
-      {transform:`translate(${dx}px,${dy}px)`,opacity:0}
-    ],{duration:2500});
-
-    setTimeout(()=>b.remove(),2500);
-  }
-}
-
-/* PAGES (UNCHANGED) */
-const pages = [
-
-{t:"Only open if you are alone… and if so click the butterfly", password:true},
-
-{t:"Welcome birthday girl ❤️"},
-
-{t:"You must wonder what is this now. Wow, you don't know. Do we have to have answers for everything? You must say now, of course not. Yes, Patricia, life has another beauty when we don't have answers for some things. I know you like not having all the answers. I know my woman. Now, lean back, think, watch, listen, and enjoy."},
-
-{t:"I'm thinking about you, Patricia. What a lovely thing you are. I never get tired of thinking about you. A lot, a lot has happened in my life, which changed and structured me. Life, of course, is interesting. How could I guess you would show up from paradise in the most unexpected way and make me fall in love with you?"},
-
-{t:"Did you know that this year is the brightest year? And do you know why? This year is the brightest year because you are shining the most."},
-
-{t:"Who are you? I want you to think."},
-
-{t:"I don't know what your answer is, however, I will tell you with my own words who are you. In my eyes, you are the light that passes by the universe. You are the soul that surrounds the whole world with peace and calmness. You are the moment that touched a lot of souls. You are the real success. You are my natural dopamine."},
-
-{t:"What do you want? I want you to focus."},
-
-{t:"A profound question. How can one know what exactly they want by observing themselves?"},
-
-{t:"What do you do? Are you just a pediatric surgeon?"},
-
-{t:"You are a lot of things. You are more than just a pediatric surgeon."},
-
-{t:"Now, take a deep breath, nice and smooth."},
-
-{t:"Ready for a journey? For a better experience, put your headphones on.", music:true},
-
-{t:"You are the most special thing for me."},
-
-{t:"Look at yourself.", img:"Patricia-and-horse.jpg"},
-
-{t:"Istanbul memories.", img:"patricia1.jpg"},
-
-{t:"Glasses.", img:"Patricia-glasses.jpg"},
-
-{t:"Pure.", img:"Patricia-pure.jpg"},
-
-{t:"Funny.", img:"Patricia-tongue-stickout.jpg"},
-
-{t:"Happy.", img:"patricia-kid.jpg"},
-
-{t:"Sunset.", img:"sunset.jpg"},
-
-{t:"Together.", img:"Patricia-me.jpg"},
-
-{t:"Los niños se alimentan del presente..."},
-
-{t:"Que vueles tan libre como las mariposas.", final:true}
-
-];
-
-function next(){
-
-  img.style.display="none";
-  butterfly.style.display="none";
-
-  let p = pages[i];
-
-  write(p.t,()=>{
-
-    if(p.password){
-      butterfly.onclick = showPassword;
-      return;
-    }
-
-    if(p.img){
-      setTimeout(()=>{
-        img.src=p.img;
-        img.style.display="block";
-      },1200);
-    }
-
-    butterfly.onclick=()=>{
-
-      if(p.music) playMusic();
-
-      if(p.final){
-        releaseButterflies();
-        setTimeout(()=>{
-          textEl.innerHTML="❤️<br>Te amo<br><br>Feliz cumpleaños Patricia";
-        },2500);
-        return;
-      }
-
-      moveButterfly(()=>{
-        i++;
-        next();
-      });
-
-    };
-
-  });
-
-}
-
-next();
-
+activateTypewriter(pages[0]);
 </script>
 
 </body>

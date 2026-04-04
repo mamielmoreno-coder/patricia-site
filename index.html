@@ -29,7 +29,7 @@ body {
   min-height: 140px;
 }
 
-/* 🔥 FIRE EFFECT (around letters, not on them) */
+/* ✨ SPARK EFFECT */
 .fireLetter {
   position: relative;
 }
@@ -37,19 +37,22 @@ body {
 .fireLetter::after {
   content: "";
   position: absolute;
-  left: -2px;
-  top: -2px;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(255,140,0,0.25) 0%, transparent 70%);
-  filter: blur(3px);
+  width: 4px;
+  height: 4px;
+  background: rgba(255,140,0,0.9);
+  border-radius: 50%;
+
+  top: -4px;
+  right: -4px;
+
   opacity: 0;
-  animation: glow 0.4s forwards;
+  animation: spark 0.35s ease forwards;
 }
 
-@keyframes glow {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+@keyframes spark {
+  0% { opacity: 0; transform: scale(0.5); }
+  40% { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 0; transform: scale(0.8); }
 }
 
 /* cursor */
@@ -64,7 +67,7 @@ body {
   50% { opacity: 0; }
 }
 
-/* 🦋 butterfly */
+/* butterfly */
 #butterfly {
   font-size: 40px;
   margin-top: 20px;
@@ -100,20 +103,17 @@ button {
 
 <body>
 
-<!-- PAGE 1 -->
 <div id="page1" class="center">
   <div id="text1" class="text"></div>
   <div id="butterfly">🦋</div>
 </div>
 
-<!-- PAGE 2 -->
 <div id="page2" class="center" style="display:none">
   <div id="hintText" class="text"></div>
   <input id="password">
   <button onclick="check()">Enter</button>
 </div>
 
-<!-- PAGE 3 -->
 <div id="page3" class="center" style="display:none">
   <div id="text3" class="text"></div>
 </div>
@@ -121,7 +121,8 @@ button {
 <script>
 
 /* ✍️ handwriting */
-function write(el, text, speed=70, callback){
+function write(el, text, baseSpeed=70, callback){
+
   el.innerHTML = "";
 
   let cursor = document.createElement("span");
@@ -129,6 +130,8 @@ function write(el, text, speed=70, callback){
   el.appendChild(cursor);
 
   let i = 0;
+
+  let speed = text.length > 120 ? 35 : baseSpeed;
 
   function type(){
     if(i < text.length){
@@ -145,7 +148,11 @@ function write(el, text, speed=70, callback){
       }
 
       i++;
-      setTimeout(type, speed + Math.random()*30);
+
+      let delay = speed + Math.random()*20;
+      if(c === "." || c === ",") delay += 120;
+
+      setTimeout(type, delay);
 
     } else {
       cursor.remove();
@@ -156,11 +163,11 @@ function write(el, text, speed=70, callback){
   type();
 }
 
-/* PAGE 1 TEXT */
-const intro = "Only open if you are alone…\n\nand if so\n\nclick the butterfly";
+/* PAGE 1 */
+const intro = "Only open if you are alone… and if so click the butterfly";
 
-/* PAGE 3 TEXT */
-const finalText = "I'm thinking about you, Patricia.\n\nWhat a lovely thing you are.\n\nI never get tired of thinking about you.\n\nA lot, a lot has happened in my life,\nwhich changed and structured me.\n\nLife, of course, is interesting.\n\nHow could I guess you would show up from paradise\nin the most unexpected way\nand make me fall in love with you?";
+/* PAGE 3 */
+const finalText = "I'm thinking about you, Patricia. What a lovely thing you are. I never get tired of thinking about you. A lot, a lot has happened in my life, which changed and structured me. Life, of course, is interesting. How could I guess you would show up from paradise in the most unexpected way and make me fall in love with you?";
 
 /* PASSWORD HINTS */
 const hints = [
@@ -168,36 +175,33 @@ const hints = [
 "You are close, think again.",
 "Who shines the most this year?",
 "Whose special day is today?",
-"Say her name"
+"Write the most beautiful name"
 ];
 
 let attempt = 0;
 
-/* START */
-window.onload = () => {
+window.onload = ()=>{
   write(document.getElementById("text1"), intro, 70, ()=>{
     document.getElementById("butterfly").classList.add("show");
   });
 };
 
-/* BUTTERFLY CLICK */
 document.getElementById("butterfly").onclick = ()=>{
-  document.getElementById("page1").style.display = "none";
-  document.getElementById("page2").style.display = "flex";
+  document.getElementById("page1").style.display="none";
+  document.getElementById("page2").style.display="flex";
   write(document.getElementById("hintText"), hints[0]);
 };
 
-/* PASSWORD CHECK */
 function check(){
   let val = document.getElementById("password").value.toLowerCase();
 
-  if(val === "patricia"){
-    document.getElementById("page2").style.display = "none";
-    document.getElementById("page3").style.display = "flex";
+  if(val==="patricia"){
+    document.getElementById("page2").style.display="none";
+    document.getElementById("page3").style.display="flex";
     write(document.getElementById("text3"), finalText);
   } else {
     attempt++;
-    if(attempt >= hints.length) attempt = hints.length - 1;
+    if(attempt>=hints.length) attempt=hints.length-1;
     write(document.getElementById("hintText"), hints[attempt]);
   }
 }

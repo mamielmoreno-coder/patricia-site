@@ -15,9 +15,7 @@ body{
     radial-gradient(circle at bottom right, rgba(0,0,0,0.06), transparent 50%),
     linear-gradient(#fdfaf3, #f6f1e6);
 
-  background-image:
-    radial-gradient(rgba(0,0,0,0.06) 1px, transparent 1px);
-
+  background-image: radial-gradient(rgba(0,0,0,0.06) 1px, transparent 1px);
   background-size:18px 18px;
 }
 
@@ -39,7 +37,6 @@ body{
 img{
   width:100%;
   height:auto;
-  object-fit:cover;
   margin-top:20px;
 }
 
@@ -65,6 +62,25 @@ img{
     90px -25px 0 0 rgba(255,255,255,0.85);
   filter:blur(2px);
   opacity:0.5;
+}
+
+input{
+  padding:12px;
+  font-size:18px;
+  background:black;
+  color:white;
+  border:none;
+  border-radius:8px;
+  text-align:center;
+}
+
+button{
+  margin-top:10px;
+  padding:10px 20px;
+  background:black;
+  color:white;
+  border:none;
+  border-radius:8px;
 }
 
 .trail{
@@ -105,31 +121,30 @@ let attempts = 0;
 const hints = [
 "What do you think the password is?",
 "You are close… think again.",
-"Who is the most authentic person?",
+"Think about who you truly are…",
 "Whose special day is today?",
-"Write the most beautiful name."
+"Write the most beautiful name…"
 ];
 
 function showPassword(){
-  textEl.innerHTML = "Please enter the password.";
-  butterfly.style.display = "none";
+  textEl.innerHTML = "Please enter the password.<br><br>You already know it.";
+  butterfly.style.display="none";
 
   let input = document.createElement("input");
   let btn = document.createElement("button");
-
-  btn.innerText = "Enter";
+  btn.innerText="Enter";
 
   textEl.appendChild(document.createElement("br"));
   textEl.appendChild(input);
   textEl.appendChild(btn);
 
-  btn.onclick = () => {
-    if(input.value.toLowerCase() === "patricia"){
+  btn.onclick = ()=>{
+    if(input.value.toLowerCase()==="patricia"){
       i++;
       next();
     } else {
       attempts++;
-      textEl.innerHTML = hints[Math.min(attempts, hints.length-1)];
+      textEl.innerHTML = hints[Math.min(attempts,hints.length-1)];
     }
   };
 }
@@ -141,32 +156,19 @@ function write(text, cb){
 
   function type(){
     if(index < text.length){
-
       let c=text[index];
-
-      if(c=="\n"){
-        textEl.innerHTML += "<br>";
-      } else {
-        textEl.innerHTML += c;
-      }
-
+      textEl.innerHTML += (c=="\n") ? "<br>" : c;
       index++;
 
       let delay = 110 + Math.random()*40;
-
-      if(c==="." || c==="?" || c==="!"){
-        delay += 300;
-        textEl.innerHTML += "<br>";
-      }
+      if(".?!".includes(c)) delay += 300;
 
       setTimeout(type,delay);
-
-    }else{
+    } else {
       setTimeout(()=>{ butterfly.style.display="block"; },2000);
       if(cb) cb();
     }
   }
-
   type();
 }
 
@@ -175,43 +177,41 @@ function createTrail(){
   let rect = butterfly.getBoundingClientRect();
   let t=document.createElement("div");
   t.className="trail";
-  t.style.left = rect.left + "px";
-  t.style.top = rect.top + "px";
+  t.style.left = rect.left+"px";
+  t.style.top = rect.top+"px";
   document.body.appendChild(t);
   setTimeout(()=>t.remove(),1200);
 }
 
 /* MOVE */
-function moveButterfly(callback, duration = 1200){
-
+function moveButterfly(callback, duration=1200){
   let interval=setInterval(createTrail,70);
 
   let dx=(Math.random()-0.5)*400;
-  let dy=-300 - Math.random()*150;
+  let dy=-300;
 
   butterfly.animate([
-    {transform:"translate(0,0)", opacity:1},
-    {transform:`translate(${dx}px,${dy}px)`, opacity:0}
+    {transform:"translate(0,0)",opacity:1},
+    {transform:`translate(${dx}px,${dy}px)`,opacity:0}
   ],{duration:duration});
 
   setTimeout(()=>{
     clearInterval(interval);
-    butterfly.style.opacity = 0;
-
+    butterfly.style.opacity=0;
     setTimeout(()=>{
-      butterfly.style.opacity = 1;
+      butterfly.style.opacity=1;
       butterfly.style.transform="translate(0,0)";
       callback();
     },400);
-
   },duration);
 }
 
 /* MUSIC */
 function playMusic(){
-  let m = document.getElementById("music");
+  let m=document.getElementById("music");
   m.currentTime = 0;
   m.volume = 0;
+
   m.play().then(()=>{
     let v = 0;
     let fade = setInterval(()=>{
@@ -220,10 +220,12 @@ function playMusic(){
         m.volume = v;
       } else clearInterval(fade);
     },200);
+  }).catch(()=>{
+    document.body.addEventListener("click", ()=>m.play(), {once:true});
   });
 }
 
-/* PAGES */
+/* FULL PAGES */
 const pages = [
 
 {t:`Only open if you are alone… and if so click the butterfly`, password:true},
@@ -254,13 +256,13 @@ Listen.
 
 And enjoy.`},
 
-{t:`I'm thinking about you, Patricia. What a lovely thing you are. I never get tired of thinking about you...`},
+{t:`I'm thinking about you, Patricia. What a lovely thing you are. I never get tired of thinking about you. A lot, a lot has happened in my life, which changed and structured me. Life, of course, is interesting. How could I guess you would show up from paradise in the most unexpected way and make me fall in love with you?`},
 
-{t:`Did you know that this year is the brightest year?...`},
+{t:`Did you know that this year is the brightest year? And do you know why? This year is the brightest year because you are shining the most.`},
 
 {t:`Who are you? I want you to think.`},
 
-{t:`I don't know what your answer is...`},
+{t:`I don't know what your answer is, however, I will tell you with my own words who are you. In my eyes, you are the light that passes by the universe. You are the soul that surrounds the whole world with peace and calmness. You are the moment that touched a lot of souls. You are the real success. You are my natural dopamine.`},
 
 {t:`What do you want?
 
@@ -270,7 +272,27 @@ I want you to really focus.`},
 
 How can one know what they truly want?
 
-Of course… by observing themselves...
+Of course… by observing themselves.
+
+But we don’t always have that ability.
+
+Even when we do observe, we tend to observe others.
+
+Rarely do we observe ourselves.
+
+The key is to hear your inner voice… and follow it.
+
+Observe yourself.
+
+Explore yourself.
+
+Listen to yourself.
+
+Be as bold as the decision you made to come to Istanbul without even knowing if I was tall or not :)
+
+You are more than what you think.
+
+You don’t have limits.
 
 You are just like a butterfly… flying freely in the sky.`, longFly:true},
 
@@ -280,7 +302,59 @@ Are you just a pediatric surgeon?
 
 I want you to empty your mind… and truly contemplate this.`},
 
-{t:`You are many things...`},
+{t:`You are many things.
+
+You are more than just a pediatric surgeon.
+
+Do you remember the face of the 13-year-old kid you operated on (if I remember his age correctly)… and his mother’s face?
+
+You help people.
+
+You change lives.
+
+You save lives.
+
+Be proud of yourself.
+
+You have achieved so much, Patricia.
+
+I’m so proud of you.
+
+Go back… and look at everything you’ve been through.
+
+All the struggle.
+All the pain.
+All the tears.
+
+You overcame all of it… because you found yourself.
+
+You realized that you can be happy with just your own presence.
+
+And you replaced everything with love.
+
+You found the real love — the love you have for yourself.
+
+And that’s Patricia.
+
+That’s real happiness.
+
+That’s real achievement.
+
+I think highly of you.
+
+You are such an amazing person.
+
+Do you know who you have helped the most… who you have changed the most… who you have saved the most?
+
+Yourself, Patricia.
+
+You helped, changed, and saved yourself the most by making the right decisions to bring yourself to where you are now.
+
+I feel at peace… knowing that I have welcomed such a marvelous soul into my life.
+
+Welcome, Patricia.
+
+Welcome, my love.`},
 
 {t:`Now, take a deep breath… nice and smooth.`},
 
@@ -288,77 +362,28 @@ I want you to empty your mind… and truly contemplate this.`},
 
 For a better experience, put your headphones on.`, music:true},
 
-{t:`You are the most special thing to me...`},
+{t:`You are the most special thing to me.
 
-{t:`Look at yourself… how noble you are.`, img:"Patricia-and-horse.jpg"},
+I prepared this for you… because it came from the bottom of my heart.
 
-{t:`Istanbul and I had our best days...`, img:"patricia1.jpg"},
+I wish you could see how excited I am while writing this for you.
 
-{t:`The first time I saw you with glasses…`, img:"Patricia-glasses.jpg"},
+I hope you feel special.
 
-{t:`As I told you before...`, img:"Patricia-pure.jpg"},
+I hope you feel unique…
 
-{t:`The very first photo you ever sent me…`, img:"Patricia-tongue-stickout.jpg"},
+and I hope you feel authentic.
 
-{t:`You look so happy here.`, img:"patricia-kid.jpg"},
+You are the most authentic person I have ever seen in my life.
 
-{t:`Do you remember that beautiful moment...`, img:"sunset.jpg"},
+Your authenticity inspires me.
 
-{t:`Don’t we look so cute together?`, img:"Patricia-me.jpg"},
+So feel special, Patricia… because you truly are.
 
-{t:`Los niños se alimentan del presente…`},
+You deserve all the best.
 
-{t:`Que vueles tan libre como las mariposas.`},
+You are the most beautiful gift the universe has ever given me.`},
 
-{t:``, final:true}
+{t:`Look at yourself… how noble you are.
 
-];
-
-/* FLOW */
-function next(){
-
-  img.style.display="none";
-  butterfly.style.display="none";
-
-  let p = pages[i];
-
-  write(p.t,()=>{
-
-    if(p.password){
-      butterfly.onclick = showPassword;
-      return;
-    }
-
-    if(p.img){
-      setTimeout(()=>{
-        img.src=p.img;
-        img.style.display="block";
-      },1200);
-    }
-
-    butterfly.onclick=()=>{
-
-      if(p.music) playMusic();
-
-      if(p.final){
-        textEl.innerHTML="❤️<br>Te amo<br><br>Feliz cumpleaños Patricia";
-        return;
-      }
-
-      moveButterfly(()=>{
-        i++;
-        next();
-      }, p.longFly ? 5000 : 1200);
-
-    };
-
-  });
-
-}
-
-next();
-
-</script>
-
-</body>
-</html>
+Life has given you beautiful gifts, and in these past years, you’ve been able

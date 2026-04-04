@@ -48,7 +48,7 @@ img{
   animation:blink 1s infinite;
 }
 
-@keyframes blink{ 50%{opacity:0;} }
+@keyframes blink{50%{opacity:0;}}
 
 .trail{
   position:fixed;
@@ -57,10 +57,10 @@ img{
   background:rgba(0,0,0,0.25);
   border-radius:2px;
   pointer-events:none;
-  animation:fade 1.2s linear forwards;
+  animation:fade 1.4s linear forwards;
 }
 
-@keyframes fade{ to{opacity:0;} }
+@keyframes fade{to{opacity:0;}}
 </style>
 </head>
 
@@ -82,7 +82,7 @@ const butterfly = document.getElementById("butterfly");
 
 let i = 0;
 
-/* ✍️ Writing */
+/* typing */
 function write(text, cb){
   textEl.innerHTML="";
   let cursor=document.createElement("span");
@@ -125,7 +125,7 @@ function write(text, cb){
   type();
 }
 
-/* 🦋 Trail */
+/* trail */
 function createTrail(){
   let rect = butterfly.getBoundingClientRect();
   let t=document.createElement("div");
@@ -133,15 +133,15 @@ function createTrail(){
   t.style.left = rect.left + rect.width/2 + "px";
   t.style.top = rect.top + rect.height/2 + "px";
   document.body.appendChild(t);
-  setTimeout(()=>t.remove(),1200);
+  setTimeout(()=>t.remove(),1400);
 }
 
-/* 🦋 Move */
+/* movement */
 function moveButterfly(callback){
-  let interval=setInterval(createTrail,60);
+  let interval=setInterval(createTrail,70);
 
   let dx=(Math.random()-0.5)*250;
-  let dy=-250 - Math.random()*100;
+  let dy=-250 - Math.random()*120;
 
   butterfly.animate([
     {transform:"translate(0,0)"},
@@ -155,7 +155,7 @@ function moveButterfly(callback){
   },1200);
 }
 
-/* 🎵 Music */
+/* music */
 function playMusic(){
   let m=document.getElementById("music");
   m.volume=0;
@@ -167,7 +167,123 @@ function playMusic(){
   },200);
 }
 
-/* 🦋 Explosion */
+/* explosion */
 function releaseButterflies(){
   for(let i=0;i<30;i++){
-    let b=document.createElement("div
+    let b=document.createElement("div");
+    b.textContent="🦋";
+    b.style.position="fixed";
+    b.style.left="50%";
+    b.style.top="60%";
+    document.body.appendChild(b);
+
+    let dx=(Math.random()-0.5)*600;
+    let dy=(Math.random()-0.5)*600;
+
+    b.animate([
+      {transform:"translate(0,0)",opacity:1},
+      {transform:`translate(${dx}px,${dy}px)`,opacity:0}
+    ],{duration:2500});
+
+    setTimeout(()=>b.remove(),2500);
+  }
+}
+
+/* ALL PAGES */
+const pages = [
+
+{t:"Only open if you are alone… and if so click the butterfly"},
+
+{t:"Welcome birthday girl ❤️"},
+
+{t:"You must wonder what is this now. Wow, you don't know. Do we have to have answers for everything? You must say now, of course not. Yes, Patricia, life has another beauty when we don't have answers for some things. I know you like not having all the answers. I know my woman. Now, lean back, think, watch, listen, and enjoy."},
+
+{t:"I'm thinking about you, Patricia. What a lovely thing you are. I never get tired of thinking about you. A lot, a lot has happened in my life, which changed and structured me. Life, of course, is interesting. How could I guess you would show up from paradise in the most unexpected way and make me fall in love with you?"},
+
+{t:"Did you know that this year is the brightest year? And do you know why? This year is the brightest year because you are shining the most."},
+
+{t:"Who are you? I want you to think."},
+
+{t:"I don't know what your answer is, however, I will tell you with my own words who are you. In my eyes, you are the light that passes by the universe. You are the soul that surrounds the whole world with peace and calmness. You are the moment that touched a lot of souls. You are the real success. You are my natural dopamine."},
+
+{t:"What do you want? I want you to focus."},
+
+{t:"A profound question. How can one know what exactly they want by observing themselves? We don't have the ability to observe most of the time."},
+
+{t:"What do you do? Are you just a pediatric surgeon?"},
+
+{t:"You are a lot of things. You are more than just a pediatric surgeon."},
+
+{t:"Now, take a deep breath, nice and smooth."},
+
+{t:"Ready for a journey? For a better experience, put your headphones on.", music:true},
+
+{t:"You are the most special thing for me."},
+
+{t:"Look at yourself.", img:"Patricia-and-horse.jpg"},
+
+{t:"Istanbul memories.", img:"patricia1.jpg"},
+
+{t:"Glasses.", img:"Patricia-glasses.jpg"},
+
+{t:"Pure.", img:"Patricia-pure.jpg"},
+
+{t:"Funny.", img:"Patricia-tongue-stickout.jpg"},
+
+{t:"Happy.", img:"patricia-kid.jpg"},
+
+{t:"Sunset.", img:"sunset.jpg"},
+
+{t:"Together.", img:"Patricia-me.jpg"},
+
+{t:"Los niños se alimentan del presente..."},
+
+{t:"Que vueles tan libre como las mariposas.", final:true}
+
+];
+
+function next(){
+
+  img.style.display="none";
+  butterfly.style.display="none";
+
+  let p = pages[i];
+
+  write(p.t,()=>{
+
+    if(p.img){
+      setTimeout(()=>{
+        img.src=p.img;
+        img.style.display="block";
+      },1200);
+    }
+
+    butterfly.onclick=()=>{
+
+      if(p.music) playMusic();
+
+      if(p.final){
+        releaseButterflies();
+        setTimeout(()=>{
+          textEl.innerHTML="❤️<br>Te amo<br><br>Feliz cumpleaños Patricia";
+        },2500);
+        return;
+      }
+
+      moveButterfly(()=>{
+        i++;
+        next();
+      });
+
+    };
+
+  });
+
+}
+
+next();
+
+</script>
+
+</body>
+</html>

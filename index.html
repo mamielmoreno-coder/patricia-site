@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap" rel="stylesheet">
 
@@ -18,19 +19,24 @@ body{
   justify-content:center;
   align-items:center;
   min-height:100vh;
+  width:100%;
   padding:20px;
+  box-sizing:border-box;
 }
 
 .text{
+  width:min(95%, 900px);
   font-size:26px;
-  max-width:95%;
   line-height:1.8;
+  flex-shrink:0;
 }
 
 img{
-  width:100%;
+  width:min(100%, 700px);
   height:auto;
   margin-top:20px;
+  flex-shrink:0;
+  object-fit:contain;
 }
 
 #butterfly{
@@ -61,27 +67,28 @@ button{
   <div id="butterfly">🦋</div>
 </div>
 
-<audio id="music" src="Twilight.mp3"></audio>
+<audio id="music" src="Twilight.mp3" preload="auto" loop playsinline></audio>
 
 <script>
-
 const textEl = document.getElementById("text");
 const img = document.getElementById("image");
 const butterfly = document.getElementById("butterfly");
+const music = document.getElementById("music");
 
 let i = 0;
 let attempts = 0;
+let musicPrimed = false;
 
 const hints = [
-"What do you think the password is?",
-"You are close… think again.",
-"Who is the most authentic person?",
-"Whose special day is today?",
-"Write the most beautiful name."
+  "What do you think the password is?",
+  "You are close… think again.",
+  "Who is the most authentic person?",
+  "Whose special day is today?",
+  "Write the most beautiful name."
 ];
 
 function showPassword(){
-  textEl.innerHTML = `Please enter the password.<br><br><div id="hint"></div>`;
+  textEl.innerHTML = 'Please enter the password.<br><br><div id="hint"></div>';
   let input = document.createElement("input");
   let btn = document.createElement("button");
   btn.innerText = "Enter";
@@ -91,63 +98,94 @@ function showPassword(){
 
   let hintEl = document.getElementById("hint");
 
-  btn.onclick = ()=>{
-    if(input.value.toLowerCase()==="patricia"){
-      attempts=0;
+  btn.onclick = () => {
+    if(input.value.toLowerCase() === "patricia"){
+      attempts = 0;
       i++;
       next();
     } else {
-      hintEl.innerHTML = "<br>" + hints[Math.min(attempts,hints.length-1)];
+      hintEl.innerHTML = "<br>" + hints[Math.min(attempts, hints.length - 1)];
       attempts++;
     }
   };
 }
 
 function write(text){
-  textEl.innerHTML="";
-  let index=0;
+  textEl.innerHTML = "";
+  let index = 0;
 
   function type(){
-    if(index<text.length){
-      let c=text[index];
-      if(c=="\n") textEl.innerHTML+="<br>";
-      else textEl.innerHTML+=c;
+    if(index < text.length){
+      let c = text[index];
+      if(c === "\n") {
+        textEl.innerHTML += "<br>";
+      } else {
+        textEl.innerHTML += c;
+      }
       index++;
 
-      let delay=90;
-      if(".?!".includes(c)) delay+=250;
+      let delay = 90;
+      if(".?!".includes(c)) delay += 250;
 
-      setTimeout(type,delay);
+      setTimeout(type, delay);
     } else {
-      setTimeout(()=>butterfly.style.opacity=1,1500);
+      setTimeout(() => butterfly.style.opacity = 1, 1500);
     }
   }
+
   type();
 }
 
 function moveButterfly(duration){
-  let x=(Math.random()-0.5)*500;
-  let y=-300;
+  let x = (Math.random() - 0.5) * 500;
+  let y = -300;
 
   butterfly.animate([
-    {transform:"translate(0,0)",opacity:1},
-    {transform:`translate(${x}px,${y}px)`,opacity:0}
-  ],{duration:duration});
+    {transform:"translate(0,0)", opacity:1},
+    {transform:`translate(${x}px,${y}px)`, opacity:0}
+  ], {duration:duration});
+}
+
+function primeMusic(){
+  if(musicPrimed) return;
+
+  music.muted = true;
+  const playPromise = music.play();
+
+  if(playPromise !== undefined){
+    playPromise.then(() => {
+      music.pause();
+      music.currentTime = 0;
+      music.muted = false;
+      musicPrimed = true;
+    }).catch(() => {
+      music.muted = false;
+    });
+  }
 }
 
 function playMusic(){
-  let m=document.getElementById("music");
-  m.currentTime=0;
-  m.play();
+  music.muted = false;
+  music.currentTime = 0;
+
+  const playPromise = music.play();
+  if(playPromise !== undefined){
+    playPromise.catch(() => {
+      document.addEventListener("click", () => {
+        music.play().catch(() => {});
+      }, { once: true });
+    });
+  }
 }
 
-const pages=[
+document.addEventListener("click", primeMusic, { once: true });
 
-{t:`Only open if you are alone… and if so click the butterfly`, password:true},
+const pages = [
+  {t:"Only open if you are alone… and if so click the butterfly", password:true},
 
-{t:`Welcome birthday girl ❤️`},
+  {t:"Welcome birthday girl ❤️"},
 
-{t:`You must wonder… what is this now?
+  {t:`You must wonder… what is this now?
 
 Well… you don’t know.
 
@@ -171,19 +209,19 @@ Listen.
 
 And enjoy.`},
 
-{t:`I'm thinking about you, Patricia. What a lovely thing you are. I never get tired of thinking about you. A lot, a lot has happened in my life, which changed and structured me. Life, of course, is interesting. How could I guess you would show up from paradise in the most unexpected way and make me fall in love with you?`},
+  {t:"I'm thinking about you, Patricia. What a lovely thing you are. I never get tired of thinking about you. A lot, a lot has happened in my life, which changed and structured me. Life, of course, is interesting. How could I guess you would show up from paradise in the most unexpected way and make me fall in love with you?"},
 
-{t:`Did you know that this year is the brightest year? And do you know why? This year is the brightest year because you are shining the most.`},
+  {t:"Did you know that this year is the brightest year? And do you know why? This year is the brightest year because you are shining the most."},
 
-{t:`Who are you? I want you to think.`},
+  {t:"Who are you? I want you to think."},
 
-{t:`I don't know what your answer is, however, I will tell you with my own words who are you. In my eyes, you are the light that passes by the universe. You are the soul that surrounds the whole world with peace and calmness. You are the moment that touched a lot of souls. You are the real success. You are my natural dopamine.`},
+  {t:"I don't know what your answer is, however, I will tell you with my own words who are you. In my eyes, you are the light that passes by the universe. You are the soul that surrounds the whole world with peace and calmness. You are the moment that touched a lot of souls. You are the real success. You are my natural dopamine."},
 
-{t:`What do you want?
+  {t:`What do you want?
 
 I want you to really focus.`},
 
-{t:`A profound question…
+  {t:`A profound question…
 How can one know what they truly want?
 Of course… by observing themselves.
 But we don’t always have that ability.
@@ -198,11 +236,11 @@ You are more than what you think.
 You don’t have limits.
 You are just like a butterfly… flying freely in the sky.`, long:true},
 
-{t:`What do you do?
+  {t:`What do you do?
 Are you just a pediatric surgeon?
 I want you to empty your mind… and truly contemplate this.`},
 
-{t:`You are many things.
+  {t:`You are many things.
 You are more than just a pediatric surgeon.
 Do you remember the face of the 13-year-old kid you operated on
 (if I remember his age correctly)…
@@ -236,12 +274,12 @@ I feel at peace… knowing that I have welcomed such a marvelous soul into my li
 Welcome, Patricia.
 Welcome, my love.`},
 
-{t:`Now, take a deep breath… nice and smooth.`},
+  {t:"Now, take a deep breath… nice and smooth."},
 
-{t:`Ready for a journey?
+  {t:`Ready for a journey?
 For a better experience, put your headphones on.`, music:true},
 
-{t:`You are the most special thing to me.
+  {t:`You are the most special thing to me.
 I prepared this for you… because it came from the bottom of my heart.
 I wish you could see how excited I am while writing this for you.
 I hope you feel special.
@@ -253,7 +291,7 @@ So feel special, Patricia… because you truly are.
 You deserve all the best.
 You are the most beautiful gift the universe has ever given me.`},
 
-{t:`Look at yourself… how noble you are.
+  {t:`Look at yourself… how noble you are.
 Life has given you beautiful gifts,
 and in these past years, you’ve been able to receive them.
 Do you know why?
@@ -264,7 +302,7 @@ The peace they give you… gives me peace as well.
 You bring so much peace into my life.
 I love you.`},
 
-{t:`Istanbul and I had our best days when you were here.
+  {t:`Istanbul and I had our best days when you were here.
 What a beautiful time we shared.
 I remember the wind gently moving your hair while I was trying to take that photo…
 and still, it looked a little messy.
@@ -274,14 +312,14 @@ I love you with all your imperfections.
 I love everything about you.
 You are so authentic, just the way you are.`},
 
-{t:`The first time I saw you with glasses… you looked so attractive.
+  {t:`The first time I saw you with glasses… you looked so attractive.
 I love how they look on you.
 I love the way you read for me.
 I love how willing you are to share things with me.
 I guess… you love me :)
 You are so beautiful in the way you carry yourself — knowledgeable, smart… and also, so sexy.`},
 
-{t:`As I told you before, if I had one word to describe you… it would be purity.
+  {t:`As I told you before, if I had one word to describe you… it would be purity.
 You look so pure.
 You carry the innocence of a child within you.
 Never lose your touch… your connection, and your bond with nature.
@@ -289,7 +327,7 @@ Always stay a part of it.
 And never lose that pure smile you carry on your face.
 Nature loves you.`},
 
-{t:`The very first photo you ever sent me…
+  {t:`The very first photo you ever sent me…
 I could see joy.
 I could see happiness.
 I wasn’t expecting it at all.
@@ -300,14 +338,14 @@ You make me laugh all the time.
 I still remember your smile…
 the one you had when you saw me for the first time at the airport.`},
 
-{t:`You look so happy here.
+  {t:`You look so happy here.
 I love this picture so much.
 I can see the child within you… joyful, inspired, active, and full of life.
 I wish you many more moments like this.
 I want to run towards you… catch you…
 and hold you in my arms without ever letting you go.`},
 
-{t:`Do you remember that beautiful moment when your colleague made you step outside the hospital to see it clearly?
+  {t:`Do you remember that beautiful moment when your colleague made you step outside the hospital to see it clearly?
 I want to thank him.
 We all need people like that… the ones who gently push us toward something beautiful.
 How could I ever forget the sunset we watched together in Kadıköy?
@@ -317,7 +355,7 @@ I love how you notice these little details in nature.
 To the many sunsets we will watch together, my love…
 I can’t wait ❤️`},
 
-{t:`Don’t we look so cute together?
+  {t:`Don’t we look so cute together?
 Istanbul, the ancient city, has witnessed the blossoming of something truly beautiful.
 I love seeing us.
 We look so happy together.
@@ -326,7 +364,7 @@ I can’t wait to share the most beautiful moments with you.
 Life has given me the most incredible woman in the world…
 and I just want to spend more and more time with her.`},
 
-{t:`Los niños se alimentan del presente…
+  {t:`Los niños se alimentan del presente…
 se ubican en el único tiempo que realmente existe.
 No añoran el pasado,
 no sienten nostalgia por otra época anterior,
@@ -349,44 +387,40 @@ Ocupas el lugar más especial en mi corazón.
 Te quiero mucho, Patricia.
 Te quiero mucho, mi amor.`},
 
-{t:``, final:true}
-
+  {t:"", final:true}
 ];
 
 function next(){
+  img.style.display = "none";
+  butterfly.style.opacity = 0;
 
-  img.style.display="none";
-  butterfly.style.opacity=0;
-
-  let p=pages[i];
+  let p = pages[i];
 
   write(p.t);
 
   if(p.password){
-    butterfly.onclick=showPassword;
+    butterfly.onclick = showPassword;
     return;
   }
 
-  butterfly.onclick=()=>{
-
+  butterfly.onclick = () => {
     if(p.music) playMusic();
 
     if(p.final){
-      textEl.innerHTML="❤️<br>Te amo<br><br>Feliz cumpleaños Patricia";
+      textEl.innerHTML = "❤️<br>Te amo<br><br>Feliz cumpleaños Patricia";
       return;
     }
 
     moveButterfly(p.long ? 5000 : 1200);
 
-    setTimeout(()=>{
+    setTimeout(() => {
       i++;
       next();
-    },p.long ? 5000 : 1200);
+    }, p.long ? 5000 : 1200);
   };
 }
 
 next();
-
 </script>
 
 </body>

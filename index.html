@@ -56,6 +56,16 @@ button{
   padding:10px 20px;
   margin-top:10px;
 }
+
+#youtube-player{
+  position:fixed;
+  width:1px;
+  height:1px;
+  opacity:0;
+  pointer-events:none;
+  left:-9999px;
+  top:-9999px;
+}
 </style>
 </head>
 
@@ -67,17 +77,16 @@ button{
   <div id="butterfly">🦋</div>
 </div>
 
-<audio id="music" src="Twilight.mp3" preload="auto" loop playsinline></audio>
+<div id="youtube-player" aria-hidden="true"></div>
 
 <script>
 const textEl = document.getElementById("text");
 const img = document.getElementById("image");
 const butterfly = document.getElementById("butterfly");
-const music = document.getElementById("music");
 
 let i = 0;
 let attempts = 0;
-let musicPrimed = false;
+let musicStarted = false;
 
 const hints = [
   "What do you think the password is?",
@@ -146,39 +155,30 @@ function moveButterfly(duration){
   ], {duration:duration});
 }
 
-function primeMusic(){
-  if(musicPrimed) return;
-
-  music.muted = true;
-  const playPromise = music.play();
-
-  if(playPromise !== undefined){
-    playPromise.then(() => {
-      music.pause();
-      music.currentTime = 0;
-      music.muted = false;
-      musicPrimed = true;
-    }).catch(() => {
-      music.muted = false;
-    });
-  }
-}
-
 function playMusic(){
-  music.muted = false;
-  music.currentTime = 0;
+  const playerHost = document.getElementById("youtube-player");
 
-  const playPromise = music.play();
-  if(playPromise !== undefined){
-    playPromise.catch(() => {
-      document.addEventListener("click", () => {
-        music.play().catch(() => {});
-      }, { once: true });
-    });
+  if(!musicStarted){
+    playerHost.innerHTML = `
+      <iframe
+        width="1"
+        height="1"
+        src="https://www.youtube.com/embed/MhFbPNLwg0s?autoplay=1&loop=1&playlist=MhFbPNLwg0s&controls=0&modestbranding=1&playsinline=1"
+        title="Twilight"
+        frameborder="0"
+        allow="autoplay; encrypted-media"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+      </iframe>
+    `;
+    musicStarted = true;
+  } else {
+    const iframe = playerHost.querySelector("iframe");
+    if(iframe){
+      iframe.src = "https://www.youtube.com/embed/MhFbPNLwg0s?autoplay=1&loop=1&playlist=MhFbPNLwg0s&controls=0&modestbranding=1&playsinline=1";
+    }
   }
 }
-
-document.addEventListener("click", primeMusic, { once: true });
 
 const pages = [
   {t:"Only open if you are alone… and if so click the butterfly", password:true},

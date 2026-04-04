@@ -11,6 +11,7 @@ body {
   background: #f5f1dc;
   font-family: 'Caveat', cursive;
   color: #222;
+  overflow: hidden;
 }
 
 .center {
@@ -29,51 +30,6 @@ body {
   min-height: 140px;
 }
 
-/* 🔥 SUBTLE FLAME SPARK (BOTTOM RIGHT) */
-.fireLetter {
-  position: relative;
-}
-
-.fireLetter::after {
-  content: "";
-  position: absolute;
-
-  width: 6px;
-  height: 8px;
-
-  /* flame-like gradient */
-  background: radial-gradient(circle at bottom,
-    rgba(255,140,0,0.4) 0%,
-    rgba(255,120,0,0.25) 40%,
-    rgba(255,100,0,0.1) 70%,
-    transparent 100%);
-
-  border-radius: 50% 50% 40% 40%;
-
-  bottom: -2px;   /* 👈 bottom */
-  right: -3px;    /* 👈 right */
-
-  opacity: 0;
-  transform: scale(0.6);
-
-  animation: flameSpark 0.4s ease forwards;
-}
-
-@keyframes flameSpark {
-  0% {
-    opacity: 0;
-    transform: scale(0.5) translateY(2px);
-  }
-  40% {
-    opacity: 0.6;
-    transform: scale(1) translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(0.8) translateY(-2px);
-  }
-}
-
 /* cursor */
 .cursor {
   display: inline-block;
@@ -86,7 +42,7 @@ body {
   50% { opacity: 0; }
 }
 
-/* butterfly */
+/* 🦋 butterfly */
 #butterfly {
   font-size: 40px;
   margin-top: 20px;
@@ -97,6 +53,22 @@ body {
 
 #butterfly.show {
   opacity: 1;
+}
+
+/* 🦋 TRAIL */
+.trail {
+  position: fixed;
+  width: 3px;
+  height: 10px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 2px;
+  pointer-events: none;
+  animation: fadeTrail 0.7s linear forwards;
+}
+
+@keyframes fadeTrail {
+  from { opacity: 0.5; }
+  to { opacity: 0; }
 }
 
 /* input */
@@ -139,6 +111,9 @@ button {
 
 <script>
 
+/* FULLSCREEN (hide GitHub UI as much as possible) */
+document.documentElement.requestFullscreen?.();
+
 /* ✍️ handwriting */
 function write(el, text, baseSpeed=70, callback){
 
@@ -149,7 +124,6 @@ function write(el, text, baseSpeed=70, callback){
   el.appendChild(cursor);
 
   let i = 0;
-
   let speed = text.length > 120 ? 35 : baseSpeed;
 
   function type(){
@@ -162,7 +136,6 @@ function write(el, text, baseSpeed=70, callback){
       } else {
         let s = document.createElement("span");
         s.textContent = c;
-        s.classList.add("fireLetter");
         el.insertBefore(s, cursor);
       }
 
@@ -182,13 +155,21 @@ function write(el, text, baseSpeed=70, callback){
   type();
 }
 
-/* PAGE 1 */
+/* 🦋 RANDOM TRAIL */
+function createTrail(x,y){
+  let t = document.createElement("div");
+  t.className = "trail";
+  t.style.left = x + "px";
+  t.style.top = y + "px";
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),700);
+}
+
+/* PAGE TEXT */
 const intro = "Only open if you are alone… and if so click the butterfly";
 
-/* PAGE 3 */
 const finalText = "I'm thinking about you, Patricia. What a lovely thing you are. I never get tired of thinking about you. A lot, a lot has happened in my life, which changed and structured me. Life, of course, is interesting. How could I guess you would show up from paradise in the most unexpected way and make me fall in love with you?";
 
-/* PASSWORD HINTS */
 const hints = [
 "What do you think the password is?",
 "You are close, think again.",
@@ -205,12 +186,41 @@ window.onload = ()=>{
   });
 };
 
+/* 🦋 CLICK WITH RANDOM MOVEMENT */
 document.getElementById("butterfly").onclick = ()=>{
-  document.getElementById("page1").style.display="none";
-  document.getElementById("page2").style.display="flex";
-  write(document.getElementById("hintText"), hints[0]);
+
+  let b = document.getElementById("butterfly");
+  let rect = b.getBoundingClientRect();
+
+  let angle = Math.random() * 120 - 60; // random direction
+  let distance = 200;
+
+  let dx = Math.sin(angle * Math.PI/180) * distance;
+  let dy = -Math.cos(angle * Math.PI/180) * distance;
+
+  let steps = 12;
+  let step = 0;
+
+  let interval = setInterval(()=>{
+    let x = rect.left + rect.width/2 + dx*(step/steps);
+    let y = rect.top + dy*(step/steps);
+    createTrail(x,y);
+    step++;
+    if(step > steps) clearInterval(interval);
+  },40);
+
+  b.style.transition = "transform 0.9s ease, opacity 0.9s";
+  b.style.transform = `translate(${dx}px, ${dy}px)`;
+  b.style.opacity = 0;
+
+  setTimeout(()=>{
+    document.getElementById("page1").style.display="none";
+    document.getElementById("page2").style.display="flex";
+    write(document.getElementById("hintText"), hints[0]);
+  },900);
 };
 
+/* PASSWORD */
 function check(){
   let val = document.getElementById("password").value.toLowerCase();
 

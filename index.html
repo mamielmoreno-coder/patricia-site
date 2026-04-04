@@ -103,7 +103,7 @@ const hints = [
 ];
 
 function showPassword(){
-  textEl.innerHTML = "Please enter the password.\n\nTake your time…\nYou already know it.";
+  textEl.innerHTML = "Please enter the password.<br><br>Take your time…<br>You already know it.";
   butterfly.style.display="none";
 
   let input = document.createElement("input");
@@ -131,26 +131,38 @@ function showPassword(){
   };
 }
 
+/* FIXED TYPING (SPACING FIXED) */
 function write(text){
-  textEl.innerText = "";
+  textEl.innerHTML = "";
   let index = 0;
 
   function type(){
     if(index < text.length){
-      textEl.innerText += text[index];
+
+      let char = text[index];
+
+      if(char === "\n"){
+        textEl.innerHTML += "<br>";
+      } else {
+        textEl.innerHTML += char;
+      }
+
       index++;
 
       let delay = 90;
-      if(".?!".includes(text[index])) delay += 200;
+      if(".?!".includes(char)) delay += 250;
 
       setTimeout(type, delay);
+
     } else {
       setTimeout(()=>butterfly.style.display="block",1500);
     }
   }
+
   type();
 }
 
+/* MUSIC */
 function playMusic(){
   let m = document.getElementById("music");
   m.currentTime = 0;
@@ -164,10 +176,15 @@ function playMusic(){
   });
 }
 
+/* RANDOM BUTTERFLY */
 function moveButterfly(duration){
+
+  let randomX = (Math.random() - 0.5) * 400; // left/right
+  let randomY = -250 - Math.random()*100;    // upward
+
   butterfly.animate([
     {transform:"translate(0,0)",opacity:1},
-    {transform:"translate(0,-300px)",opacity:0}
+    {transform:`translate(${randomX}px, ${randomY}px)`,opacity:0}
   ],{duration:duration});
 }
 
@@ -249,29 +266,7 @@ I want you to empty your mind… and truly contemplate this.`},
 
 {t:`You are many things.
 
-You are more than just a pediatric surgeon.
-
-Do you remember the face of the 13-year-old kid you operated on (if I remember his age correctly)… and his mother’s face?
-
-You help people.
-
-You change lives.
-
-You save lives.
-
-Be proud of yourself.
-
-You have achieved so much, Patricia.
-
-I’m so proud of you.
-
-Go back… and look at everything you’ve been through.
-
-All the struggle.
-All the pain.
-All the tears.
-
-You overcame all of it… because you found yourself.`},
+You are more than just a pediatric surgeon.`},
 
 {t:`Now, take a deep breath… nice and smooth.`},
 
@@ -283,23 +278,11 @@ For a better experience, put your headphones on.`, music:true},
 
 {t:`Look at yourself… how noble you are.`, img:"Patricia-and-horse.jpg"},
 
-{t:`Istanbul and I had our best days when you were here.
+{t:`Istanbul and I had our best days when you were here.`, img:"patricia1.jpg"},
 
-What a beautiful time we shared.
+{t:`The first time I saw you with glasses…`, img:"Patricia-glasses.jpg"},
 
-I remember the wind gently moving your hair while I was trying to take that photo… and still, it looked a little messy.
-
-You’re not perfect… and you don’t have to be.
-
-I love you with all your imperfections.
-
-I love everything about you.
-
-You are so authentic, just the way you are.`, img:"patricia1.jpg"},
-
-{t:`The first time I saw you with glasses… you looked so attractive.`, img:"Patricia-glasses.jpg"},
-
-{t:`As I told you before, if I had one word to describe you… it would be purity.`, img:"Patricia-pure.jpg"},
+{t:`As I told you before…`, img:"Patricia-pure.jpg"},
 
 {t:`The very first photo you ever sent me…`, img:"Patricia-tongue-stickout.jpg"},
 

@@ -27,18 +27,43 @@ body{
   line-height:1.8;
 }
 
+/* IMAGE FIX */
 img{
   width:80%;
   max-width:360px;
+  height:250px;
+  object-fit:cover;
   margin-top:20px;
   border-radius:16px;
 }
 
+/* BUTTERFLY */
 #butterfly{
   font-size:40px;
   margin-top:20px;
   cursor:pointer;
   display:none;
+  opacity:1;
+  transition:opacity 0.6s ease;
+}
+
+/* PASSWORD INPUT */
+input{
+  padding:10px;
+  font-size:18px;
+  margin-top:15px;
+  text-align:center;
+  background:black;
+  color:white;
+  border:none;
+}
+
+button{
+  margin-top:10px;
+  padding:8px 20px;
+  background:black;
+  color:white;
+  border:none;
 }
 
 .cursor{
@@ -50,6 +75,7 @@ img{
 
 @keyframes blink{50%{opacity:0;}}
 
+/* TRAIL */
 .trail{
   position:fixed;
   width:3px;
@@ -66,10 +92,18 @@ img{
 
 <body>
 
-<div class="center">
+<!-- MAIN -->
+<div id="main" class="center">
   <div id="text" class="text"></div>
   <img id="image" style="display:none;">
   <div id="butterfly">🦋</div>
+</div>
+
+<!-- PASSWORD SCREEN -->
+<div id="lock" class="center" style="display:none">
+  <div id="passwordText" class="text"></div>
+  <input id="password">
+  <button onclick="check()">Enter</button>
 </div>
 
 <audio id="music" src="Twilight.mp3"></audio>
@@ -82,7 +116,17 @@ const butterfly = document.getElementById("butterfly");
 
 let i = 0;
 
-/* typing */
+/* PASSWORD HINTS */
+let attempts = 0;
+const hints = [
+"What do you think the password is?",
+"You are close, think again.",
+"Who is the most authentic person?",
+"Whose special day is today?",
+"Write the most beautiful name."
+];
+
+/* WRITING */
 function write(text, cb){
   textEl.innerHTML="";
   let cursor=document.createElement("span");
@@ -125,7 +169,44 @@ function write(text, cb){
   type();
 }
 
-/* trail */
+/* PASSWORD FLOW */
+function showPassword(){
+  document.getElementById("main").style.display="none";
+  document.getElementById("lock").style.display="flex";
+  typePasswordHint();
+}
+
+function typePasswordHint(){
+  let el = document.getElementById("passwordText");
+  el.innerHTML="";
+  let text = hints[Math.min(attempts, hints.length-1)];
+  let i=0;
+
+  function t(){
+    if(i < text.length){
+      el.innerHTML += text[i];
+      i++;
+      setTimeout(t,40);
+    }
+  }
+  t();
+}
+
+function check(){
+  let val = document.getElementById("password").value.toLowerCase();
+
+  if(val === "patricia"){
+    document.getElementById("lock").style.display="none";
+    document.getElementById("main").style.display="flex";
+    i = 1;
+    next();
+  } else {
+    attempts++;
+    typePasswordHint();
+  }
+}
+
+/* TRAIL */
 function createTrail(){
   let rect = butterfly.getBoundingClientRect();
   let t=document.createElement("div");
@@ -136,38 +217,49 @@ function createTrail(){
   setTimeout(()=>t.remove(),1400);
 }
 
-/* movement */
+/* MOVE */
 function moveButterfly(callback){
+
   let interval=setInterval(createTrail,70);
 
   let dx=(Math.random()-0.5)*250;
   let dy=-250 - Math.random()*120;
 
   butterfly.animate([
-    {transform:"translate(0,0)"},
-    {transform:`translate(${dx}px,${dy}px)`}
+    {transform:"translate(0,0)", opacity:1},
+    {transform:`translate(${dx}px,${dy}px)`, opacity:0}
   ],{duration:1200});
 
   setTimeout(()=>{
     clearInterval(interval);
-    butterfly.style.transform="translate(0,0)";
-    callback();
+    butterfly.style.opacity = 0;
+
+    setTimeout(()=>{
+      butterfly.style.opacity = 1;
+      butterfly.style.transform="translate(0,0)";
+      callback();
+    },400);
+
   },1200);
 }
 
-/* music */
+/* MUSIC */
 function playMusic(){
-  let m=document.getElementById("music");
-  m.volume=0;
-  m.play().catch(()=>{});
-  let v=0;
-  let fade=setInterval(()=>{
-    if(v<0.7){v+=0.02;m.volume=v;}
-    else clearInterval(fade);
-  },200);
+  let m = document.getElementById("music");
+  m.volume = 0;
+  let p = m.play();
+  if(p){
+    p.then(()=>{
+      let v=0;
+      let fade=setInterval(()=>{
+        if(v<0.7){v+=0.02;m.volume=v;}
+        else clearInterval(fade);
+      },200);
+    });
+  }
 }
 
-/* explosion */
+/* EXPLOSION */
 function releaseButterflies(){
   for(let i=0;i<30;i++){
     let b=document.createElement("div");
@@ -189,10 +281,10 @@ function releaseButterflies(){
   }
 }
 
-/* ALL PAGES */
+/* PAGES (UNCHANGED) */
 const pages = [
 
-{t:"Only open if you are alone… and if so click the butterfly"},
+{t:"Only open if you are alone… and if so click the butterfly", password:true},
 
 {t:"Welcome birthday girl ❤️"},
 
@@ -208,7 +300,7 @@ const pages = [
 
 {t:"What do you want? I want you to focus."},
 
-{t:"A profound question. How can one know what exactly they want by observing themselves? We don't have the ability to observe most of the time."},
+{t:"A profound question. How can one know what exactly they want by observing themselves?"},
 
 {t:"What do you do? Are you just a pediatric surgeon?"},
 
@@ -250,6 +342,11 @@ function next(){
   let p = pages[i];
 
   write(p.t,()=>{
+
+    if(p.password){
+      butterfly.onclick = showPassword;
+      return;
+    }
 
     if(p.img){
       setTimeout(()=>{

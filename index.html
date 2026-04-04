@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>For Patricia ❤️</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+
 <style>
+
 body {
   margin: 0;
-  background: black;
+  background: linear-gradient(135deg, #1b5e20, #fdd835);
   color: white;
-  font-family: Georgia, serif;
+  font-family: 'Dancing Script', cursive;
   overflow: hidden;
 }
 
@@ -33,6 +40,7 @@ body {
 button {
   margin-top: 20px;
   padding: 10px 20px;
+  font-family: 'Dancing Script', cursive;
 }
 
 .butterfly {
@@ -41,19 +49,24 @@ button {
   cursor: pointer;
 }
 
-.image {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 2s;
+.typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid white;
+  animation: typing 3s steps(40, end), blink .7s infinite;
 }
 
-.show {
-  opacity: 1;
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
 }
+
+@keyframes blink {
+  50% { border-color: transparent }
+}
+
 </style>
+
 </head>
 
 <body>
@@ -63,350 +76,486 @@ button {
 </audio>
 
 <!-- PAGE 1 -->
+
 <div class="page active" id="page1">
-<p>Only open if you are alone… and if so click the butterfly</p>
+
+<p class="typewriter">
+Only open if you are alone… and if so click the butterfly
+</p>
+
 <div id="butterfly1" class="butterfly">🦋</div>
+
 </div>
 
-<!-- PASSWORD -->
+<!-- PAGE 2 PASSWORD -->
+
 <div class="page" id="page2">
-<p>Please enter the password.</p>
-<p>Hints:<br>
-What do you think the password is?<br>
-You are close… think again.<br>
-Who is the most authentic person?<br>
-Whose special day is today?<br>
-Write the most beautiful name.</p>
+
+<p>
+Please enter the password.
+</p>
+
+<p>
+Hints:
+<br>
+What do you think the password is?
+<br>
+You are close… think again.
+<br>
+Who is the most authentic person?
+<br>
+Whose special day is today?
+<br>
+Write the most beautiful name.
+</p>
+
 <input id="password" placeholder="Password">
-<button onclick="checkPassword()">Enter</button>
+
+<button onclick="checkPassword()">
+Enter
+</button>
+
 <p id="hint"></p>
+
 </div>
 
 <!-- PAGE 3 -->
+
 <div class="page" id="page3">
-<p>Welcome birthday girl ❤️</p>
-<button onclick="nextPage()">Continue</button>
+
+<p>
+Welcome birthday girl ❤️
+</p>
+
+<button onclick="nextPage()">
+Continue
+</button>
+
 </div>
 
 <!-- PAGE 4 -->
+
 <div class="page" id="page4">
-<p>You must wonder… what is this now?<br><br>
-Well… you don’t know.<br><br>
-Do we really have to have answers for everything?<br><br>
-Right now, you would probably say… of course not.<br><br>
-Yes, Patricia… life has another kind of beauty when we don’t have answers for some things.<br><br>
-I know you like not having all the answers.<br>
-I know my woman.<br><br>
-Now… lean back.<br>
-Think.<br>
-Watch.<br>
-Listen.<br>
-And enjoy.</p>
-<button onclick="nextPage()">Continue</button>
+
+<p>
+You must wonder… what is this now?
+<br><br>
+Well… you don’t know.
+<br><br>
+Do we really have to have answers for everything?
+<br><br>
+Right now, you would probably say… of course not.
+<br><br>
+Yes, Patricia… life has another kind of beauty when we don’t have answers for some things.
+<br><br>
+I know you like not having all the answers.
+<br>
+I know my woman.
+<br><br>
+Now… lean back.
+<br>
+Think.
+<br>
+Watch.
+<br>
+Listen.
+<br>
+And enjoy.
+</p>
+
+<button onclick="nextPage()">
+Continue
+</button>
+
 </div>
 
 <!-- PAGE 5 -->
+
 <div class="page" id="page5">
-<p>I'm thinking about you, Patricia. What a lovely thing you are. I never get tired of thinking about you. A lot, a lot has happened in my life, which changed and structured me. Life, of course, is interesting. How could I guess you would show up from paradise in the most unexpected way and make me fall in love with you?</p>
-<button onclick="nextPage()">Continue</button>
+
+<p>
+I'm thinking about you, Patricia. What a lovely thing you are. I never get tired of thinking about you. A lot, a lot has happened in my life, which changed and structured me. Life, of course, is interesting. How could I guess you would show up from paradise in the most unexpected way and make me fall in love with you?
+</p>
+
+<button onclick="nextPage()">
+Continue
+</button>
+
 </div>
 
 <!-- PAGE 6 -->
+
 <div class="page" id="page6">
-<p>Did you know that this year is the brightest year? And do you know why? This year is the brightest year because you are shining the most.</p>
-<button onclick="nextPage()">Continue</button>
+
+<p>
+Did you know that this year is the brightest year? And do you know why? This year is the brightest year because you are shining the most.
+</p>
+
+<button onclick="nextPage()">
+Continue
+</button>
+
 </div>
 
 <!-- PAGE 7 -->
+
 <div class="page" id="page7">
-<p>Who are you? I want you to think.</p>
-<button onclick="nextPage()">Continue</button>
+
+<p>
+Who are you? I want you to think.
+</p>
+
+<button onclick="nextPage()">
+Continue
+</button>
+
 </div>
 
 <!-- PAGE 8 -->
+
 <div class="page" id="page8">
-<p>I don't know what your answer is, however, I will tell you with my own words who are you. In my eyes, you are the light that passes by the universe. You are the soul that surrounds the whole world with peace and calmness. You are the moment that touched a lot of souls. You are the real success. You are my natural dopamine.</p>
-<button onclick="nextPage()">Continue</button>
+
+<p>
+I don't know what your answer is, however, I will tell you with my own words who are you. In my eyes, you are the light that passes by the universe. You are the soul that surrounds the whole world with peace and calmness. You are the moment that touched a lot of souls. You are the real success. You are my natural dopamine.
+</p>
+
+<button onclick="nextPage()">
+Continue
+</button>
+
 </div>
 
 <!-- PAGE 9 -->
+
 <div class="page" id="page9">
-<p>What do you want?<br>I want you to really focus.</p>
-<button onclick="nextPage()">Continue</button>
+
+<p>
+What do you want?
+<br>
+I want you to really focus.
+</p>
+
+<button onclick="nextPage()">
+Continue
+</button>
+
 </div>
 
 <!-- PAGE 10 -->
+
 <div class="page" id="page10">
-<p>A profound question…<br><br>
-How can one know what they truly want?<br><br>
-Of course… by observing themselves.<br>
-But we don’t always have that ability.<br><br>
-Even when we do observe, we tend to observe others.<br>
-Rarely do we observe ourselves.<br><br>
-The key is to hear your inner voice… and follow it.<br><br>
-Observe yourself.<br>
-Explore yourself.<br>
-Listen to yourself.<br><br>
-Be as bold as the decision you made to come to Istanbul without even knowing if I was tall or not :)<br><br>
-You are more than what you think.<br>
-You don’t have limits.<br><br>
-You are just like a butterfly… flying freely in the sky.</p>
-<button onclick="nextPage()">Continue</button>
+
+<p>
+A profound question…
+<br><br>
+How can one know what they truly want?
+<br><br>
+Of course… by observing themselves.
+<br>
+But we don’t always have that ability.
+<br><br>
+Even when we do observe, we tend to observe others.
+<br>
+Rarely do we observe ourselves.
+<br><br>
+The key is to hear your inner voice… and follow it.
+<br><br>
+Observe yourself.
+<br>
+Explore yourself.
+<br>
+Listen to yourself.
+<br><br>
+Be as bold as the decision you made to come to Istanbul without even knowing if I was tall or not :)
+<br><br>
+You are more than what you think.
+<br>
+You don’t have limits.
+<br><br>
+You are just like a butterfly… flying freely in the sky.
+</p>
+
+<button onclick="nextPage()">
+Continue
+</button>
+
 </div>
 
 <!-- PAGE 11 -->
+
 <div class="page" id="page11">
-<p>What do you do?<br>
-Are you just a pediatric surgeon?<br><br>
-I want you to empty your mind… and truly contemplate this.</p>
-<button onclick="nextPage()">Continue</button>
+
+<p>
+What do you do?
+<br>
+Are you just a pediatric surgeon?
+<br><br>
+I want you to empty your mind… and truly contemplate this.
+</p>
+
+<button onclick="nextPage()">
+Continue
+</button>
+
 </div>
 
 <!-- PAGE 12 -->
+
 <div class="page" id="page12">
-<p>You are many things.<br>
-You are more than just a pediatric surgeon.<br><br>
-Do you remember the face of the 13-year-old kid you operated on (if I remember his age correctly)… and his mother’s face?<br><br>
-You help people.<br>
-You change lives.<br>
-You save lives.<br><br>
-Be proud of yourself.<br>
-You have achieved so much, Patricia.<br>
-I’m so proud of you.<br><br>
-Go back… and look at everything you’ve been through.<br>
-All the struggle.<br>
-All the pain.<br>
-All the tears.<br><br>
-You overcame all of it… because you found yourself.<br><br>
-You realized that you can be happy with just your own presence.<br>
-And you replaced everything with love.<br><br>
-You found the real love — the love you have for yourself.<br><br>
-And that’s Patricia.<br>
-That’s real happiness.<br>
-That’s real achievement.<br><br>
-I think highly of you.<br>
-You are such an amazing person.<br><br>
-Do you know who you have helped the most… who you have changed the most… who you have saved the most?<br><br>
-Yourself, Patricia.<br><br>
-You helped, changed, and saved yourself the most by making the right decisions to bring yourself to where you are now.<br><br>
-I feel at peace… knowing that I have welcomed such a marvelous soul into my life.<br><br>
-Welcome, Patricia.<br>
-Welcome, my love.</p>
-<button onclick="nextPage()">Continue</button>
+
+<p>
+You are many things.
+<br>
+You are more than just a pediatric surgeon.
+<br><br>
+Do you remember the face of the 13-year-old kid you operated on (if I remember his age correctly)… and his mother’s face?
+<br><br>
+You help people.
+<br>
+You change lives.
+<br>
+You save lives.
+<br><br>
+Be proud of yourself.
+<br>
+You have achieved so much, Patricia.
+<br>
+I’m so proud of you.
+<br><br>
+Go back… and look at everything you’ve been through.
+<br>
+All the struggle.
+<br>
+All the pain.
+<br>
+All the tears.
+<br><br>
+You overcame all of it… because you found yourself.
+<br><br>
+You realized that you can be happy with just your own presence.
+<br>
+And you replaced everything with love.
+<br><br>
+You found the real love — the love you have for yourself.
+<br><br>
+And that’s Patricia.
+<br>
+That’s real happiness.
+<br>
+That’s real achievement.
+<br><br>
+I think highly of you.
+<br>
+You are such an amazing person.
+<br><br>
+Do you know who you have helped the most… who you have changed the most… who you have saved the most?
+<br><br>
+Yourself, Patricia.
+<br><br>
+You helped, changed, and saved yourself the most by making the right decisions to bring yourself to where you are now.
+<br><br>
+I feel at peace… knowing that I have welcomed such a marvelous soul into my life.
+<br><br>
+Welcome, Patricia.
+<br>
+Welcome, my love.
+</p>
+
+<button onclick="nextPage()">
+Continue
+</button>
+
 </div>
 
 <!-- PAGE 13 -->
+
 <div class="page" id="page13">
-<p>Now, take a deep breath… nice and smooth.</p>
-<button onclick="nextPage()">Continue</button>
+
+<p>
+Now, take a deep breath… nice and smooth.
+</p>
+
+<button onclick="nextPage()">
+Continue
+</button>
+
 </div>
 
 <!-- PAGE 14 -->
+
 <div class="page" id="page14">
-<p>Ready for a journey?<br><br>
-For a better experience, put your headphones on.</p>
-<button onclick="nextPage()">Continue</button>
+
+<p>
+Ready for a journey?
+<br><br>
+For a better experience, put your headphones on.
+</p>
+
+<button onclick="nextPage()">
+Continue
+</button>
+
 </div>
 
 <!-- PAGE 15 -->
+
 <div class="page" id="page15">
-<p>You are the most special thing to me.<br><br>
-I prepared this for you… because it came from the bottom of my heart.<br><br>
-I wish you could see how excited I am while writing this for you.<br><br>
-I hope you feel special.<br>
-I hope you feel unique…<br>
-and I hope you feel authentic.<br><br>
-You are the most authentic person I have ever seen in my life.<br>
-Your authenticity inspires me.<br><br>
-So feel special, Patricia… because you truly are.<br>
-You deserve all the best.<br><br>
-You are the most beautiful gift the universe has ever given me.</p>
-<button onclick="nextPage()">Continue</button>
+
+<p>
+You are the most special thing to me.
+<br><br>
+I prepared this for you… because it came from the bottom of my heart.
+<br><br>
+I wish you could see how excited I am while writing this for you.
+<br><br>
+I hope you feel special.
+<br>
+I hope you feel unique…
+<br>
+and I hope you feel authentic.
+<br><br>
+You are the most authentic person I have ever seen in my life.
+<br>
+Your authenticity inspires me.
+<br><br>
+So feel special, Patricia… because you truly are.
+<br>
+You deserve all the best.
+<br><br>
+You are the most beautiful gift the universe has ever given me.
+</p>
+
+<button onclick="nextPage()">
+Continue
+</button>
+
 </div>
 
 <!-- PAGE 16 -->
+
 <div class="page" id="page16">
-<p>Look at yourself… how noble you are.<br><br>
-Life has given you beautiful gifts,<br>
-and in these past years, you’ve been able to receive them.<br><br>
-Do you know why?<br><br>
-Because now… you’re ready to receive.<br><br>
-From the very first moment you told me how much you love having a connection with horses,<br>
-I felt something special.<br><br>
-The peace they give you… gives me peace as well.<br><br>
-You bring so much peace into my life.<br><br>
-I love you.</p>
-<button onclick="nextPage()">Continue</button>
+
+<p>
+Look at yourself… how noble you are.
+<br><br>
+Life has given you beautiful gifts,
+<br>
+and in these past years, you’ve been able to receive them.
+<br><br>
+Do you know why?
+<br><br>
+Because now… you’re ready to receive.
+<br><br>
+From the very first moment you told me how much you love having a connection with horses,
+<br>
+I felt something special.
+<br><br>
+The peace they give you… gives me peace as well.
+<br><br>
+You bring so much peace into my life.
+<br><br>
+I love you.
+</p>
+
+<button onclick="nextPage()">
+Continue
+</button>
+
 </div>
 
 <!-- PAGE 17 -->
+
 <div class="page" id="page17">
-<p>Istanbul and I had our best days when you were here.<br>
-What a beautiful time we shared.<br><br>
-I remember the wind gently moving your hair while I was trying to take that photo…<br>
-and still, it looked a little messy.<br><br>
-You’re not perfect…<br>
-and you don’t have to be.<br><br>
-I love you with all your imperfections.<br>
-I love everything about you.<br><br>
-You are so authentic, just the way you are.</p>
-<button onclick="nextPage()">Continue</button>
+
+<p>
+Istanbul and I had our best days when you were here.
+<br>
+What a beautiful time we shared.
+<br><br>
+I remember the wind gently moving your hair while I was trying to take that photo…
+<br>
+and still, it looked a little messy.
+<br><br>
+You’re not perfect…
+<br>
+and you don’t have to be.
+<br><br>
+I love you with all your imperfections.
+<br>
+I love everything about you.
+<br><br>
+You are so authentic, just the way you are.
+</p>
+
+<button onclick="nextPage()">
+Continue
+</button>
+
 </div>
 
 <!-- PAGE 18 -->
+
 <div class="page" id="page18">
-<p>The first time I saw you with glasses… you looked so attractive.<br>
-I love how they look on you.<br><br>
-I love the way you read for me.<br>
-I love how willing you are to share things with me.<br><br>
-I guess… you love me :)<br><br>
-You are so beautiful in the way you carry yourself — knowledgeable, smart… and also, so sexy.</p>
-<button onclick="nextPage()">Continue</button>
+
+<p>
+The first time I saw you with glasses… you looked so attractive.
+<br>
+I love how they look on you.
+<br><br>
+I love the way you read for me.
+<br>
+I love how willing you are to share things with me.
+<br><br>
+I guess… you love me :)
+<br><br>
+You are so beautiful in the way you carry yourself — knowledgeable, smart… and also, so sexy.
+</p>
+
+<button onclick="nextPage()">
+Continue
+</button>
+
 </div>
 
 <!-- PAGE 19 -->
+
 <div class="page" id="page19">
-<p>As I told you before, if I had one word to describe you… it would be purity.<br><br>
-You look so pure.<br>
-You carry the innocence of a child within you.<br><br>
-Never lose your touch… your connection, and your bond with nature.<br>
-Always stay a part of it.<br><br>
-And never lose that pure smile you carry on your face.<br><br>
-Nature loves you.</p>
-<button onclick="nextPage()">Continue</button>
+
+<p>
+As I told you before, if I had one word to describe you… it would be purity.
+<br><br>
+You look so pure.
+<br>
+You carry the innocence of a child within you.
+<br><br>
+Never lose your touch… your connection, and your bond with nature.
+<br>
+Always stay a part of it.
+<br><br>
+And never lose that pure smile you carry on your face.
+<br><br>
+Nature loves you.
+</p>
+
+<button onclick="nextPage()">
+Continue
+</button>
+
 </div>
 
 <!-- PAGE 20 -->
+
 <div class="page" id="page20">
-<p>The very first photo you ever sent me…<br>
-I could see joy.<br>
-I could see happiness.<br><br>
-I wasn’t expecting it at all.<br>
-I must confess… I loved seeing you.<br><br>
-I love when you stick your tongue out, because I know you feel so good that it just comes naturally.<br><br>
-You are so funny.<br>
-You make me laugh all the time.<br><br>
-I still remember your smile…<br>
-the one you had when you saw me for the first time at the airport.</p>
-<button onclick="nextPage()">Continue</button>
-</div>
 
-<!-- PAGE 21 -->
-<div class="page" id="page21">
-<p>You look so happy here.<br>
-I love this picture so much.<br><br>
-I can see the child within you… joyful, inspired, active, and full of life.<br><br>
-I wish you many more moments like this.<br><br>
-I want to run towards you… catch you…<br>
-and hold you in my arms without ever letting you go.</p>
-<button onclick="nextPage()">Continue</button>
-</div>
-
-<!-- PAGE 22 -->
-<div class="page" id="page22">
-<p>Do you remember that beautiful moment when your colleague made you step outside the hospital to see it clearly?<br><br>
-I want to thank him.<br><br>
-We all need people like that… the ones who gently push us toward something beautiful.<br><br>
-How could I ever forget the sunset we watched together in Kadıköy?<br><br>
-I loved how excited you were to show me that moment…<br>
-the point where you can’t tell if it’s morning or evening.<br><br>
-I love how you notice these little details in nature.<br><br>
-To the many sunsets we will watch together, my love…<br>
-I can’t wait ❤️</p>
-<button onclick="nextPage()">Continue</button>
-</div>
-
-<!-- PAGE 23 -->
-<div class="page" id="page23">
-<p>Don’t we look so cute together?<br><br>
-Istanbul, the ancient city, has witnessed the blossoming of something truly beautiful.<br><br>
-I love seeing us.<br>
-We look so happy together.<br><br>
-I can’t wait to take more photos with you.<br>
-I can’t wait to share the most beautiful moments with you.<br><br>
-Life has given me the most incredible woman in the world…<br>
-and I just want to spend more and more time with her.</p>
-<button onclick="nextPage()">Continue</button>
-</div>
-
-<!-- PAGE 24 SPANISH -->
-<div class="page" id="page24">
-<p>Los niños se alimentan del presente…<br>
-se ubican en el único tiempo que realmente existe.<br><br>
-No añoran el pasado,<br>
-no sienten nostalgia por otra época anterior,<br>
-no se lamentan por lo que hicieron o dejaron de hacer años atrás.<br><br>
-Tampoco se preocupan por el futuro…<br>
-solo miran hacia adelante para recordar la fecha de su cumpleaños.<br><br>
-Que seas tan feliz como la niña que,<br>
-aun estando nerviosa, sostiene un conejo entre sus manos.<br><br>
-Eres el regalo más hermoso…<br>
-no solo para mí, sino también para ti.<br><br>
-Nunca pierdas la sonrisa de la niña que llevas en tu rostro.<br><br>
-Quiero besarte como te besé aquella primera vez…<br>
-qué beso tan tierno fue.<br><br>
-Mi pecho está lleno de amor.<br><br>
-¿Recuerdas cuando me dijiste que la felicidad no cabía en tu pecho…<br>
-y que tuviste que mandar un mensaje a una amiga?<br><br>
-Así es como me siento ahora.<br><br>
-Quiero darte un amor que no cabe en el pecho.<br><br>
-Ocupas el lugar más especial en mi corazón.<br><br>
-Te quiero mucho, Patricia.<br>
-Te quiero mucho, mi amor.</p>
-<button onclick="nextPage()">Continue</button>
-</div>
-
-<!-- PAGE 25 -->
-<div class="page" id="page25">
-<p>Que vueles tan libre como las mariposas.</p>
-<button onclick="nextPage()">Continue</button>
-</div>
-
-<!-- PAGE 26 -->
-<div class="page" id="page26">
-<p>❤️<br>Te amo<br>Feliz cumpleaños Patricia</p>
-<div id="finalButterfly" class="butterfly">🦋</div>
-</div>
-
-<script>
-let current = 1;
-
-function nextPage(){
-  document.getElementById("page"+current).classList.remove("active");
-  current++;
-  document.getElementById("page"+current).classList.add("active");
-
-  if(current === 14){
-    document.getElementById("music").play();
-  }
-
-  if(current === 26){
-    flyFinalButterfly();
-  }
-}
-
-function checkPassword(){
-  let pass = document.getElementById("password").value;
-  if(pass.toLowerCase() === "patricia"){
-    nextPage();
-  } else {
-    document.getElementById("hint").innerText = "Think again…";
-  }
-}
-
-document.getElementById("butterfly1").onclick = nextPage;
-
-function flyFinalButterfly(){
-  let el = document.getElementById("finalButterfly");
-  let t = 0;
-  let interval = setInterval(()=>{
-    el.style.left = Math.random()*80 + "%";
-    el.style.top = Math.random()*80 + "%";
-    t++;
-    if(t > 5) clearInterval(interval);
-  },1000);
-}
-</script>
-
-</body>
-  </html>
+<p>
+The very first photo you ever sent me…
+<br>
+I could see joy.
+<br>
+I could see happiness.
+<br><br>
+I wasn’t expecting it at all.
+<br>
+I must confess… I loved seeing you.
+<br><br>
+I love when you

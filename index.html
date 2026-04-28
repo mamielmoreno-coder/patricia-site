@@ -3,12 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap" rel="stylesheet">
 
 <style>
 body{
   margin:0;
-  font-family:'Caveat', cursive;
   text-align:center;
   background:white;
 }
@@ -19,53 +17,12 @@ body{
   justify-content:center;
   align-items:center;
   min-height:100vh;
-  width:100%;
-  padding:20px;
-  box-sizing:border-box;
-}
-
-.text{
-  width:min(95%, 900px);
-  font-size:26px;
-  line-height:1.8;
-  flex-shrink:0;
-}
-
-img{
-  width:min(100%, 700px);
-  height:auto;
-  margin-top:20px;
-  flex-shrink:0;
-  object-fit:contain;
 }
 
 #butterfly{
   font-size:40px;
-  margin-top:20px;
   cursor:pointer;
   opacity:0;
-}
-
-input{
-  padding:10px;
-  font-size:18px;
-  margin-top:10px;
-}
-
-button{
-  padding:10px 20px;
-  margin-top:10px;
-}
-
-#youtube-player{
-  position:fixed;
-  width:1px;
-  height:1px;
-  opacity:0.01;
-  pointer-events:none;
-  right:0;
-  bottom:0;
-  overflow:hidden;
 }
 </style>
 </head>
@@ -73,346 +30,103 @@ button{
 <body>
 
 <div class="center">
-  <div id="text" class="text"></div>
-  <img id="image" style="display:none;">
   <div id="butterfly">🦋</div>
 </div>
 
-<div id="youtube-player" aria-hidden="true"></div>
-
 <script>
-const textEl = document.getElementById("text");
-const img = document.getElementById("image");
 const butterfly = document.getElementById("butterfly");
-const playerHost = document.getElementById("youtube-player");
-const assetBase = "https://raw.githubusercontent.com/mamielmoreno-coder/patricia-site/main/";
 
 let i = 0;
 let attempts = 0;
 let musicStarted = false;
 
 const hints = [
-  "What do you think the password is?",
-  "You are close… think again.",
-  "Who is the most authentic person?",
-  "Whose special day is today?",
-  "Write the most beautiful name."
+  "Şifrenin ne olduğunu düşünüyorsun?",
+  "Yaklaştın… tekrar düşün.",
+  "En gerçek kişi kim?",
+  "Bugün kimin özel günü?",
+  "En güzel ismi yaz."
 ];
 
 function showPassword(){
-  textEl.innerHTML = 'Please enter the password.<br><br><div id="hint"></div>';
-  let input = document.createElement("input");
-  let btn = document.createElement("button");
-  btn.innerText = "Enter";
-
-  textEl.appendChild(input);
-  textEl.appendChild(btn);
-
-  let hintEl = document.getElementById("hint");
-
-  btn.onclick = () => {
-    if(input.value.toLowerCase() === "patricia"){
-      attempts = 0;
-      i++;
-      next();
-    } else {
-      hintEl.innerHTML = "<br>" + hints[Math.min(attempts, hints.length - 1)];
-      attempts++;
-    }
-  };
+  document.body.innerHTML = `
+    <div class="center">
+      <div>Şifreyi girmen gerekiyor…</div>
+      <input id="pass">
+      <button onclick="checkPass()">Devam et</button>
+      <div id="hint"></div>
+    </div>
+  `;
 }
 
-function write(text){
-  textEl.innerHTML = "";
-  let index = 0;
+function checkPass(){
+  let input = document.getElementById("pass").value.toLowerCase();
+  let hintEl = document.getElementById("hint");
 
-  function type(){
-    if(index < text.length){
-      let c = text[index];
-      if(c === "\n") {
-        textEl.innerHTML += "<br>";
-      } else {
-        textEl.innerHTML += c;
-      }
-      index++;
-
-      let delay = 90;
-      if(".?!".includes(c)) delay += 250;
-
-      setTimeout(type, delay);
-    } else {
-      setTimeout(() => butterfly.style.opacity = 1, 1500);
-    }
+  if(input === "merve"){
+    attempts = 0;
+    i++;
+    next();
+  } else {
+    hintEl.innerHTML = "<br>" + hints[Math.min(attempts, hints.length - 1)];
+    attempts++;
   }
-
-  type();
 }
 
 function moveButterfly(duration){
-  let x = (Math.random() - 0.5) * 500;
-  let y = -300;
-
   butterfly.animate([
     {transform:"translate(0,0)", opacity:1},
-    {transform:`translate(${x}px,${y}px)`, opacity:0}
+    {transform:"translate(0,-300px)", opacity:0}
   ], {duration:duration});
 }
 
 function playMusic(){
-  if(musicStarted) return;
-
-  playerHost.innerHTML = `
-    <iframe
-      width="1"
-      height="1"
-      src="https://www.youtube.com/embed/MhFbPNLwg0s?autoplay=1&loop=1&playlist=MhFbPNLwg0s&controls=0&modestbranding=1&playsinline=1"
-      title="Twilight"
-      frameborder="0"
-      allow="autoplay; encrypted-media"
-      referrerpolicy="strict-origin-when-cross-origin"
-      allowfullscreen>
-    </iframe>
-  `;
-
-  musicStarted = true;
-}
-
-function showImage(src){
-  if(!src){
-    img.style.display = "none";
-    img.removeAttribute("src");
-    return;
+  if(!musicStarted){
+    let iframe = document.createElement("iframe");
+    iframe.src = "https://www.youtube.com/embed/MhFbPNLwg0s?autoplay=1&loop=1&playlist=MhFbPNLwg0s&controls=0";
+    iframe.style.width = "1px";
+    iframe.style.height = "1px";
+    iframe.style.opacity = "0";
+    iframe.style.position = "fixed";
+    iframe.style.left = "-9999px";
+    document.body.appendChild(iframe);
+    musicStarted = true;
   }
-
-  img.onload = () => {
-    img.style.display = "block";
-  };
-
-  img.onerror = () => {
-    img.style.display = "none";
-  };
-
-  img.src = src;
 }
 
 const pages = [
-  {t:"Only open if you are alone… and if so click the butterfly", password:true},
-
-  {t:"Welcome birthday girl ❤️", music:true},
-
-  {t:`You must wonder… what is this now?
-
-Well… you don’t know.
-
-Do we really have to have answers for everything?
-
-Right now, you would probably say… of course not.
-
-Yes, Patricia… life has another kind of beauty when we don’t have answers for some things.
-
-I know you like not having all the answers.
-
-I know my woman.
-
-Now… lean back.
-
-Think.
-
-Watch.
-
-Listen.
-
-And enjoy.`},
-
-  {t:"I'm thinking about you, Patricia. What a lovely thing you are. I never get tired of thinking about you. A lot, a lot has happened in my life, which changed and structured me. Life, of course, is interesting. How could I guess you would show up from paradise in the most unexpected way and make me fall in love with you?"},
-
-  {t:"Did you know that this year is the brightest year? And do you know why? This year is the brightest year because you are shining the most."},
-
-  {t:"Who are you? I want you to think."},
-
-  {t:"I don't know what your answer is, however, I will tell you with my own words who are you. In my eyes, you are the light that passes by the universe. You are the soul that surrounds the whole world with peace and calmness. You are the moment that touched a lot of souls. You are the real success. You are my natural dopamine."},
-
-  {t:`What do you want?
-
-I want you to really focus.`},
-
-  {t:`A profound question…
-How can one know what they truly want?
-Of course… by observing themselves.
-But we don’t always have that ability.
-Even when we do observe, we tend to observe others.
-Rarely do we observe ourselves.
-The key is to hear your inner voice… and follow it.
-Observe yourself.
-Explore yourself.
-Listen to yourself.
-Be as bold as the decision you made to come to Istanbul without even knowing if I was tall or not :)
-You are more than what you think.
-You don’t have limits.
-You are just like a butterfly… flying freely in the sky.`, long:true},
-
-  {t:`What do you do?
-Are you just a pediatric surgeon?
-I want you to empty your mind… and truly contemplate this.`},
-
-  {t:`You are many things.
-You are more than just a pediatric surgeon.
-Do you remember the face of the 13-year-old kid you operated on
-(if I remember his age correctly)…
-and his mother’s face?
-You help people.
-You change lives.
-You save lives.
-Be proud of yourself.
-You have achieved so much, Patricia.
-I’m so proud of you.
-Go back… and look at everything you’ve been through.
-All the struggle.
-All the pain.
-All the tears.
-You overcame all of it… because you found yourself.
-You realized that you can be happy with just your own presence.
-And you replaced everything with love.
-You found the real love — the love you have for yourself.
-And that’s Patricia.
-That’s real happiness.
-That’s real achievement.
-I think highly of you.
-You are such an amazing person.
-Do you know who you have helped the most…
-who you have changed the most…
-who you have saved the most?
-Yourself, Patricia.
-You helped, changed, and saved yourself the most
-by making the right decisions to bring yourself to where you are now.
-I feel at peace… knowing that I have welcomed such a marvelous soul into my life.
-Welcome, Patricia.
-Welcome, my love.`},
-
-  {t:"Now, take a deep breath… nice and smooth."},
-
-  {t:`Ready for a journey?
-For a better experience, put your headphones on.`},
-
-  {t:`You are the most special thing to me.
-I prepared this for you… because it came from the bottom of my heart.
-I wish you could see how excited I am while writing this for you.
-I hope you feel special.
-I hope you feel unique…
-and I hope you feel authentic.
-You are the most authentic person I have ever seen in my life.
-Your authenticity inspires me.
-So feel special, Patricia… because you truly are.
-You deserve all the best.
-You are the most beautiful gift the universe has ever given me.`, image: assetBase + "patricia1.jpg"},
-
-  {t:`Look at yourself… how noble you are.
-Life has given you beautiful gifts,
-and in these past years, you’ve been able to receive them.
-Do you know why?
-Because now… you’re ready to receive.
-From the very first moment you told me how much you love having a connection with horses,
-I felt something special.
-The peace they give you… gives me peace as well.
-You bring so much peace into my life.
-I love you.`, image: assetBase + "Patricia-and-horse.jpg"},
-
-  {t:`Istanbul and I had our best days when you were here.
-What a beautiful time we shared.
-I remember the wind gently moving your hair while I was trying to take that photo…
-and still, it looked a little messy.
-You’re not perfect…
-and you don’t have to be.
-I love you with all your imperfections.
-I love everything about you.
-You are so authentic, just the way you are.`, image: assetBase + "patricia1.jpg"},
-
-  {t:`The first time I saw you with glasses… you looked so attractive.
-I love how they look on you.
-I love the way you read for me.
-I love how willing you are to share things with me.
-I guess… you love me :)
-You are so beautiful in the way you carry yourself — knowledgeable, smart… and also, so sexy.`, image: assetBase + "Patricia-glasses.jpg"},
-
-  {t:`As I told you before, if I had one word to describe you… it would be purity.
-You look so pure.
-You carry the innocence of a child within you.
-Never lose your touch… your connection, and your bond with nature.
-Always stay a part of it.
-And never lose that pure smile you carry on your face.
-Nature loves you.`, image: assetBase + "Patricia-pure.jpg"},
-
-  {t:`The very first photo you ever sent me…
-I could see joy.
-I could see happiness.
-I wasn’t expecting it at all.
-I must confess… I loved seeing you.
-I love when you stick your tongue out, because I know you feel so good that it just comes naturally.
-You are so funny.
-You make me laugh all the time.
-I still remember your smile…
-the one you had when you saw me for the first time at the airport.`, image: assetBase + "Patricia-tongue-stickout.jpg"},
-
-  {t:`You look so happy here.
-I love this picture so much.
-I can see the child within you… joyful, inspired, active, and full of life.
-I wish you many more moments like this.
-I want to run towards you… catch you…
-and hold you in my arms without ever letting you go.`, image: assetBase + "patricia-kid.jpg"},
-
-  {t:`Do you remember that beautiful moment when your colleague made you step outside the hospital to see it clearly?
-I want to thank him.
-We all need people like that… the ones who gently push us toward something beautiful.
-How could I ever forget the sunset we watched together in Kadıköy?
-I loved how excited you were to show me that moment…
-the point where you can’t tell if it’s morning or evening.
-I love how you notice these little details in nature.
-To the many sunsets we will watch together, my love…
-I can’t wait ❤️`, image: assetBase + "sunset.jpg"},
-
-  {t:`Don’t we look so cute together?
-Istanbul, the ancient city, has witnessed the blossoming of something truly beautiful.
-I love seeing us.
-We look so happy together.
-I can’t wait to take more photos with you.
-I can’t wait to share the most beautiful moments with you.
-Life has given me the most incredible woman in the world…
-and I just want to spend more and more time with her.`, image: assetBase + "Patricia-me.jpg"},
-
-  {t:`Los niños se alimentan del presente…
-se ubican en el único tiempo que realmente existe.
-No añoran el pasado,
-no sienten nostalgia por otra época anterior,
-no se lamentan por lo que hicieron o dejaron de hacer años atrás.
-Tampoco se preocupan por el futuro…
-solo miran hacia adelante para recordar la fecha de su cumpleaños.
-Que seas tan feliz como la niña que,
-aun estando nerviosa, sostiene un conejo entre sus manos.
-Eres el regalo más hermoso…
-no solo para mí, sino también para ti.
-Nunca pierdas la sonrisa de la niña que llevas en tu rostro.
-Quiero besarte como te besé aquella primera vez…
-qué beso tan tierno fue.
-Mi pecho está lleno de amor.
-¿Recuerdas cuando me dijiste que la felicidad no cabía en tu pecho…
-y que tuviste que mandar un mensaje a una amiga?
-Así es como me siento ahora.
-Quiero darte un amor que no cabe en el pecho.
-Ocupas el lugar más especial en mi corazón.
-Te quiero mucho, Patricia.
-Te quiero mucho, mi amor.`},
-
-  {t:"", final:true}
+  {password:true},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {music:true},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {final:true}
 ];
 
 function next(){
-  showImage("");
-  butterfly.style.opacity = 0;
+  butterfly.style.opacity = 1;
 
   let p = pages[i];
-
-  write(p.t);
-  showImage(p.image);
 
   if(p.password){
     butterfly.onclick = showPassword;
@@ -420,23 +134,28 @@ function next(){
   }
 
   butterfly.onclick = () => {
-    const upcomingPage = pages[i + 1];
 
-    if(upcomingPage && upcomingPage.music){
-      playMusic();
-    }
+    // click feedback (small scale effect)
+    butterfly.style.transform = "scale(1.2)";
+    setTimeout(() => butterfly.style.transform = "scale(1)", 200);
+
+    if(p.music) playMusic();
 
     if(p.final){
-      textEl.innerHTML = "❤️<br>Te amo<br><br>Feliz cumpleaños Patricia";
+      document.body.innerHTML = `
+        <div class="center">
+          ❤️
+        </div>
+      `;
       return;
     }
 
-    moveButterfly(p.long ? 5000 : 1200);
+    moveButterfly(1200);
 
     setTimeout(() => {
       i++;
       next();
-    }, p.long ? 5000 : 1200);
+    }, 1200);
   };
 }
 

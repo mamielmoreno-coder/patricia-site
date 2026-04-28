@@ -99,17 +99,6 @@ button:hover{
   bottom:0;
   overflow:hidden;
 }
-
-@media(max-width:600px){
-  .text{
-    font-size:29px;
-    padding:22px;
-  }
-
-  #butterfly{
-    font-size:42px;
-  }
-}
 </style>
 </head>
 
@@ -120,7 +109,7 @@ button:hover{
   <div id="butterfly">🦋</div>
 </div>
 
-<div id="youtube-player" aria-hidden="true"></div>
+<div id="youtube-player"></div>
 
 <script>
 const textEl = document.getElementById("text");
@@ -136,12 +125,12 @@ const hints = [
   "Şaka yaptım, en sevdiğin yemek",
   "Galiba yine şaka yaptım",
   "8 yıl yaşadığın ülke…",
-  "Bugün kimin özel günü"
+  "Bugün kimin özel günü… ALOHOMORA! ✨"
 ];
 
 function showPassword(){
   textEl.innerHTML = `
-    <div style="font-family:'Quicksand', sans-serif; font-size:22px; line-height:1.6;">
+    <div style="font-family:'Quicksand', sans-serif; font-size:22px;">
       Küçük bir kapı var burada...<br>
       Açmak için şifreyi girmen gerekiyor.
       <br><br>
@@ -179,11 +168,8 @@ function write(text){
     if(index < text.length){
       let c = text[index];
 
-      if(c === "\n") {
-        textEl.innerHTML += "<br>";
-      } else {
-        textEl.innerHTML += c;
-      }
+      if(c === "\n") textEl.innerHTML += "<br>";
+      else textEl.innerHTML += c;
 
       index++;
 
@@ -199,18 +185,14 @@ function write(text){
   type();
 }
 
-function moveButterfly(duration){
+function moveButterfly(){
   let x = (Math.random() - 0.5) * 360;
   let y = -240;
 
   butterfly.animate([
-    {transform:"translate(0,0) scale(1)", opacity:1},
-    {transform:`translate(${x/2}px,${y/2}px) scale(1.2) rotate(12deg)`, opacity:0.85},
-    {transform:`translate(${x}px,${y}px) scale(0.8) rotate(-10deg)`, opacity:0}
-  ], {
-    duration:duration,
-    easing:"ease-in-out"
-  });
+    {transform:"translate(0,0)", opacity:1},
+    {transform:`translate(${x}px,${y}px)`, opacity:0}
+  ], {duration:1400, easing:"ease-in-out"});
 }
 
 function playMusic(){
@@ -220,12 +202,8 @@ function playMusic(){
     <iframe
       width="1"
       height="1"
-      src="https://www.youtube.com/embed/MhFbPNLwg0s?autoplay=1&loop=1&playlist=MhFbPNLwg0s&controls=0&modestbranding=1&playsinline=1"
-      title="Twilight"
-      frameborder="0"
-      allow="autoplay; encrypted-media"
-      referrerpolicy="strict-origin-when-cross-origin"
-      allowfullscreen>
+      src="https://www.youtube.com/embed/MhFbPNLwg0s?autoplay=1&loop=1&playlist=MhFbPNLwg0s&controls=0"
+      allow="autoplay">
     </iframe>
   `;
 
@@ -243,17 +221,15 @@ const pages = [
 
   {t:"Bazen küçük bir detay bile insanı gülümsetir."},
 
-  {t:"Mesela 8 yıl Arjantin’de yaşamış olman…"},
+  {t:"Mesela Boursier Hotel resepsiyonuna ilk geldiğinde bana gülümsemeni hatırlamak gibi."},
 
-  {t:"Bazı insanlar gittikleri yerlerden bir parça taşır."},
+  {t:"Çamlıca tepesindeki ilk buluşmamızı hatırlamak gibi."},
 
-  {t:"Sen de içinde biraz Arjantin, biraz neşe, biraz hikâye taşıyorsun."},
-
-  {t:"Ve belki de biraz Harry Potter büyüsü… ✨"},
+  {t:"İlk günkü gibi benim için hâlâ çok özelsin."},
 
   {t:"Bugün senin günün."},
 
-  {t:"Ve ben bu küçük şeyi sana özel yapmak istedim."},
+  {t:"Ve ben bu küçük şeyi sana özel yapmak istedim… EXPECTO PATRONUM! ✨"},
 
   {t:"", final:true}
 ];
@@ -278,17 +254,16 @@ function next(){
     }
 
     if(p.final){
-      textEl.innerHTML = "❤️<br>İyi ki varsın Merve";
-      butterfly.style.opacity = 0;
+      textEl.innerHTML = "❤️<br>İyi ki doğdun Canım Eşim<br>İyi ki varsın<br><br>Seni çok seviyorum";
       return;
     }
 
-    moveButterfly(1500);
+    moveButterfly();
 
     setTimeout(() => {
       i++;
       next();
-    }, 1500);
+    }, 1400);
   };
 }
 

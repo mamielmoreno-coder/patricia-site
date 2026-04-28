@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap" rel="stylesheet">
 
 <style>
 body{
   margin:0;
+  font-family:'Caveat', cursive;
   text-align:center;
   background:white;
 }
@@ -17,12 +19,45 @@ body{
   justify-content:center;
   align-items:center;
   min-height:100vh;
+  width:100%;
+  padding:20px;
+  box-sizing:border-box;
+}
+
+.text{
+  width:min(95%, 900px);
+  font-size:26px;
+  line-height:1.8;
+  flex-shrink:0;
 }
 
 #butterfly{
   font-size:40px;
+  margin-top:20px;
   cursor:pointer;
   opacity:0;
+}
+
+input{
+  padding:10px;
+  font-size:18px;
+  margin-top:10px;
+}
+
+button{
+  padding:10px 20px;
+  margin-top:10px;
+}
+
+#youtube-player{
+  position:fixed;
+  width:1px;
+  height:1px;
+  opacity:0.01;
+  pointer-events:none;
+  right:0;
+  bottom:0;
+  overflow:hidden;
 }
 </style>
 </head>
@@ -30,103 +65,163 @@ body{
 <body>
 
 <div class="center">
+  <div id="text" class="text"></div>
   <div id="butterfly">🦋</div>
 </div>
 
+<div id="youtube-player" aria-hidden="true"></div>
+
 <script>
+const textEl = document.getElementById("text");
 const butterfly = document.getElementById("butterfly");
+const playerHost = document.getElementById("youtube-player");
 
 let i = 0;
 let attempts = 0;
 let musicStarted = false;
 
 const hints = [
-  "Şifrenin ne olduğunu düşünüyorsun?",
+  "Şifre ne olabilir sence?",
   "Yaklaştın… tekrar düşün.",
-  "En gerçek kişi kim?",
+  "En güzel isim kimin?",
   "Bugün kimin özel günü?",
   "En güzel ismi yaz."
 ];
 
 function showPassword(){
-  document.body.innerHTML = `
-    <div class="center">
-      <div>Şifreyi girmen gerekiyor…</div>
-      <input id="pass">
-      <button onclick="checkPass()">Devam et</button>
-      <div id="hint"></div>
-    </div>
-  `;
-}
+  textEl.innerHTML = 'Lütfen şifreyi gir.<br><br><div id="hint"></div>';
+  let input = document.createElement("input");
+  let btn = document.createElement("button");
+  btn.innerText = "Gir";
 
-function checkPass(){
-  let input = document.getElementById("pass").value.toLowerCase();
+  textEl.appendChild(input);
+  textEl.appendChild(btn);
+
   let hintEl = document.getElementById("hint");
 
-  if(input === "merve"){
-    attempts = 0;
-    i++;
-    next();
-  } else {
-    hintEl.innerHTML = "<br>" + hints[Math.min(attempts, hints.length - 1)];
-    attempts++;
+  btn.onclick = () => {
+    if(input.value.toLowerCase() === "merve"){
+      attempts = 0;
+      i++;
+      next();
+    } else {
+      hintEl.innerHTML = "<br>" + hints[Math.min(attempts, hints.length - 1)];
+      attempts++;
+    }
+  };
+}
+
+function write(text){
+  textEl.innerHTML = "";
+  let index = 0;
+
+  function type(){
+    if(index < text.length){
+      let c = text[index];
+      if(c === "\n") {
+        textEl.innerHTML += "<br>";
+      } else {
+        textEl.innerHTML += c;
+      }
+      index++;
+
+      let delay = 90;
+      if(".?!".includes(c)) delay += 250;
+
+      setTimeout(type, delay);
+    } else {
+      setTimeout(() => butterfly.style.opacity = 1, 1500);
+    }
   }
+
+  type();
 }
 
 function moveButterfly(duration){
+  let x = (Math.random() - 0.5) * 500;
+  let y = -300;
+
   butterfly.animate([
     {transform:"translate(0,0)", opacity:1},
-    {transform:"translate(0,-300px)", opacity:0}
+    {transform:`translate(${x}px,${y}px)`, opacity:0}
   ], {duration:duration});
 }
 
 function playMusic(){
-  if(!musicStarted){
-    let iframe = document.createElement("iframe");
-    iframe.src = "https://www.youtube.com/embed/MhFbPNLwg0s?autoplay=1&loop=1&playlist=MhFbPNLwg0s&controls=0";
-    iframe.style.width = "1px";
-    iframe.style.height = "1px";
-    iframe.style.opacity = "0";
-    iframe.style.position = "fixed";
-    iframe.style.left = "-9999px";
-    document.body.appendChild(iframe);
-    musicStarted = true;
-  }
+  if(musicStarted) return;
+
+  playerHost.innerHTML = `
+    <iframe
+      width="1"
+      height="1"
+      src="https://www.youtube.com/embed/MhFbPNLwg0s?autoplay=1&loop=1&playlist=MhFbPNLwg0s&controls=0&modestbranding=1&playsinline=1"
+      title="Twilight"
+      frameborder="0"
+      allow="autoplay; encrypted-media"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen>
+    </iframe>
+  `;
+
+  musicStarted = true;
 }
 
 const pages = [
-  {password:true},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {music:true},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {final:true}
+  {t:"Sadece yalnızsan aç… ve hazırsan kelebeğe tıkla", password:true},
+
+  {t:"Hoş geldin Merve ❤️", music:true},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:""},
+
+  {t:"", final:true}
 ];
 
 function next(){
-  butterfly.style.opacity = 1;
+  butterfly.style.opacity = 0;
 
   let p = pages[i];
+
+  write(p.t);
 
   if(p.password){
     butterfly.onclick = showPassword;
@@ -134,28 +229,23 @@ function next(){
   }
 
   butterfly.onclick = () => {
+    const upcomingPage = pages[i + 1];
 
-    // click feedback (small scale effect)
-    butterfly.style.transform = "scale(1.2)";
-    setTimeout(() => butterfly.style.transform = "scale(1)", 200);
-
-    if(p.music) playMusic();
+    if(upcomingPage && upcomingPage.music){
+      playMusic();
+    }
 
     if(p.final){
-      document.body.innerHTML = `
-        <div class="center">
-          ❤️
-        </div>
-      `;
+      textEl.innerHTML = "❤️<br>Seni seviyorum<br><br>İyi ki varsın Merve";
       return;
     }
 
-    moveButterfly(1200);
+    moveButterfly(p.long ? 5000 : 1200);
 
     setTimeout(() => {
       i++;
       next();
-    }, 1200);
+    }, p.long ? 5000 : 1200);
   };
 }
 

@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
@@ -239,14 +238,13 @@
 
     function renderFinal(){
       textEl.innerHTML = `
-        <img class="final-photo" src="./ornek-photo.jpg" alt="Aile fotoğrafı">
+        <img class="final-photo" src="./merve.jpg" alt="Aile fotoğrafı">
         <div class="final-note">❤️<br>İyi ki doğdun Canım Eşim, iyi ki varsın ve seni çok seviyorum ❤️</div>
       `;
     }
 
     function next(){
       butterfly.style.opacity = 0;
-
       const p = pages[i];
 
       if(!p){
@@ -263,10 +261,7 @@
 
       butterfly.onclick = () => {
         const upcomingPage = pages[i + 1];
-
-        if(upcomingPage && upcomingPage.music){
-          playMusic();
-        }
+        if(upcomingPage && upcomingPage.music) playMusic();
 
         moveButterfly();
 

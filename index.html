@@ -1,279 +1,287 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
 
-<style>
-body{
-  margin:0;
-  min-height:100vh;
-  text-align:center;
-  background:linear-gradient(135deg,#fff8ec,#f7ead7,#fffdf7);
-  color:#4a3528;
-  overflow:hidden;
-}
+  <style>
+    body{
+      margin:0;
+      min-height:100vh;
+      text-align:center;
+      background:linear-gradient(135deg,#fff8ec,#f7ead7,#fffdf7);
+      color:#4a3528;
+      overflow:hidden;
+    }
 
-.center{
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
-  width:100%;
-  padding:24px;
-  box-sizing:border-box;
-}
+    .center{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      min-height:100vh;
+      width:100%;
+      padding:24px;
+      box-sizing:border-box;
+    }
 
-.text{
-  width:min(92%, 820px);
-  font-family:'Caveat', cursive;
-  font-size:34px;
-  line-height:1.7;
-  padding:28px;
-  border-radius:28px;
-  background:transparent;
-  box-shadow:none;
-  backdrop-filter:none;
-}
+    .text{
+      width:min(92%, 820px);
+      font-family:'Caveat', cursive;
+      font-size:34px;
+      line-height:1.7;
+      padding:28px;
+      border-radius:28px;
+      background:transparent;
+      box-shadow:none;
+      backdrop-filter:none;
+    }
 
-#butterfly{
-  font-size:46px;
-  margin-top:28px;
-  cursor:pointer;
-  opacity:0;
-  transition:opacity 1.2s ease, transform .4s ease;
-}
+    #butterfly{
+      font-size:46px;
+      margin-top:28px;
+      cursor:pointer;
+      opacity:0;
+      transition:opacity 1.2s ease, transform .4s ease;
+    }
 
-#butterfly:hover{
-  transform:scale(1.18) rotate(8deg);
-}
+    #butterfly:hover{
+      transform:scale(1.18) rotate(8deg);
+    }
 
-input{
-  padding:13px 18px;
-  font-size:18px;
-  margin-top:18px;
-  border:1px solid rgba(120,80,45,0.25);
-  border-radius:18px;
-  outline:none;
-  background:#fffaf2;
-  color:#4a3528;
-  font-family:'Quicksand', sans-serif;
-  text-align:center;
-}
+    input{
+      padding:13px 18px;
+      font-size:18px;
+      margin-top:18px;
+      border:1px solid rgba(120,80,45,0.25);
+      border-radius:18px;
+      outline:none;
+      background:#fffaf2;
+      color:#4a3528;
+      font-family:'Quicksand', sans-serif;
+      text-align:center;
+    }
 
-button{
-  padding:12px 24px;
-  margin-top:14px;
-  border:none;
-  border-radius:20px;
-  background:#8b5e3c;
-  color:white;
-  font-family:'Quicksand', sans-serif;
-  font-size:16px;
-  cursor:pointer;
-  transition:0.3s ease;
-}
+    button{
+      padding:12px 24px;
+      margin-top:14px;
+      border:none;
+      border-radius:20px;
+      background:#8b5e3c;
+      color:white;
+      font-family:'Quicksand', sans-serif;
+      font-size:16px;
+      cursor:pointer;
+      transition:0.3s ease;
+    }
 
-button:hover{
-  background:#6f472b;
-  transform:translateY(-2px);
-}
+    button:hover{
+      background:#6f472b;
+      transform:translateY(-2px);
+    }
 
-#hint{
-  font-family:'Quicksand', sans-serif;
-  font-size:22px;
-  margin-top:14px;
-  color:#6b4c38;
-}
+    #hint{
+      font-family:'Quicksand', sans-serif;
+      font-size:22px;
+      margin-top:14px;
+      color:#6b4c38;
+    }
 
-#youtube-player{
-  position:fixed;
-  width:1px;
-  height:1px;
-  opacity:0.01;
-  pointer-events:none;
-  right:0;
-  bottom:0;
-  overflow:hidden;
-}
+    #youtube-player{
+      position:fixed;
+      width:1px;
+      height:1px;
+      opacity:0.01;
+      pointer-events:none;
+      right:0;
+      bottom:0;
+      overflow:hidden;
+    }
 
-.final-photo{
-  width:min(88vw, 420px);
-  border-radius:22px;
-  box-shadow:0 12px 36px rgba(80,50,25,0.22);
-}
+    .final-photo{
+      width:min(88vw, 420px);
+      border-radius:22px;
+      box-shadow:0 12px 36px rgba(80,50,25,0.22);
+    }
 
-.final-note{
-  margin-top:16px;
-  font-size:38px;
-  line-height:1.35;
-}
-</style>
+    .final-note{
+      margin-top:16px;
+      font-size:38px;
+      line-height:1.35;
+    }
+  </style>
 </head>
 
 <body>
+  <div class="center">
+    <div id="text" class="text"></div>
+    <div id="butterfly">🦋</div>
+  </div>
 
-<div class="center">
-  <div id="text" class="text"></div>
-  <div id="butterfly">🦋</div>
-</div>
+  <div id="youtube-player"></div>
 
-<div id="youtube-player"></div>
+  <script>
+    const textEl = document.getElementById("text");
+    const butterfly = document.getElementById("butterfly");
+    const playerHost = document.getElementById("youtube-player");
 
-<script>
-const textEl = document.getElementById("text");
-const butterfly = document.getElementById("butterfly");
-const playerHost = document.getElementById("youtube-player");
+    let i = 0;
+    let attempts = 0;
+    let musicStarted = false;
 
-let i = 0;
-let attempts = 0;
-let musicStarted = false;
+    const hints = [
+      "En sevdiğin renk",
+      "Şaka yaptım, en sevdiğin yemek",
+      "Galiba yine şaka yaptım",
+      "8 yıl yaşadığın ülke…",
+      "Bugün kimin özel günü… ALOHOMORA! ✨"
+    ];
 
-const hints = [
-  "En sevdiğin renk",
-  "Şaka yaptım, en sevdiğin yemek",
-  "Galiba yine şaka yaptım",
-  "8 yıl yaşadığın ülke…",
-  "Bugün kimin özel günü… ALOHOMORA! ✨"
-];
+    function showPassword(){
+      textEl.innerHTML = `
+        <div style="font-family:'Quicksand', sans-serif; font-size:24px;">
+          Küçük bir kapı var burada...<br>
+          Açmak için şifreyi girmen gerekiyor.
+          <br><br>
+          <div id="hint"></div>
+        </div>
+      `;
 
-function showPassword(){
-  textEl.innerHTML = `
-    <div style="font-family:'Quicksand', sans-serif; font-size:24px;">
-      Küçük bir kapı var burada...<br>
-      Açmak için şifreyi girmen gerekiyor.
-      <br><br>
-      <div id="hint"></div>
-    </div>
-  `;
+      const input = document.createElement("input");
+      const btn = document.createElement("button");
+      btn.innerText = "Aç";
 
-  let input = document.createElement("input");
-  let btn = document.createElement("button");
-  btn.innerText = "Aç";
+      textEl.appendChild(input);
+      textEl.appendChild(document.createElement("br"));
+      textEl.appendChild(btn);
 
-  textEl.appendChild(input);
-  textEl.appendChild(document.createElement("br"));
-  textEl.appendChild(btn);
+      const hintEl = document.getElementById("hint");
 
-  let hintEl = document.getElementById("hint");
-
-  btn.onclick = () => {
-    if(input.value.toLowerCase().trim() === "alohomora"){
-      attempts = 0;
-      i++;
-      next();
-    } else {
-      hintEl.innerHTML = "<br>" + hints[Math.min(attempts, hints.length - 1)];
-      attempts++;
-    }
-  };
-}
-
-function write(text){
-  textEl.innerHTML = "";
-  let index = 0;
-
-  function type(){
-    if(index < text.length){
-      let c = text[index];
-
-      if(c === "\n") textEl.innerHTML += "<br>";
-      else textEl.innerHTML += c;
-
-      index++;
-
-      let delay = 85;
-      if(".?!…".includes(c)) delay += 260;
-
-      setTimeout(type, delay);
-    } else {
-      setTimeout(() => butterfly.style.opacity = 1, 1000);
-    }
-  }
-
-  type();
-}
-
-function moveButterfly(){
-  let x = (Math.random() - 0.5) * 360;
-  let y = -240;
-
-  butterfly.animate([
-    {transform:"translate(0,0)", opacity:1},
-    {transform:`translate(${x}px,${y}px)`, opacity:0}
-  ], {duration:1800, easing:"ease-in-out"});
-}
-
-function playMusic(){
-  if(musicStarted) return;
-
-  playerHost.innerHTML = `
-    <iframe
-      width="1"
-      height="1"
-      src="https://www.youtube.com/embed/MhFbPNLwg0s?autoplay=1&loop=1&playlist=MhFbPNLwg0s&controls=0"
-      allow="autoplay">
-    </iframe>
-  `;
-
-  musicStarted = true;
-}
-
-const pages = [
-  {t:"Sadece yalnızsan aç… ve hazırsan kelebeğe tıkla.", password:true},
-  {t:"Hoş geldin Merve ❤️", music:true},
-  {t:"Bu sayfa sadece senin için hazırlandı."},
-  {t:"Bazı şeyler uzun uzun anlatılmaz…"},
-  {t:"Bazen küçük bir detay bile insanı gülümsetir."},
-  {t:"Mesela Boursier Hotel resepsiyonuna ilk geldiğinde bana gülümsemeni hatırlamak gibi."},
-  {t:"Çamlıca tepesindeki ilk buluşmamızı hatırlamak gibi."},
-  {t:"İlk günkü gibi benim için hâlâ çok özelsin."},
-  {t:"Bugün senin günün."},
-  {t:"Ve ben bu küçük şeyi sana özel yapmak istedim… EXPECTO PATRONUM! ✨", final:true}
-];
-
-function next(){
-  butterfly.style.opacity = 0;
-
-  let p = pages[i];
-
-  if(!p){
-    textEl.innerHTML = `<img class="final-photo" src="./ornek-photo.jpg" alt="Aile fotoğrafı"><div class="final-note">❤️<br>İyi ki doğdun canım eşim</div>`;
-    return;
-  }
-
-  write(p.t);
-
-  if(p.password){
-    butterfly.onclick = showPassword;
-    return;
-  }
-
-  butterfly.onclick = () => {
-    const upcomingPage = pages[i + 1];
-
-    if(upcomingPage && upcomingPage.music){
-      playMusic();
+      btn.onclick = () => {
+        if(input.value.toLowerCase().trim() === "alohomora"){
+          attempts = 0;
+          i++;
+          next();
+        } else {
+          hintEl.innerHTML = "<br>" + hints[Math.min(attempts, hints.length - 1)];
+          attempts++;
+        }
+      };
     }
 
-    moveButterfly();
+    function write(text){
+      textEl.innerHTML = "";
+      let index = 0;
 
-    setTimeout(() => {
-      i++;
-      if(p.final){
-        textEl.innerHTML = `<img class="final-photo" src="./ornek-photo.jpg" alt="Aile fotoğrafı"><div class="final-note">❤️<br>İyi ki doğdun canım eşim</div>`;
+      function type(){
+        if(index < text.length){
+          const c = text[index];
+
+          if(c === "\n") textEl.innerHTML += "<br>";
+          else textEl.innerHTML += c;
+
+          index++;
+
+          let delay = 85;
+          if(".?!…".includes(c)) delay += 260;
+
+          setTimeout(type, delay);
+        } else {
+          setTimeout(() => butterfly.style.opacity = 1, 1000);
+        }
+      }
+
+      type();
+    }
+
+    function moveButterfly(){
+      const x = (Math.random() - 0.5) * 360;
+      const y = -240;
+
+      butterfly.animate(
+        [
+          {transform:"translate(0,0)", opacity:1},
+          {transform:`translate(${x}px,${y}px)`, opacity:0}
+        ],
+        {duration:1800, easing:"ease-in-out"}
+      );
+    }
+
+    function playMusic(){
+      if(musicStarted) return;
+
+      playerHost.innerHTML = `
+        <iframe
+          width="1"
+          height="1"
+          src="https://www.youtube.com/embed/MhFbPNLwg0s?autoplay=1&loop=1&playlist=MhFbPNLwg0s&controls=0"
+          allow="autoplay">
+        </iframe>
+      `;
+
+      musicStarted = true;
+    }
+
+    const pages = [
+      {t:"Sadece yalnızsan aç… ve hazırsan kelebeğe tıkla.", password:true},
+      {t:"Hoş geldin Merve ❤️", music:true},
+      {t:"Bu sayfa sadece senin için hazırlandı."},
+      {t:"Bazı şeyler uzun uzun anlatılmaz…"},
+      {t:"Bazen küçük bir detay bile insanı gülümsetir."},
+      {t:"Mesela Boursier Hotel resepsiyonuna ilk geldiğinde bana gülümsemeni hatırlamak gibi."},
+      {t:"Çamlıca tepesindeki ilk buluşmamızı hatırlamak gibi."},
+      {t:"İlk günkü gibi benim için hâlâ çok özelsin."},
+      {t:"Bugün senin günün."},
+      {t:"Ve ben bu küçük şeyi sana özel yapmak istedim… EXPECTO PATRONUM! ✨", final:true}
+    ];
+
+    function renderFinal(){
+      textEl.innerHTML = `
+        <img class="final-photo" src="./ornek-photo.jpg" alt="Aile fotoğrafı">
+        <div class="final-note">❤️<br>İyi ki doğdun Canım Eşim, iyi ki varsın ve seni çok seviyorum ❤️</div>
+      `;
+    }
+
+    function next(){
+      butterfly.style.opacity = 0;
+
+      const p = pages[i];
+
+      if(!p){
+        renderFinal();
         return;
       }
-      next();
-    }, 1800);
-  };
-}
 
-next();
-</script>
+      write(p.t);
 
+      if(p.password){
+        butterfly.onclick = showPassword;
+        return;
+      }
+
+      butterfly.onclick = () => {
+        const upcomingPage = pages[i + 1];
+
+        if(upcomingPage && upcomingPage.music){
+          playMusic();
+        }
+
+        moveButterfly();
+
+        setTimeout(() => {
+          i++;
+          if(p.final){
+            renderFinal();
+            return;
+          }
+          next();
+        }, 1800);
+      };
+    }
+
+    next();
+  </script>
 </body>
 </html>

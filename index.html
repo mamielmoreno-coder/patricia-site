@@ -143,6 +143,7 @@ const hints = [
 function showPassword(){
   textEl.innerHTML = `
     <div style="font-family:'Quicksand', sans-serif; font-size:24px;">
+      Küçük bir kapı var burada...<br>
       Açmak için şifreyi girmen gerekiyor.
       <br><br>
       <div id="hint"></div>
@@ -160,7 +161,7 @@ function showPassword(){
   let hintEl = document.getElementById("hint");
 
   btn.onclick = () => {
-    if(input.value.toLowerCase().trim() === "merve"){
+    if(input.value.toLowerCase().trim() === "alohomora"){
       attempts = 0;
       i++;
       next();
@@ -240,7 +241,7 @@ function next(){
   let p = pages[i];
 
   if(!p){
-    textEl.innerHTML = `<img class="final-photo" src="ornek-photo.jpg" alt="Aile fotoğrafı"><div class="final-note">❤️<br>İyi ki doğdun canım eşim</div>`;
+    textEl.innerHTML = `<img class="final-photo" src="./ornek-photo.jpg" alt="Aile fotoğrafı"><div class="final-note">❤️<br>İyi ki doğdun canım eşim</div>`;
     return;
   }
 
@@ -263,7 +264,7 @@ function next(){
     setTimeout(() => {
       i++;
       if(p.final){
-        textEl.innerHTML = `<img class="final-photo" src="ornek-photo.jpg" alt="Aile fotoğrafı"><div class="final-note">❤️<br>İyi ki doğdun canım eşim</div>`;
+        textEl.innerHTML = `<img class="final-photo" src="./ornek-photo.jpg" alt="Aile fotoğrafı"><div class="final-note">❤️<br>İyi ki doğdun canım eşim</div>`;
         return;
       }
       next();
